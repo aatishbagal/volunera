@@ -1,0 +1,91 @@
+// Variables (should match your global theme)
+$primary-color: #4D8AFF;
+$secondary-color: #FFB84D;
+$light-color: #FFFFFF;
+$text-color: #333333;
+$border-radius: 12px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+.section {
+  padding: 80px 0;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 32px;
+  margin-bottom: 50px;
+  text-align: center;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: $secondary-color;
+    border-radius: 2px;
+  }
+}
+
+.how-it-works-container {
+  display: flex;
+  gap: 30px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.how-it-works-column {
+  flex: 1;
+  
+  h3 {
+    font-size: 24px;
+    margin-bottom: 30px;
+    text-align: center;
+    color: $primary-color;
+  }
+}
+
+.step-card {
+  background-color: $light-color;
+  padding: 30px;
+  border-radius: $border-radius;
+  margin-bottom: 20px;
+  box-shadow: $box-shadow;
+  position: relative;
+  
+  .step-number {
+    position: absolute;
+    top: -15px;
+    left: -15px;
+    width: 40px;
+    height: 40px;
+    background-color: $secondary-color;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    color: $text-color;
+    font-size: 18px;
+  }
+  
+  h4 {
+    margin-bottom: 15px;
+    color: $primary-color;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+}

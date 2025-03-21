@@ -1,0 +1,26 @@
+<nav class="navbar" [ngClass]="{'scrolled': isScrolled}">
+  <div class="navbar-container">
+    <!-- Logo -->
+    <div class="logo">
+      <img src="assets/images/volunera-text-logo-black.svg" alt="VolunEra Logo">
+    </div>
+    
+    <!-- Navigation Links - desktop -->
+    <div class="nav-links" [ngClass]="{'active': isMobileMenuOpen}">
+      <a href="#home" class="nav-link" (click)="scrollToSection('home')">Home</a>
+      <a href="#how-it-works" class="nav-link" (click)="scrollToSection('how-it-works')">How It Works</a>
+      <a href="#features" class="nav-link" (click)="scrollToSection('features')">Features</a>
+    </div>
+    
+    <!-- Auth Buttons -->
+    <div class="auth-buttons">
+      <button class="btn btn-secondary">Login</button>
+      <button class="btn btn-primary">Sign Up</button>
+    </div>
+    
+    <!-- Mobile menu toggle -->
+    <div class="mobile-menu-toggle" (click)="toggleMobileMenu()">
+      <i class="fas" [ngClass]="isMobileMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+    </div>
+  </div>
+</nav>
