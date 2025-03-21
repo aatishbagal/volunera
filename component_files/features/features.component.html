@@ -1,0 +1,15 @@
+<section id="features" class="section bg-light">
+    <div class="section-container">
+      <h2 class="section-title">Key Features</h2>
+      
+      <div class="features-grid">
+        <div class="feature-card" *ngFor="let feature of features">
+          <div class="feature-icon">
+            <i class="fas {{ feature.icon }}"></i>
+          </div>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
