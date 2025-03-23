@@ -1,7 +1,6 @@
-// Variables
-$primary-color: #4D8AFF;    // Blue shade
-$secondary-color: #FFB84D;  // Orange shade
-$background-color: #F7F9FC; // Light gray/blue background
+$primary-color: #4D8AFF;    
+$secondary-color: #FFB84D;  
+$background-color: #F7F9FC; 
 $text-color: #333333;
 $light-color: #FFFFFF;
 $dark-color: #222222;
@@ -9,7 +8,6 @@ $border-radius: 12px;
 $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 $transition: all 0.3s ease;
 
-// Base styles
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 
 * {
