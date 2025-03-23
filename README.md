@@ -1,7 +1,8 @@
 # VolunEra: A New Era of Volunteering
 
 <img src="./src/assets/images/volunera-text-logo-white.svg" width="400" alt="VolunEra Logo">
-*Google Solution Challenge 2025*
+
+### Google Solution Challenge 2025
 
 VolunEra is a web application that bridges the gap between passionate volunteers and NGOs making a difference. Our platform enables meaningful connections, simplifies volunteer management, and creates measurable community impact.
 
