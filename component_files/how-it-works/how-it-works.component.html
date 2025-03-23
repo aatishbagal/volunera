@@ -1,0 +1,25 @@
+<section id="how-it-works" class="section">
+  <div class="section-container">
+    <h2 class="section-title">How It Works</h2>
+    
+    <div class="how-it-works-container">
+      <div class="how-it-works-column">
+        <h3>For Volunteers</h3>
+        <div class="step-card" *ngFor="let step of volunteerSteps">
+          <div class="step-number">{{ step.number }}</div>
+          <h4>{{ step.title }}</h4>
+          <p>{{ step.description }}</p>
+        </div>
+      </div>
+      
+      <div class="how-it-works-column">
+        <h3>For NGOs</h3>
+        <div class="step-card" *ngFor="let step of ngoSteps">
+          <div class="step-number">{{ step.number }}</div>
+          <h4>{{ step.title }}</h4>
+          <p>{{ step.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

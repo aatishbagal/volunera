@@ -1,0 +1,119 @@
+$primary-color: #4D8AFF;
+$secondary-color: #FFB84D;
+$light-color: #FFFFFF;
+$text-color: #333333;
+$background-color: #F7F9FC;
+$border-radius: 12px;
+$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+.section {
+  padding: 80px 0;
+  
+  &.bg-light {
+    background-color: $background-color;
+  }
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section-title {
+  font-size: 32px;
+  margin-bottom: 50px;
+  text-align: center;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: $secondary-color;
+    border-radius: 2px;
+  }
+}
+
+.gamification-container {
+  display: flex;
+  gap: 30px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
+}
+
+.gamification-column {
+  flex: 1;
+  
+  h3 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: $primary-color;
+    font-size: 24px;
+  }
+}
+
+.points-list {
+  background-color: $light-color;
+  padding: 30px;
+  border-radius: $border-radius;
+  box-shadow: $box-shadow;
+  list-style: none;
+  
+  li {
+    padding: 12px 0;
+    border-bottom: 1px solid rgba($text-color, 0.1);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    span {
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+}
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.badge {
+  background-color: $light-color;
+  padding: 20px;
+  border-radius: $border-radius;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  box-shadow: $box-shadow;
+  
+  .badge-icon {
+    font-size: 24px;
+    color: $secondary-color;
+  }
+  
+  .badge-info {
+    h4 {
+      margin-bottom: 5px;
+      color: $primary-color;
+    }
+    
+    p {
+      font-size: 14px;
+      line-height: 1.5;
+    }
+  }
+}

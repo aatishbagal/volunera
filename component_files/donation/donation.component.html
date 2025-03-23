@@ -1,0 +1,12 @@
+<section class="section">
+    <div class="section-container">
+      <h2 class="section-title">Donation Impact</h2>
+      
+      <div class="donation-impact-container">
+        <div class="impact-card" *ngFor="let impact of impacts">
+          <i class="fas {{ impact.icon }}"></i>
+          <p>{{ impact.description }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
