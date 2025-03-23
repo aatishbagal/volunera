@@ -53,8 +53,8 @@ Potential features we'd like to implement if time permits:
 
 ## 👥 Team VolNexus
 
-- Rhiya Buranpur - @rhiyaburanpur
-- Aatish Bagal - @aatishbagal
+- Rhiya Buranpur - [@rhiyaburanpur](https://github.com/rhiyaburanpur)
+- Aatish Bagal - [@aatishbagal](https://github.com/aatishbagal)
 
 ---
 
