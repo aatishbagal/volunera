@@ -14,7 +14,7 @@ interface NGO {
   standalone: true,
   imports:[NgFor]
 })
-export class NGOSpotlightComponent implements OnInit {
+export class NgoSpotlightComponent implements OnInit {
   ngos: NGO[] = [
     {
       name: 'GreenEarth Foundation',

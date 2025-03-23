@@ -12,12 +12,13 @@ import { DonationComponent } from '../../component_files/donation/donation.compo
 import { CtaComponent } from '../../component_files/cta/cta.component';
 import { FooterComponent } from '../../component_files/footer/footer.component';
 
+
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     CommonModule,
-    RouterOutlet,
+    // RouterOutlet,
     NavbarComponent,
     HeroComponent,
     HowItWorksComponent,

@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './cta.component.html',
   styleUrls: ['./cta.component.scss']
 })
-export class CTAComponent implements OnInit {
+export class CtaComponent implements OnInit {
 
   constructor() { }
 
