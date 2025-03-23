@@ -1,59 +1,60 @@
-# Myapp
+# VolunEra: A New Era of Volunteering
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+![VolunEra Logo](./src/assets/images/volunera-text-logo-white.svg)
+*Google Solution Challenge 2025*
 
-## Development server
+VolunEra is a web application that bridges the gap between passionate volunteers and NGOs making a difference. Our platform enables meaningful connections, simplifies volunteer management, and creates measurable community impact.
 
-To start a local development server, run:
+## 🌟 Overview
 
-```bash
-ng serve
-```
+VolunEra helps volunteers discover opportunities that match their skills and interests, while giving NGOs the tools they need to effectively manage volunteers and showcase their impact. Whether you're looking to contribute your time or finding committed volunteers for your cause, VolunEra provides the infrastructure to make it happen.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+**"Connect, Contribute, and Create Impact in Your Community"**
 
-## Code scaffolding
+## 🔧 Tech Stack
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- **Frontend**: Angular
+- **Backend**: Firebase
+- **Authentication**: Firebase Authentication
+- **Database**: Firebase Firestore
+- **Storage**: Firebase Storage
+- **Hosting**: Firebase Hosting
 
-```bash
-ng generate component component-name
-```
+## ✨ Features
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Core Features
+- **NGO Profiles**: Organizations can create detailed profiles highlighting their mission and impact
+- **Event Management**: NGOs can list previous and upcoming volunteering events
+- **Volunteer Registration**: Simple signup process for individuals to join events
+- **Smart Search**: Find NGOs by location, type, and domain of work
+- **Donation System**: Support causes through financial contributions and belongings donation
+- **Domain Exploration**: Help volunteers discover different areas of social impact
 
-```bash
-ng generate --help
-```
+## 📱 Usage
 
-## Building
+### For Volunteers:
+1. **Create Your Profile**: Sign up and tell us about your skills, interests, and availability
+2. **Discover Opportunities**: Find volunteering matches based on your preferences and location
+3. **Make an Impact**: Volunteer, track your contributions, and connect with your community
 
-To build the project run:
+### For NGOs:
+1. **Register Your Organization**: Create your NGO profile with your mission, needs, and impact stories
+2. **Post Opportunities**: Share events, workshops, and donation needs with our community
+3. **Find Dedicated Volunteers**: Connect with skilled volunteers passionate about your cause
 
-```bash
-ng build
-```
+## 🛣️ Future Enhancements
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+Potential features we'd like to implement if time permits:
+- Chat functionality between volunteers and NGOs
+- Location-based communities
+- Personalized volunteering recommendations
+- Educational resources for volunteers
 
-## Running unit tests
+## 👥 Team VolNexus
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+- Rhiya Buranpur
+- Aatish Bagal
 
-```bash
-ng test
-```
+---
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Made with ❤️ for Google Solution Challenge 2025
