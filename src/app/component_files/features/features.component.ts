@@ -30,6 +30,21 @@ export class FeaturesComponent implements OnInit {
       icon: 'fa-graduation-cap',
       title: 'Skill Development',
       description: 'Access workshops and resources to grow while making a difference'
+    },
+    {
+      icon: 'fa-map-marker-alt',
+      title: 'Geo-Location',
+      description: 'Find volunteer opportunities near you with our location-based search and recommendations'
+    },
+    {
+      icon: 'fa-chart-line',
+      title: 'Impact Tracking',
+      description: 'Measure and visualize your volunteering impact with detailed analytics and reporting'
+    },
+    {
+      icon: 'fa-gift',
+      title: 'Donation Management',
+      description: 'Facilitate both financial and goods donations through our transparent platform'
     }
   ];
 

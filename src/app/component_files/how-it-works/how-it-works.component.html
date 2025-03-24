@@ -1,23 +1,47 @@
 <section id="how-it-works" class="section">
   <div class="section-container">
-    <h2 class="section-title">How It Works</h2>
+    <div class="section-title-area">
+      <div class="section-tag">Process</div>
+      <h2 class="section-title">How It Works</h2>
+      <p class="section-subtitle">Our platform makes it easy for both volunteers and NGOs to connect and create meaningful impact</p>
+    </div>
     
     <div class="how-it-works-container">
       <div class="how-it-works-column">
-        <h3>For Volunteers</h3>
-        <div class="step-card" *ngFor="let step of volunteerSteps">
-          <div class="step-number">{{ step.number }}</div>
-          <h4>{{ step.title }}</h4>
-          <p>{{ step.description }}</p>
+        <div class="column-header">
+          <div class="column-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 12.75c1.63 0 3.07.39 4.24.9 1.08.48 1.76 1.56 1.76 2.73V18H6v-1.62c0-1.17.68-2.25 1.76-2.73 1.17-.51 2.61-.9 4.24-.9zM12 2.25c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+            </svg>
+          </div>
+          <h3 class="column-title">For Volunteers</h3>
+        </div>
+        
+        <div class="steps-container">
+          <div class="step-card" *ngFor="let step of volunteerSteps">
+            <div class="step-number">Step 0{{ step.number }}</div>
+            <h4 class="step-title">{{ step.title }}</h4>
+            <p class="step-description">{{ step.description }}</p>
+          </div>
         </div>
       </div>
       
       <div class="how-it-works-column">
-        <h3>For NGOs</h3>
-        <div class="step-card" *ngFor="let step of ngoSteps">
-          <div class="step-number">{{ step.number }}</div>
-          <h4>{{ step.title }}</h4>
-          <p>{{ step.description }}</p>
+        <div class="column-header">
+          <div class="column-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/>
+            </svg>
+          </div>
+          <h3 class="column-title">For NGOs</h3>
+        </div>
+        
+        <div class="steps-container">
+          <div class="step-card" *ngFor="let step of ngoSteps">
+            <div class="step-number">Step 0{{ step.number }}</div>
+            <h4 class="step-title">{{ step.title }}</h4>
+            <p class="step-description">{{ step.description }}</p>
+          </div>
         </div>
       </div>
     </div>

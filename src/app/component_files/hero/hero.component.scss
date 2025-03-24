@@ -51,23 +51,24 @@ $transition: all 0.3s ease;
   color: $light-color; // Default text color is white
   z-index: 1;
   
+  .hero-logo {
+    max-width: 60%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
   h1 {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    font-weight: 600;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   }
   
   h2 {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     margin-bottom: 20px;
     font-weight: 500;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  }
-  
-  p {
-    font-size: 1.2rem;
-    margin-bottom: 30px;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   }
 }
 
@@ -101,16 +102,16 @@ $transition: all 0.3s ease;
 // Mobile responsive
 @media (max-width: 768px) {
   .hero-content {
+    .hero-logo {
+      max-width: 70%;
+    }
+    
     h1 {
-      font-size: 2.2rem;
+      font-size: 1.5rem;
     }
     
     h2 {
-      font-size: 1.4rem;
-    }
-    
-    p {
-      font-size: 1rem;
+      font-size: 1.2rem;
     }
   }
   

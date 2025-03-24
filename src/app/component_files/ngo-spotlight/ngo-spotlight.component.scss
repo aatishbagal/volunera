@@ -1,75 +1,193 @@
-$primary-color: #4D8AFF;
-$secondary-color: #FFB84D;
-$light-color: #FFFFFF;
-$border-radius: 12px;
-$box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+$primary-color: #021a02;
+$accent-color: #3b826f;
+$black-color: #000000;
+$white-color: #FFFFFF;
+$light-green: rgba(2, 26, 2, 0.05);
+$medium-green: rgba(2, 26, 2, 0.1);
+$border-radius: 16px;
+$box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
 
 .section {
-  padding: 80px 0;
+  padding: 100px 0;
+  background-color: $white-color;
+  position: relative;
 }
 
 .section-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 30px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: rgba(59, 130, 111, 0.1);
+  color: $accent-color;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
 }
 
 .section-title {
-  font-size: 32px;
-  margin-bottom: 50px;
-  text-align: center;
+  font-size: 36px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0 0 20px 0;
   position: relative;
   
   &:after {
     content: '';
     position: absolute;
-    bottom: -15px;
+    bottom: -10px;
     left: 50%;
     transform: translateX(-50%);
-    width: 80px;
+    width: 60px;
     height: 4px;
-    background-color: $secondary-color;
+    background-color: $accent-color;
     border-radius: 2px;
   }
 }
 
+.section-subtitle {
+  max-width: 600px;
+  margin: 20px auto 0;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 18px;
+}
+
 .ngo-spotlight-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 30px;
   
   @media (max-width: 768px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
 
 .ngo-card {
-  flex: 1;
-  background-color: $light-color;
-  padding: 30px;
+  background-color: $white-color;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: $border-radius;
-  box-shadow: $box-shadow;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
   
-  h3 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: $primary-color;
-    font-size: 22px;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $box-shadow;
+    border-color: transparent;
   }
 }
 
-.ngo-info {
+.ngo-card-header {
+  padding: 24px 24px 0;
   display: flex;
-  flex-direction: column;
-  gap: 20px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.ngo-icon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(59, 130, 111, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
   
-  h4 {
-    margin-bottom: 10px;
-    color: $secondary-color;
-    font-size: 18px;
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $accent-color;
   }
+}
+
+.ngo-name {
+  font-size: 22px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0;
+}
+
+.ngo-info {
+  padding: 0 24px;
+  flex-grow: 1;
+}
+
+.ngo-section {
+  margin-bottom: 24px;
+}
+
+.ngo-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: $accent-color;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ngo-section-content {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+.ngo-metrics {
+  display: flex;
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.metric {
+  flex: 1;
+  text-align: center;
+}
+
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: $accent-color;
+}
+
+.metric-label {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 4px;
+}
+
+.ngo-action {
+  padding: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+.connect-button {
+  width: 100%;
+  padding: 12px;
+  background-color: $accent-color;
+  color: $white-color;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
   
-  p {
-    font-size: 16px;
-    line-height: 1.6;
+  &:hover {
+    background-color: darken($accent-color, 5%);
   }
 }
