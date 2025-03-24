@@ -1,12 +1,23 @@
 <section class="section">
-    <div class="section-container">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Support</div>
       <h2 class="section-title">Donation Impact</h2>
-      
-      <div class="donation-impact-container">
-        <div class="impact-card" *ngFor="let impact of impacts">
+      <p class="section-subtitle">Your contributions make a real difference in communities</p>
+    </div>
+    
+    <div class="donation-impact-container">
+      <div class="impact-card" *ngFor="let impact of impacts">
+        <div class="impact-icon">
           <i class="fas {{ impact.icon }}"></i>
-          <p>{{ impact.description }}</p>
         </div>
+        <h3 class="impact-title">{{ impact.title }}</h3>
+        <p class="impact-description">{{ impact.description }}</p>
       </div>
     </div>
-  </section>
+    
+    <div class="donation-cta">
+      <button class="donate-button">Make a Donation</button>
+    </div>
+  </div>
+</section>

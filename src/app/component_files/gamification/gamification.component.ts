@@ -25,7 +25,6 @@ export class GamificationComponent implements OnInit {
       activity: 'Event Participation',
       points: '10-50 points per event'
     },
-    // Removed "Skills Sharing" as requested
     {
       activity: 'Consistent Volunteering',
       points: '100 bonus points per month'
@@ -33,6 +32,10 @@ export class GamificationComponent implements OnInit {
     {
       activity: 'Positive Feedback',
       points: '30 points per recognition'
+    },
+    {
+      activity: 'Volunteering Milestones',
+      points: '200 points per 10 events'
     }
   ];
 
@@ -47,11 +50,15 @@ export class GamificationComponent implements OnInit {
       name: '"Local Hero"',
       description: 'Volunteer 50+ hours in your community'
     },
-    // Removed "Skill Master" as requested
     {
       icon: 'fa-star',
       name: '"Dedication Star"',
       description: 'Volunteer consistently for 6 months'
+    },
+    {
+      icon: 'fa-trophy',
+      name: '"Impact Champion"',
+      description: 'Make a measurable difference in 3+ projects'
     }
   ];
 

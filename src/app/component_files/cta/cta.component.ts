@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-cta',
   templateUrl: './cta.component.html',
-  styleUrls: ['./cta.component.scss']
+  styleUrls: ['./cta.component.scss'],
+  standalone: true
 })
 export class CtaComponent implements OnInit {
 
