@@ -1,16 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
+import { filter } from 'rxjs/operators'; // Added missing import
 
-import { NavbarComponent } from '../../component_files/navbar/navbar.component';
-import { HeroComponent } from '../../component_files/hero/hero.component';
-import { HowItWorksComponent } from '../../component_files/how-it-works/how-it-works.component';
-import { FeaturesComponent } from '../../component_files/features/features.component';
-import { NgoSpotlightComponent } from '../../component_files/ngo-spotlight/ngo-spotlight.component';
-import { GamificationComponent } from '../../component_files/gamification/gamification.component';
-import { DonationComponent } from '../../component_files/donation/donation.component';
-import { CtaComponent } from '../../component_files/cta/cta.component';
-import { FooterComponent } from '../../component_files/footer/footer.component';
+import { NavbarComponent } from './component_files/navbar/navbar.component';
+import { HeroComponent } from './component_files/hero/hero.component';
+import { HowItWorksComponent } from './component_files/how-it-works/how-it-works.component';
+import { FeaturesComponent } from './component_files/features/features.component';
+import { NgoSpotlightComponent } from './component_files/ngo-spotlight/ngo-spotlight.component';
+import { GamificationComponent } from './component_files/gamification/gamification.component';
+import { DonationComponent } from './component_files/donation/donation.component';
+import { CtaComponent } from './component_files/cta/cta.component';
+import { FooterComponent } from './component_files/footer/footer.component';
 
 
 @Component({
@@ -18,7 +20,8 @@ import { FooterComponent } from '../../component_files/footer/footer.component';
   standalone: true,
   imports: [
     CommonModule,
-    // RouterOutlet,
+    RouterModule,
+    RouterOutlet, // Added RouterOutlet to imports
     NavbarComponent,
     HeroComponent,
     HowItWorksComponent,
@@ -34,6 +37,16 @@ import { FooterComponent } from '../../component_files/footer/footer.component';
 })
 export class AppComponent implements OnInit {
   title = 'volunera';
+  currentRoute: string = '';
+  
+  constructor(private router: Router) {
+    // Subscribe to router events to track current route
+    this.router.events.pipe(
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd) // Fixed typing
+    ).subscribe((event: NavigationEnd) => { // Fixed typing
+      this.currentRoute = event.url;
+    });
+  }
   
   ngOnInit() {
     // Add scroll event listener for navbar color change
@@ -41,6 +54,10 @@ export class AppComponent implements OnInit {
     
     // Load Font Awesome icons
     this.loadFontAwesome();
+  }
+  
+  isHomeRoute() {
+    return this.currentRoute === '/' || this.currentRoute === '';
   }
   
   handleScroll = () => {

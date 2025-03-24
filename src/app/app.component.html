@@ -1,28 +1,34 @@
-<!-- Main Container -->
+<!-- In app.component.html -->
 <div class="container">
   <!-- Navbar -->
   <app-navbar></app-navbar>
 
-  <!-- Hero Section -->
-  <app-hero></app-hero>
+  <!-- Router Outlet for dynamic content -->
+  <router-outlet></router-outlet>
 
-  <!-- How It Works Section -->
-  <app-how-it-works></app-how-it-works>
+  <!-- Only show these components on the home route -->
+  <ng-container *ngIf="isHomeRoute()">
+    <!-- Hero Section -->
+    <app-hero></app-hero>
 
-  <!-- Key Features Section -->
-  <app-features></app-features>
+    <!-- How It Works Section -->
+    <app-how-it-works></app-how-it-works>
 
-  <!-- NGO Spotlight Section -->
-  <app-ngo-spotlight></app-ngo-spotlight>
+    <!-- Key Features Section -->
+    <app-features></app-features>
 
-  <!-- Gamification Section -->
-  <app-gamification></app-gamification>
+    <!-- NGO Spotlight Section -->
+    <app-ngo-spotlight></app-ngo-spotlight>
 
-  <!-- Donation Impact Section -->
-  <app-donation></app-donation>
+    <!-- Gamification Section -->
+    <app-gamification></app-gamification>
 
-  <!-- CTA Section -->
-  <app-cta></app-cta>
+    <!-- Donation Impact Section -->
+    <app-donation></app-donation>
+
+    <!-- CTA Section -->
+    <app-cta></app-cta>
+  </ng-container>
 
   <!-- Footer -->
   <app-footer></app-footer>
