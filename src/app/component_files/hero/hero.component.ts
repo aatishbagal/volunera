@@ -14,8 +14,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   // Reference to the video element
   @ViewChild('heroVideo') videoElement!: ElementRef;
   
-  // For dynamic text coloring
-  colorUpdateInterval: any;
+  // Text color is now static white
 
   constructor(private router: Router) { }
 
@@ -33,10 +32,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Clean up interval when component is destroyed
-    if (this.colorUpdateInterval) {
-      clearInterval(this.colorUpdateInterval);
-    }
+    // No interval to clean up anymore
   }
 
   setupVideo(): void {
@@ -81,10 +77,8 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   startColorAnalysis(): void {
-    // This will analyze video colors and adjust text accordingly
-    this.colorUpdateInterval = setInterval(() => {
-      this.analyzeVideoColor();
-    }, 1000); // Check every second
+    // Set text color immediately and no need for interval
+    this.analyzeVideoColor();
   }
 
   scrollToSection(sectionId: string): void {
@@ -103,52 +97,17 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/register-ngo']);
   }
 
-  // Function to analyze video and determine text color
+  // Function to set permanent white text color (no dynamic analysis)
   analyzeVideoColor(): void {
-    if (!this.videoElement) return;
+    // Get hero content element
+    const heroContent = document.querySelector('.hero-content');
     
-    const video = this.videoElement.nativeElement;
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    
-    // Check if context is null before using it
-    if (!context) return;
-    
-    // Set canvas size to a small sample (for performance)
-    canvas.width = 50;
-    canvas.height = 50;
-    
-    // Draw the current video frame to the canvas
-    try {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // Safely check and cast heroContent before using style property
+    if (heroContent) {
+      const htmlElement = heroContent as HTMLElement;
       
-      // Get image data from the center of the video
-      const centerX = Math.floor(canvas.width / 2);
-      const centerY = Math.floor(canvas.height / 2);
-      const pixelData = context.getImageData(centerX, centerY, 1, 1).data;
-      
-      // Calculate brightness (simple average)
-      const brightness = (pixelData[0] + pixelData[1] + pixelData[2]) / 3;
-      
-      // Get hero content element
-      const heroContent = document.querySelector('.hero-content');
-      
-      // Safely check and cast heroContent before using style property
-      if (heroContent) {
-        const htmlElement = heroContent as HTMLElement;
-        
-        // Change text color based on brightness
-        if (brightness < 128) {
-          // Dark background, use light text
-          htmlElement.style.color = '#ffffff';
-        } else {
-          // Light background, use dark text
-          htmlElement.style.color = '#021a02';
-        }
-      }
-    } catch (error) {
-      // Handle potential errors when video isn't ready
-      console.log('Video not ready for analysis yet:', error);
+      // Set text color to white permanently
+      htmlElement.style.color = '#ffffff';
     }
   }
 }
