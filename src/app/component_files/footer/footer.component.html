@@ -1,47 +1,78 @@
 <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-column">
-        <img src="/src/assets/images/volunera-text-logo-white.svg" alt="VolunEra Logo" class="footer-logo">
-        <p>A new era of volunteering is here. Connect, contribute, and create impact.</p>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Contact</h3>
-        <p>Email: contact &commat;volunera.org</p>
-        <p>Support: help &commat;volunera.org</p>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Social Media</h3>
-        <div class="social-links">
-          <a href="#" class="social-link"><i class="fab fa-instagram"></i> &commat;VolunEra</a>
-          <a href="#" class="social-link"><i class="fab fa-twitter"></i> &commat;VolunEra</a>
-          <a href="#" class="social-link"><i class="fab fa-facebook"></i> /VolunEraOfficial</a>
-        </div>
-      </div>
-      
-      <div class="footer-column">
-        <h3>Newsletter</h3>
-        <p>Stay updated on opportunities and community impact stories</p>
-        <div class="newsletter-form">
-          <input 
-            type="email" 
-            placeholder="Your email address" 
-            class="newsletter-input"
-            [(ngModel)]="emailSubscription"
-            name="email"
-          >
-          <button class="btn btn-secondary" (click)="subscribeToNewsletter()">Subscribe</button>
-        </div>
-      </div>
+  <div class="footer-container">
+    <div class="footer-column logo-column">
+      <img src="/images/volunera-text-logo-black.svg" alt="VolunEra Logo" class="footer-logo">
+      <p class="footer-tagline">A new era of volunteering is here. Connect, contribute, and create impact.</p>
     </div>
     
-    <div class="footer-bottom">
-      <div class="footer-links">
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
-        <a href="#">Community Guidelines</a>
-      </div>
-      <p>&copy; {{ currentYear }} VolunEra. All rights reserved.</p>
+    <div class="footer-column">
+      <h3 class="footer-heading">Contact</h3>
+      <ul class="footer-list">
+        <li class="footer-list-item">
+          <div class="item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+            </svg>
+          </div>
+          <span>contact&commat;volunera.org</span>
+        </li>
+        <li class="footer-list-item">
+          <div class="item-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z"/>
+            </svg>
+          </div>
+          <span>help&commat;volunera.org</span>
+        </li>
+      </ul>
     </div>
-  </footer>
+    
+    <div class="footer-column">
+      <h3 class="footer-heading">Social Media</h3>
+      <ul class="footer-list">
+        <li class="footer-list-item">
+          <div class="item-icon">
+            <i class="fab fa-instagram"></i>
+          </div>
+          <a href="#" class="footer-link">Instagram: &commat;VolunEra</a>
+        </li>
+        <li class="footer-list-item">
+          <div class="item-icon">
+            <i class="fab fa-twitter"></i>
+          </div>
+          <a href="#" class="footer-link">Twitter: &commat;VolunEra</a>
+        </li>
+        <li class="footer-list-item">
+          <div class="item-icon">
+            <i class="fab fa-facebook"></i>
+          </div>
+          <a href="#" class="footer-link">Facebook: VolunEraOfficial</a>
+        </li>
+      </ul>
+    </div>
+    
+    <div class="footer-column">
+      <h3 class="footer-heading">Newsletter</h3>
+      <p class="footer-text">Stay updated on opportunities and community impact stories</p>
+      <div class="newsletter-form">
+        <input 
+          type="email" 
+          placeholder="Your email address" 
+          class="newsletter-input"
+          [(ngModel)]="emailSubscription"
+          name="email"
+        >
+        <button class="btn-subscribe" (click)="subscribeToNewsletter()">Subscribe</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <div class="footer-links">
+      <a href="#" class="footer-bottom-link">Privacy Policy</a>
+      <a href="#" class="footer-bottom-link">Terms of Service</a>
+      <a href="#" class="footer-bottom-link">Community Guidelines</a>
+    </div>
+    <p class="copyright">&copy; {{ currentYear }} VolunEra. All rights reserved.</p>
+  </div>
+</footer>
