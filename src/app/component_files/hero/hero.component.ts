@@ -88,13 +88,15 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
   
-  // Navigation methods for the buttons
+  // In hero.component.ts, update the navigation methods
   navigateToVolunteer(): void {
-    this.router.navigate(['/join-volunteer']);
+    console.log('Volunteer button clicked');
+    window.location.href = '/auth/volunteer/login';
   }
-  
+
   navigateToNGO(): void {
-    this.router.navigate(['/register-ngo']);
+    console.log('NGO button clicked');
+    window.location.href = '/auth/ngo/login';
   }
 
   // Function to set permanent white text color (no dynamic analysis)

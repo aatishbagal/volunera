@@ -27,6 +27,7 @@ export interface UserProfile {
   displayName?: string;
   photoURL?: string;
   isOnboarded?: boolean;
+  isVerified?: boolean;
   createdAt?: any;
   updatedAt?: any;
 }
