@@ -64,7 +64,7 @@ export class OnboardingVolunteerComponent implements OnInit {
   availabilityOptions = [
     { title: 'Regular', value: 'regular', icon: 'fa-calendar-check', description: 'Set weekly or monthly volunteer hours' },
     { title: 'One-time', value: 'onetime', icon: 'fa-calendar-day', description: 'Participate in specific events' },
-    { title: 'Flexible', value: 'flexible', icon: 'fa-clock', description: 'Volunteer when you're available' }
+    { title: 'Flexible', value: 'flexible', icon: 'fa-clock', description: 'Volunteer when you\'re available' }
   ];
   
   selectedSkills: string[] = [];
