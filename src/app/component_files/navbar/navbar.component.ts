@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Router } from '@angular/router';
 
 interface NavbarColors {
   bg: string;
@@ -24,11 +25,14 @@ export class NavbarComponent implements OnInit {
   // Sections with dark backgrounds where navbar should be light
   darkSections = ['features', 'gamification'];
   
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
     // Load Font Awesome if needed
     this.loadFontAwesome();
+    
+    // Check initial color
+    this.updateNavbarColor();
   }
 
   loadFontAwesome() {
@@ -49,6 +53,7 @@ export class NavbarComponent implements OnInit {
 
   updateNavbarColor() {
     const currentSection = this.getCurrentSection();
+    console.log('Current section:', currentSection);
     
     if (this.darkSections.includes(currentSection)) {
       // Light navbar for dark backgrounds
@@ -63,6 +68,8 @@ export class NavbarComponent implements OnInit {
         text: '#ffffff'
       };
     }
+    
+    console.log('Navbar colors:', this.currentSectionColor);
   }
 
   getCurrentSection(): string {
@@ -96,5 +103,13 @@ export class NavbarComponent implements OnInit {
       element.scrollIntoView({ behavior: 'smooth' });
       this.isMobileMenuOpen = false;
     }
+  }
+  
+  navigateToLogin() {
+    this.router.navigate(['/auth/volunteer/login']);
+  }
+  
+  navigateToSignup() {
+    this.router.navigate(['/auth/ngo/login']);
   }
 }

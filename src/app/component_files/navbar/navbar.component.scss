@@ -14,6 +14,7 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   padding: 0 20px;
+  pointer-events: none; // Makes the navbar container not block clicks
   transition: $transition;
 }
 
@@ -23,11 +24,10 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   align-items: center;
   width: 90%;
   max-width: 1200px;
-  background-color: $primary-color;
-  color: $light-color;
   padding: 10px 30px;
   border-radius: 50px;
   box-shadow: $box-shadow;
+  pointer-events: auto; // Re-enable pointer events for the container
   transition: $transition;
 }
 
@@ -37,6 +37,7 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   img {
     height: 40px;
     max-width: 100%;
+    transition: $transition;
   }
 }
 
@@ -47,12 +48,11 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   
   .nav-link {
     padding: 8px 16px;
-    color: $light-color;
     font-weight: 500;
-    transition: $transition;
+    text-decoration: none;
     border-radius: 20px;
     cursor: pointer;
-    text-decoration: none;
+    transition: $transition;
     
     &:hover {
       background-color: rgba(255, 255, 255, 0.1);
@@ -66,14 +66,41 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   justify-content: flex-end;
   gap: 10px;
   
-  .btn-primary {
-    background-color: $secondary-color;
-    color: $light-color;
-  }
-  
-  .btn-secondary {
-    background-color: $light-color;
-    color: $primary-color;
+  .btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: $transition;
+    
+    &.btn-outline {
+      background-color: transparent;
+      border: 1px solid;
+      
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+    }
+    
+    &.btn-dark {
+      background-color: $primary-color;
+      color: $light-color;
+      border: none;
+      
+      &:hover {
+        background-color: darken($primary-color, 10%);
+      }
+    }
+    
+    &.btn-light {
+      background-color: $light-color;
+      color: $primary-color;
+      border: none;
+      
+      &:hover {
+        background-color: darken($light-color, 10%);
+      }
+    }
   }
 }
 
@@ -81,33 +108,37 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: none;
   font-size: 24px;
   cursor: pointer;
-  color: $light-color;
+  transition: $transition;
 }
 
 // Mobile responsive
 @media (max-width: 768px) {
   .navbar {
-    top: 0;
-    padding: 0;
+    top: 10px;
+    padding: 0 10px;
   }
   
   .navbar-container {
     width: 100%;
-    border-radius: 0;
+    border-radius: 30px;
     padding: 10px 20px;
+  }
+  
+  .logo img {
+    height: 30px;
   }
   
   .nav-links {
     position: fixed;
-    top: 60px;
-    left: 0;
-    right: 0;
-    background-color: $primary-color;
+    top: 70px;
+    left: 10px;
+    right: 10px;
     flex-direction: column;
     align-items: center;
     padding: 20px 0;
     gap: 10px;
-    transform: translateY(-100%);
+    border-radius: 20px;
+    transform: translateY(-20px);
     opacity: 0;
     visibility: hidden;
     box-shadow: $box-shadow;
@@ -122,13 +153,12 @@ $box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     .nav-link {
       width: 100%;
       text-align: center;
-      color: $light-color;
     }
   }
   
   .auth-buttons {
     .btn {
-      padding: 8px 16px;
+      padding: 6px 12px;
       font-size: 14px;
     }
   }
