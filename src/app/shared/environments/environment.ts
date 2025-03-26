@@ -1,7 +1,8 @@
+
 export const environment = {
   production: false,
   firebase: {
-    apiKey: '$FIREBASE_API_KEY',
+    apiKey: 'AIzaSyDZclluqu8Xg2k7HetW8HNI03mzJqt6B_c',
     authDomain: 'volunera-volnexus.firebaseapp.com',
     projectId: 'volunera-volnexus',
     storageBucket: 'volunera-volnexus.firebasestorage.app',
