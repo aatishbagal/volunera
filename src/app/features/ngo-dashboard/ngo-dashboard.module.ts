@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NgoDashboardComponent } from './components/dashboard-home.component';
+import { NgoDashboardComponent } from './pages/dashboard-home/ngo-dashboard.component';
 import { SharedModule } from '../../shared/shared.module';
 import { NGO_ROUTES } from './ngo-dashboard.routes';
 

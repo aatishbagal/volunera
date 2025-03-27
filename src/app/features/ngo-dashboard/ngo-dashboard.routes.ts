@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { NgoDashboardComponent } from './components/dashboard-home.component';
+import { NgoDashboardComponent } from './pages/dashboard-home/ngo-dashboard.component';
 import { PageNotFoundComponent } from '../../shared/components/page-not-found/page-not-found.component';
 
 export const NGO_ROUTES: Routes = [
