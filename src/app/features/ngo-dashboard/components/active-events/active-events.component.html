@@ -1,1 +1,45 @@
-<p>active-events works!</p>
+<div class="active-events-container">
+    <div class="card">
+      <div class="card-header">
+        <h2 class="card-title">Active Events</h2>
+        <a href="#" class="card-link">Manage Events</a>
+      </div>
+      <div class="card-content">
+        <div class="event-list">
+          <div *ngFor="let event of events" class="event-item">
+            <div class="event-date">
+              <span class="date-day">{{event.date | date:'d'}}</span>
+              <span class="date-month">{{event.date | date:'MMM'}}</span>
+            </div>
+            <div class="event-details">
+              <h4 class="event-title">{{event.title}}</h4>
+              <p class="event-location">
+                <i class="fas fa-map-marker-alt"></i>
+                {{event.location}}
+              </p>
+              <div class="registration-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" [style.width.%]="(event.registrations / event.maxSpots) * 100"></div>
+                </div>
+                <span class="registration-text">{{event.registrations}}/{{event.maxSpots}} registered</span>
+              </div>
+            </div>
+            <div class="event-actions">
+              <button class="event-action-btn edit" (click)="editEvent(event)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="event-action-btn share" (click)="shareEvent(event)">
+                <i class="fas fa-share-alt"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="create-event-action">
+          <button class="create-event-btn" (click)="createNewEvent()">
+            <i class="fas fa-plus"></i>
+            Create New Event
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>

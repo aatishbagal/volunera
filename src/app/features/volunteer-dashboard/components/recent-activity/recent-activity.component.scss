@@ -1,0 +1,152 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.recent-activity-container {
+  width: 100%;
+}
+
+.card {
+  @include card;
+  margin-bottom: 24px;
+  
+  .card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .card-link {
+      color: $primary-color;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  
+  .card-content {
+    padding: 16px 24px;
+  }
+  
+  .activity-list {
+    .activity-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.02);
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 16px;
+        
+        &.event {
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+        }
+        
+        &.donation {
+          background-color: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+        
+        &.achievement {
+          background-color: rgba($secondary-color, 0.1);
+          color: $secondary-color;
+        }
+      }
+      
+      .activity-details {
+        flex: 1;
+        
+        .activity-title {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 2px;
+          margin-top: 0;
+        }
+        
+        .activity-organization {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 2px;
+          margin-top: 0;
+        }
+        
+        .activity-date {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 0;
+          margin-top: 0;
+        }
+      }
+      
+      .activity-points {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-weight: 600;
+        color: $success-color;
+        
+        .points-label {
+          font-size: 0.6875rem;
+          color: $text-light;
+          font-weight: normal;
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0;
+    
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .empty-message {
+      font-size: 0.875rem;
+      color: $text-color;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .empty-subtext {
+      font-size: 0.75rem;
+      color: $text-light;
+      margin-bottom: 0;
+    }
+  }
+}
