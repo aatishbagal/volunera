@@ -1,0 +1,165 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.upcoming-events-container {
+  width: 100%;
+}
+
+.card {
+  @include card;
+  margin-bottom: 24px;
+  
+  .card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .card-link {
+      color: $primary-color;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  
+  .card-content {
+    padding: 16px 24px;
+  }
+  
+  .event-list {
+    .event-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.02);
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .event-date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 48px;
+        margin-right: 16px;
+        
+        .date-day {
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+        
+        .date-month {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+      }
+      
+      .event-details {
+        flex: 1;
+        
+        .event-title {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 2px;
+          margin-top: 0;
+        }
+        
+        .event-organization {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 2px;
+          margin-top: 0;
+        }
+        
+        .event-location {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 0;
+          margin-top: 0;
+          
+          i {
+            margin-right: 4px;
+          }
+        }
+      }
+      
+      .event-action {
+        .registered-btn, .register-btn {
+          padding: 6px 12px;
+          border-radius: $border-radius;
+          font-size: 0.75rem;
+          font-weight: 500;
+          border: none;
+          cursor: pointer;
+        }
+        
+        .registered-btn {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+          
+          i {
+            margin-right: 4px;
+          }
+        }
+        
+        .register-btn {
+          background-color: $primary-color;
+          color: white;
+          
+          &:hover {
+            background-color: darken($primary-color, 5%);
+          }
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0;
+    
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .empty-message {
+      font-size: 0.875rem;
+      color: $text-light;
+      margin-bottom: 16px;
+    }
+    
+    .find-events-btn {
+      @include button-primary;
+      
+      i {
+        margin-right: 8px;
+      }
+    }
+  }
+}
