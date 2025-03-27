@@ -2,12 +2,12 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: '$FIREBASE_API_KEY',
-    authDomain: '$FIREBASE_AUTH_DOMAIN',
-    projectId: '$FIREBASE_PROJECT_ID',
-    storageBucket: '$FIREBASE_STORAGE_BUCKET',
-    messagingSenderId: '$FIREBASE_MESSAGING_SENDER_ID',
-    appId: '$FIREBASE_APP_ID',
-    measurementId: '$FIREBASE_MEASUREMENT_ID'
+    apiKey: 'AIzaSyDZclluqu8Xg2k7HetW8HNI03mzJqt6B_c',
+    authDomain: 'volunera-volnexus.firebaseapp.com',
+    projectId: 'volunera-volnexus',
+    storageBucket: 'volunera-volnexus.firebasestorage.app',
+    messagingSenderId: '381526710819',
+    appId: '1:381526710819:web:2b042819cb3d9049e56f96',
+    measurementId: 'G-WB2H90PG3V'
   }
 };

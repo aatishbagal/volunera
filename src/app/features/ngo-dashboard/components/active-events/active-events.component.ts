@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Event {
   id: number;
@@ -12,7 +13,9 @@ interface Event {
 @Component({
   selector: 'app-active-events',
   templateUrl: './active-events.component.html',
-  styleUrls: ['./active-events.component.scss']
+  styleUrls: ['./active-events.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class ActiveEventsComponent implements OnInit {
   @Input() events: Event[] = [];

@@ -300,6 +300,112 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
           border-right: 1px solid #e5e7eb;
           
           &:last-child {
+            border-right: none;
+          }
+          
+          .stat-title {
+            font-size: 0.875rem;
+            color: $text-light;
+            margin-bottom: 8px;
+          }
+          
+          .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+          }
+          
+          .stat-trend {
+            display: flex;
+            align-items: center;
+            font-size: 0.75rem;
+            
+            i {
+              margin-right: 4px;
+            }
+            
+            &.positive {
+              color: $success-color;
+            }
+            
+            &.negative {
+              color: $danger-color;
+            }
+          }
+        }
+      }
+    }
+    
+    .two-column-layout {
+      display: flex;
+      gap: 24px;
+      
+      .column {
+        flex: 1;
+      }
+    }
+    
+    .card {
+      background-color: $card-background;
+      border-radius: $border-radius;
+      box-shadow: $box-shadow;
+      margin-bottom: 24px;
+      
+      .card-header {
+        padding: 16px 24px;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        
+        .card-title {
+          font-size: 1.125rem;
+          font-weight: 600;
+        }
+        
+        .card-link {
+          color: $primary-color;
+          text-decoration: none;
+          font-size: 0.875rem;
+          font-weight: 500;
+        }
+        
+        .period-selector {
+          display: flex;
+          
+          .period-btn {
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            color: $text-light;
+            
+            &.active {
+              background-color: rgba($primary-color, 0.1);
+              color: $primary-color;
+              border-radius: 16px;
+              font-weight: 500;
+            }
+          }
+        }
+      }
+      
+      .card-content {
+        padding: 16px 24px;
+      }
+    }
+    
+    // Recent Activity
+    .recent-activity {
+      .activity-list {
+        .activity-item {
+          display: flex;
+          align-items: center;
+          padding: 12px 0;
+          border-bottom: 1px solid #e5e7eb;
+          
+          &:last-child {
             border-bottom: none;
           }
           
@@ -581,109 +687,3 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     }
   }
 }
-            border-right: none;
-          }
-          
-          .stat-title {
-            font-size: 0.875rem;
-            color: $text-light;
-            margin-bottom: 8px;
-          }
-          
-          .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-          }
-          
-          .stat-trend {
-            display: flex;
-            align-items: center;
-            font-size: 0.75rem;
-            
-            i {
-              margin-right: 4px;
-            }
-            
-            &.positive {
-              color: $success-color;
-            }
-            
-            &.negative {
-              color: $danger-color;
-            }
-          }
-        }
-      }
-    }
-    
-    .two-column-layout {
-      display: flex;
-      gap: 24px;
-      
-      .column {
-        flex: 1;
-      }
-    }
-    
-    .card {
-      background-color: $card-background;
-      border-radius: $border-radius;
-      box-shadow: $box-shadow;
-      margin-bottom: 24px;
-      
-      .card-header {
-        padding: 16px 24px;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        .card-title {
-          font-size: 1.125rem;
-          font-weight: 600;
-        }
-        
-        .card-link {
-          color: $primary-color;
-          text-decoration: none;
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-        
-        .period-selector {
-          display: flex;
-          
-          .period-btn {
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: $text-light;
-            
-            &.active {
-              background-color: rgba($primary-color, 0.1);
-              color: $primary-color;
-              border-radius: 16px;
-              font-weight: 500;
-            }
-          }
-        }
-      }
-      
-      .card-content {
-        padding: 16px 24px;
-      }
-    }
-    
-    // Recent Activity
-    .recent-activity {
-      .activity-list {
-        .activity-item {
-          display: flex;
-          align-items: center;
-          padding: 12px 0;
-          border-bottom: 1px solid #e5e7eb;
-          
-          &:last-child {

@@ -1,9 +1,22 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ImpactCardComponent } from '../../components/impact-card/impact-card.component';
+import { UpcomingEventsComponent } from '../../components/upcoming-events/upcoming-events.component';
+import { RecentActivityComponent } from '../../components/recent-activity/recent-activity.component';
 
 @Component({
   selector: 'app-volunteer-dashboard',
   templateUrl: './volunteer-dashboard.component.html',
-  styleUrls: ['./volunteer-dashboard.component.scss']
+  styleUrls: ['./volunteer-dashboard.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    ImpactCardComponent,
+    UpcomingEventsComponent,
+    RecentActivityComponent
+  ]
 })
 export class VolunteerDashboardComponent implements OnInit {
   user = {

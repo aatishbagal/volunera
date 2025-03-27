@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface ImpactData {
   hoursVolunteered: number;
@@ -11,12 +12,17 @@ interface ImpactData {
 @Component({
   selector: 'app-impact-card',
   templateUrl: './impact-card.component.html',
-  styleUrls: ['./impact-card.component.scss']
+  styleUrls: ['./impact-card.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class ImpactCardComponent implements OnInit {
   @Input() impactData: ImpactData | null = null;
   activePeriod: 'week' | 'month' | 'year' = 'week';
   dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  
+  // Add Math property so it's available in the template
+  Math = Math;
   
   constructor() { }
 

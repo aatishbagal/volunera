@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Volunteer {
   id: number;
@@ -11,7 +12,9 @@ interface Volunteer {
 @Component({
   selector: 'app-volunteer-management',
   templateUrl: './volunteer-management.component.html',
-  styleUrls: ['./volunteer-management.component.scss']
+  styleUrls: ['./volunteer-management.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class VolunteerManagementComponent implements OnInit {
   @Input() volunteers: Volunteer[] = [];

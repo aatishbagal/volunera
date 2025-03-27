@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Activity {
   id: number;
@@ -12,7 +13,9 @@ interface Activity {
 @Component({
   selector: 'app-recent-activity',
   templateUrl: './recent-activity.component.html',
-  styleUrls: ['./recent-activity.component.scss']
+  styleUrls: ['./recent-activity.component.scss'],
+  standalone: true,
+  imports: [CommonModule]
 })
 export class RecentActivityComponent implements OnInit {
   @Input() activities: Activity[] = [];

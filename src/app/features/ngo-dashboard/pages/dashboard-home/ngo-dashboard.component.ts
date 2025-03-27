@@ -1,9 +1,20 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { VolunteerManagementComponent } from '../../components/volunteer-management/volunteer-management.component';
+import { ActiveEventsComponent } from '../../components/active-events/active-events.component';
 
 @Component({
   selector: 'app-ngo-dashboard',
   templateUrl: './ngo-dashboard.component.html',
-  styleUrls: ['./ngo-dashboard.component.scss']
+  styleUrls: ['./ngo-dashboard.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    VolunteerManagementComponent,
+    ActiveEventsComponent
+  ]
 })
 export class NgoDashboardComponent implements OnInit {
   organization = {
