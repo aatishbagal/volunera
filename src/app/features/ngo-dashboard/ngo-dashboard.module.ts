@@ -1,14 +1,28 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { NgoDashboardRoutingModule } from './ngo-dashboard-routing.module';
+import { NgoDashboardComponent } from './components/dashboard-home.component';
+import { SharedModule } from '../../shared/shared.module';
+import { NGO_ROUTES } from './ngo-dashboard.routes';
 
+// You'll need to create these components later
+import { VolunteerManagementComponent } from './components/volunteer-management/volunteer-management.component';
+import { ActiveEventsComponent } from './components/active-events/active-events.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    NgoDashboardComponent,
+    VolunteerManagementComponent,
+    ActiveEventsComponent
+  ],
   imports: [
     CommonModule,
-    NgoDashboardRoutingModule
+    RouterModule.forChild(NGO_ROUTES),
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule
   ]
 })
 export class NgoDashboardModule { }
