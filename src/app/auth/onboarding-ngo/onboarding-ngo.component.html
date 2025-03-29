@@ -1,4 +1,5 @@
-<div class="onboarding-container">
+<div class="onboarding-wrapper">
+  <div class="onboarding-container">
     <div class="onboarding-sidebar">
       <div class="sidebar-header">
         <img src="assets/images/volunera-logo.svg" alt="VolunEra Logo" class="onboarding-logo">
@@ -57,34 +58,36 @@
             <div class="error-message" *ngIf="orgInfoForm.get('displayName')?.invalid && orgInfoForm.get('displayName')?.touched">
               Display name is required
             </div>
-            <div class="helper-text">This is the name that will be visible to volunteers</div>
+            <div class="helper-text">This is the name that will be visible to volunteers on the platform</div>
           </div>
           
-          <div class="form-group">
-            <label for="website">Website (optional)</label>
-            <input 
-              type="url" 
-              id="website" 
-              formControlName="website" 
-              class="form-control"
-              placeholder="https://www.example.org"
-              [class.is-invalid]="orgInfoForm.get('website')?.invalid && orgInfoForm.get('website')?.touched">
-            <div class="error-message" *ngIf="orgInfoForm.get('website')?.invalid && orgInfoForm.get('website')?.touched">
-              Please enter a valid URL
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="website">Website</label>
+              <input 
+                type="url" 
+                id="website" 
+                formControlName="website" 
+                class="form-control"
+                placeholder="https://example.org"
+                [class.is-invalid]="orgInfoForm.get('website')?.invalid && orgInfoForm.get('website')?.touched">
+              <div class="error-message" *ngIf="orgInfoForm.get('website')?.invalid && orgInfoForm.get('website')?.touched">
+                Please enter a valid URL
+              </div>
             </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="phone">Phone Number (optional)</label>
-            <input 
-              type="tel" 
-              id="phone" 
-              formControlName="phone" 
-              class="form-control"
-              placeholder="+1 (555) 123-4567"
-              [class.is-invalid]="orgInfoForm.get('phone')?.invalid && orgInfoForm.get('phone')?.touched">
-            <div class="error-message" *ngIf="orgInfoForm.get('phone')?.invalid && orgInfoForm.get('phone')?.touched">
-              Please enter a valid phone number
+            
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                formControlName="phone" 
+                class="form-control"
+                placeholder="+1 (555) 123-4567"
+                [class.is-invalid]="orgInfoForm.get('phone')?.invalid && orgInfoForm.get('phone')?.touched">
+              <div class="error-message" *ngIf="orgInfoForm.get('phone')?.invalid && orgInfoForm.get('phone')?.touched">
+                Please enter a valid phone number
+              </div>
             </div>
           </div>
           
@@ -98,8 +101,7 @@
               [class.is-invalid]="orgInfoForm.get('description')?.invalid && orgInfoForm.get('description')?.touched">
             </textarea>
             <div class="error-message" *ngIf="orgInfoForm.get('description')?.invalid && orgInfoForm.get('description')?.touched">
-              <span *ngIf="orgInfoForm.get('description')?.errors?.['required']">Description is required</span>
-              <span *ngIf="orgInfoForm.get('description')?.errors?.['maxlength']">Description must be less than 1000 characters</span>
+              Description is required and must be less than 1000 characters
             </div>
             <div class="character-count" [class.limit-reached]="descriptionLength >= 1000">
               {{ descriptionLength }}/1000
@@ -107,21 +109,21 @@
           </div>
           
           <div class="form-group">
-            <label for="establishedYear">Year Established (optional)</label>
+            <label for="establishedYear">Year Established</label>
             <input 
               type="number" 
               id="establishedYear" 
               formControlName="establishedYear" 
               class="form-control"
-              placeholder="e.g., 2010"
+              placeholder="E.g., 2010"
               [class.is-invalid]="orgInfoForm.get('establishedYear')?.invalid && orgInfoForm.get('establishedYear')?.touched">
             <div class="error-message" *ngIf="orgInfoForm.get('establishedYear')?.invalid && orgInfoForm.get('establishedYear')?.touched">
-              Please enter a valid year (1800-present)
+              Please enter a valid year (1800 - present)
             </div>
           </div>
           
           <div class="form-group">
-            <label for="logoImage">Organization Logo</label>
+            <label for="logo">Organization Logo</label>
             <div class="image-upload-container">
               <div class="image-preview" *ngIf="logoPreview">
                 <img [src]="logoPreview" alt="Logo preview">
@@ -129,308 +131,268 @@
                   <i class="fas fa-times"></i>
                 </button>
               </div>
-              <label for="logoImage" class="image-upload-button" *ngIf="!logoPreview">
+              <label for="logo" class="image-upload-button" *ngIf="!logoPreview">
                 <i class="fas fa-cloud-upload-alt"></i>
                 <span>Upload Logo</span>
               </label>
               <input 
                 type="file" 
-                id="logoImage" 
+                id="logo" 
                 (change)="onLogoSelected($event)"
                 accept="image/*"
                 class="file-input">
             </div>
+            <div class="helper-text">Recommended size: 400x400 pixels, max 2MB</div>
           </div>
         </form>
         
         <!-- Step 2: Location & Mission -->
         <form *ngIf="currentStep === 1" [formGroup]="missionForm" class="onboarding-form">
-          <div class="form-group">
-            <label>Address (optional)</label>
-            <div class="address-fields">
+          <div class="form-section">
+            <h3 class="section-title">Location Information</h3>
+            
+            <div class="form-grid">
               <div class="form-group">
-                <label for="street">Street</label>
+                <label for="street">Street Address</label>
                 <input 
-                  type="text" 
-                  id="street" 
-                  formControlName="street" 
+                  type="text"
+                  id="street"
+                  formControlName="street"
                   class="form-control">
               </div>
               
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="city">City</label>
-                  <input 
-                    type="text" 
-                    id="city" 
-                    formControlName="city" 
-                    class="form-control">
-                </div>
-                
-                <div class="form-group">
-                  <label for="state">State/Province</label>
-                  <input 
-                    type="text" 
-                    id="state" 
-                    formControlName="state" 
-                    class="form-control">
-                </div>
-              </div>
-              
-              <div class="form-grid">
-                <div class="form-group">
-                  <label for="zip">Postal/Zip Code</label>
-                  <input 
-                    type="text" 
-                    id="zip" 
-                    formControlName="zip" 
-                    class="form-control">
-                </div>
-                
-                <div class="form-group">
-                  <label for="country">Country</label>
-                  <input 
-                    type="text" 
-                    id="country" 
-                    formControlName="country" 
-                    class="form-control">
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label for="mission">Organization Mission *</label>
-            <textarea 
-              id="mission" 
-              formControlName="mission" 
-              class="form-control textarea"
-              placeholder="What is your organization's mission?"
-              [class.is-invalid]="missionForm.get('mission')?.invalid && missionForm.get('mission')?.touched">
-            </textarea>
-            <div class="error-message" *ngIf="missionForm.get('mission')?.invalid && missionForm.get('mission')?.touched">
-              Mission statement is required
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Focus Areas *</label>
-            <div class="interests-container">
-              <div 
-                *ngFor="let cause of causes" 
-                class="interest-checkbox"
-                [class.selected]="isCauseSelected(cause.value)"
-                (click)="toggleCause(cause.value)">
-                <div class="interest-icon">
-                  <i class="fas {{ cause.icon }}"></i>
-                </div>
-                <div class="interest-content">
-                  <div class="interest-name">{{ cause.name }}</div>
-                  <div class="interest-description">{{ cause.description }}</div>
-                </div>
-                <div class="interest-check">
-                  <i class="fas fa-check"></i>
-                </div>
-              </div>
-            </div>
-            <div class="error-message" *ngIf="missionForm.get('causes')?.invalid && missionForm.get('causes')?.touched">
-              Please select at least one focus area
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Volunteer Needs</label>
-            <div class="checkbox-group">
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="needsRegular">
-                <span class="custom-checkbox"></span>
-                <span>Regular volunteers</span>
-              </label>
-              
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="needsOneTime">
-                <span class="custom-checkbox"></span>
-                <span>One-time event volunteers</span>
-              </label>
-              
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="needsRemote">
-                <span class="custom-checkbox"></span>
-                <span>Remote volunteers</span>
-              </label>
-            </div>
-          </div>
-        </form>
-        
-        <!-- Step 3: Social Media & Verification -->
-        <form *ngIf="currentStep === 2" [formGroup]="verificationForm" class="onboarding-form">
-          <div class="form-group">
-            <label>Social Media (optional)</label>
-            <div class="social-media-fields">
-              <div class="social-input">
-                <div class="social-icon facebook">
-                  <i class="fab fa-facebook-f"></i>
-                </div>
+              <div class="form-group">
+                <label for="city">City</label>
                 <input 
-                  type="text" 
-                  formControlName="facebook" 
-                  class="form-control"
-                  placeholder="https://facebook.com/yourorganization">
-              </div>
-              
-              <div class="social-input">
-                <div class="social-icon twitter">
-                  <i class="fab fa-twitter"></i>
-                </div>
-                <input 
-                  type="text" 
-                  formControlName="twitter" 
-                  class="form-control"
-                  placeholder="https://twitter.com/yourorganization">
-              </div>
-              
-              <div class="social-input">
-                <div class="social-icon instagram">
-                  <i class="fab fa-instagram"></i>
-                </div>
-                <input 
-                  type="text" 
-                  formControlName="instagram" 
-                  class="form-control"
-                  placeholder="https://instagram.com/yourorganization">
-              </div>
-              
-              <div class="social-input">
-                <div class="social-icon linkedin">
-                  <i class="fab fa-linkedin-in"></i>
-                </div>
-                <input 
-                  type="text" 
-                  formControlName="linkedin" 
-                  class="form-control"
-                  placeholder="https://linkedin.com/company/yourorganization">
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Verification Documents *</label>
-            <div class="verification-info">
-              <i class="fas fa-info-circle"></i>
-              <p>To verify your organization, please upload at least one of the following documents:</p>
-            </div>
-            
-            <div class="verification-options">
-              <div class="verification-option">
-                <div class="option-header">
-                  <h4>Non-profit Registration</h4>
-                  <div class="status" [class.uploaded]="registrationDoc">
-                    {{ registrationDoc ? 'Uploaded' : 'Not Uploaded' }}
-                  </div>
-                </div>
-                <p>501(c)(3) determination letter or equivalent document</p>
-                <div class="file-upload">
-                  <label for="registrationDoc" class="upload-button">
-                    <i class="fas fa-upload"></i>
-                    <span>{{ registrationDoc ? 'Change File' : 'Upload File' }}</span>
-                  </label>
-                  <input 
-                    type="file" 
-                    id="registrationDoc" 
-                    (change)="onRegistrationDocSelected($event)"
-                    accept=".pdf,.jpg,.jpeg,.png"
-                    class="file-input">
-                  <div class="file-name" *ngIf="registrationDoc">{{ registrationDoc.name }}</div>
-                </div>
-              </div>
-              
-              <div class="verification-option">
-                <div class="option-header">
-                    <h4>Official Letter</h4>
-                    <div class="status" [class.uploaded]="letterDoc">
-                      {{ letterDoc ? 'Uploaded' : 'Not Uploaded' }}
-                    </div>
-                  </div>
-                  <p>Letter from a government official or recognized authority</p>
-                  <div class="file-upload">
-                    <label for="letterDoc" class="upload-button">
-                      <i class="fas fa-upload"></i>
-                      <span>{{ letterDoc ? 'Change File' : 'Upload File' }}</span>
-                    </label>
-                    <input 
-                      type="file" 
-                      id="letterDoc" 
-                      (change)="onLetterDocSelected($event)"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      class="file-input">
-                    <div class="file-name" *ngIf="letterDoc">{{ letterDoc.name }}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="error-message" *ngIf="!isAnyDocumentUploaded() && verificationAttempted">
-                Please upload at least one verification document
+                  type="text"
+                  id="city"
+                  formControlName="city"
+                  class="form-control">
               </div>
             </div>
             
-            <div class="verification-notice">
-              <i class="fas fa-shield-alt"></i>
-              <div>
-                <h4>Verification Process</h4>
-                <p>After submitting, our team will review your documents and verify your organization within 2-3 business days. You'll receive an email notification once the process is complete.</p>
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="state">State/Province</label>
+                <input 
+                  type="text"
+                  id="state"
+                  formControlName="state"
+                  class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="zip">Postal/ZIP Code</label>
+                <input 
+                  type="text"
+                  id="zip"
+                  formControlName="zip"
+                  class="form-control">
               </div>
             </div>
             
             <div class="form-group">
-              <label class="checkbox-label terms-checkbox">
-                <input type="checkbox" formControlName="agreeTerms">
-                <span class="custom-checkbox"></span>
-                <span>I certify that I am authorized to represent this organization and all provided information is accurate and complete. I agree to VolunEra's <a href="#" target="_blank">Terms of Service</a> and <a href="#" target="_blank">Privacy Policy</a>.</span>
-              </label>
-              <div class="error-message" *ngIf="verificationForm.get('agreeTerms')?.invalid && verificationForm.get('agreeTerms')?.touched">
-                You must agree to the terms to proceed
+              <label for="country">Country</label>
+              <input 
+                type="text"
+                id="country"
+                formControlName="country"
+                class="form-control">
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <h3 class="section-title">Mission & Focus Areas</h3>
+            
+            <div class="form-group">
+              <label for="mission">Mission Statement *</label>
+              <textarea 
+                id="mission" 
+                formControlName="mission" 
+                class="form-control textarea"
+                placeholder="What is your organization's mission?"
+                [class.is-invalid]="missionForm.get('mission')?.invalid && missionForm.get('mission')?.touched">
+              </textarea>
+              <div class="error-message" *ngIf="missionForm.get('mission')?.invalid && missionForm.get('mission')?.touched">
+                Mission statement is required
               </div>
             </div>
-          </form>
-        </div>
+            
+            <div class="form-group">
+              <label>Focus Areas *</label>
+              <div class="interests-container">
+                <div 
+                  *ngFor="let cause of causes" 
+                  class="interest-checkbox"
+                  [class.selected]="isCauseSelected(cause.value)"
+                  (click)="toggleCause(cause.value)">
+                  <div class="interest-icon">
+                    <i class="fas {{ cause.icon }}"></i>
+                  </div>
+                  <div class="interest-content">
+                    <div class="interest-name">{{ cause.name }}</div>
+                    <div class="interest-description">{{ cause.description }}</div>
+                  </div>
+                  <div class="interest-check">
+                    <i class="fas fa-check"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="error-message" *ngIf="missionForm.get('causes')?.invalid && missionForm.get('causes')?.touched">
+                Please select at least one focus area
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Volunteer Needs</label>
+              <div class="checkbox-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="needsRegular">
+                  <span class="custom-checkbox"></span>
+                  <span>Regular volunteers (weekly/monthly commitments)</span>
+                </label>
+                
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="needsOneTime">
+                  <span class="custom-checkbox"></span>
+                  <span>One-time event volunteers</span>
+                </label>
+                
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="needsRemote">
+                  <span class="custom-checkbox"></span>
+                  <span>Remote volunteers</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </form>
         
-        <div class="form-actions">
-          <button 
-            type="button" 
-            class="btn-secondary" 
-            *ngIf="currentStep > 0"
-            (click)="prevStep()">
-            <i class="fas fa-arrow-left"></i> Back
-          </button>
+        <!-- Step 3: Social Media & Terms -->
+        <form *ngIf="currentStep === 2" [formGroup]="verificationForm" class="onboarding-form">
+          <div class="form-section">
+            <h3 class="section-title">Social Media Information</h3>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="facebook">
+                  <i class="fab fa-facebook"></i> Facebook
+                </label>
+                <input 
+                  type="text"
+                  id="facebook"
+                  formControlName="facebook"
+                  placeholder="facebook.com/yourorganization"
+                  class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="twitter">
+                  <i class="fab fa-twitter"></i> Twitter
+                </label>
+                <input 
+                  type="text"
+                  id="twitter"
+                  formControlName="twitter"
+                  placeholder="twitter.com/yourhandle"
+                  class="form-control">
+              </div>
+            </div>
+            
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="instagram">
+                  <i class="fab fa-instagram"></i> Instagram
+                </label>
+                <input 
+                  type="text"
+                  id="instagram"
+                  formControlName="instagram"
+                  placeholder="instagram.com/yourhandle"
+                  class="form-control">
+              </div>
+              
+              <div class="form-group">
+                <label for="linkedin">
+                  <i class="fab fa-linkedin"></i> LinkedIn
+                </label>
+                <input 
+                  type="text"
+                  id="linkedin"
+                  formControlName="linkedin"
+                  placeholder="linkedin.com/company/yourorganization"
+                  class="form-control">
+              </div>
+            </div>
+          </div>
           
-          <button 
-            type="button" 
-            class="btn-primary" 
-            [disabled]="isNextDisabled()"
-            (click)="nextStep()">
-            {{ currentStep < steps.length - 1 ? 'Continue' : 'Submit for Verification' }}
-            <i class="fas" [ngClass]="currentStep < steps.length - 1 ? 'fa-arrow-right' : 'fa-check'"></i>
-          </button>
-        </div>
+          <div class="form-section">
+            <h3 class="section-title">Terms & Conditions</h3>
+            
+            <div class="terms-container">
+              <p>By creating an account on VolunEra, you agree to:</p>
+              <ul>
+                <li>Provide accurate information about your organization</li>
+                <li>Engage respectfully with volunteers</li>
+                <li>Follow our community guidelines for posting opportunities</li>
+                <li>Protect volunteer data and privacy</li>
+              </ul>
+              <p>Please review our <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a> for complete details.</p>
+            </div>
+            
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="agreeTerms">
+                <span class="custom-checkbox"></span>
+                <span>I agree to the Terms of Service and Privacy Policy *</span>
+              </label>
+              <div class="error-message" *ngIf="verificationForm.get('agreeTerms')?.invalid && verificationAttempted">
+                You must agree to the terms to continue
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn-secondary" 
+          *ngIf="currentStep > 0"
+          (click)="prevStep()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn-primary" 
+          [disabled]="isNextDisabled()"
+          (click)="nextStep()">
+          {{ currentStep < steps.length - 1 ? 'Continue' : 'Complete' }}
+          <i class="fas" [ngClass]="currentStep < steps.length - 1 ? 'fa-arrow-right' : 'fa-check'"></i>
+        </button>
       </div>
     </div>
-    
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" *ngIf="isLoading">
-      <div class="spinner-container">
-        <div class="spinner"></div>
-        <p>{{ loadingMessage }}</p>
-      </div>
+  </div>
+  
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p>{{ loadingMessage }}</p>
     </div>
-    
-    <!-- Error Toast -->
-    <div class="toast error" *ngIf="errorMessage" [@fadeInOut]>
-      <div class="toast-icon">
-        <i class="fas fa-exclamation-circle"></i>
-      </div>
-      <div class="toast-content">
-        <p>{{ errorMessage }}</p>
-      </div>
-      <button class="toast-close" (click)="errorMessage = ''">
-        <i class="fas fa-times"></i>
-      </button>
+  </div>
+  
+  <!-- Error Toast -->
+  <div class="toast error" *ngIf="errorMessage" [@fadeInOut]>
+    <div class="toast-icon">
+      <i class="fas fa-exclamation-circle"></i>
     </div>
+    <div class="toast-content">
+      <p>{{ errorMessage }}</p>
+    </div>
+    <button class="toast-close" (click)="errorMessage = ''">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>

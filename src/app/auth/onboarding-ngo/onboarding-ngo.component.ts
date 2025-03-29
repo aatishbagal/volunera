@@ -152,7 +152,8 @@ export class OnboardingNgoComponent implements OnInit {
   
   isNextDisabled(): boolean {
     if (this.currentStep === 2) {
-      return this.verificationForm.invalid || (!this.isAnyDocumentUploaded() && !this.verificationAttempted);
+      // Document verification is temporarily disabled
+      return this.verificationForm.invalid;
     }
     
     switch(this.currentStep) {
@@ -173,7 +174,8 @@ export class OnboardingNgoComponent implements OnInit {
         return this.missionForm.valid;
       case 2:
         this.verificationAttempted = true;
-        return this.verificationForm.valid && this.isAnyDocumentUploaded();
+        // Document verification is temporarily disabled, only require form validity
+        return this.verificationForm.valid;
       default:
         return true;
     }
@@ -242,9 +244,9 @@ export class OnboardingNgoComponent implements OnInit {
   
   // Final submission
   async submitOnboarding(): Promise<void> {
-    if (this.orgInfoForm.invalid || this.missionForm.invalid || this.verificationForm.invalid || !this.isAnyDocumentUploaded()) {
+    if (this.orgInfoForm.invalid || this.missionForm.invalid || this.verificationForm.invalid) {
       this.verificationAttempted = true;
-      this.errorMessage = 'Please complete all required fields and upload at least one verification document';
+      this.errorMessage = 'Please complete all required fields';
       setTimeout(() => {
         this.errorMessage = '';
       }, 5000);
