@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Router, NavigationEnd } from '@angular/router';
+import { RouterModule, Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { RouterOutlet } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
 import { NavbarComponent } from './component_files/navbar/navbar.component';
 import { FooterComponent } from './component_files/footer/footer.component';
+import { LoadingScreenComponent } from './component_files/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,8 @@ import { FooterComponent } from './component_files/footer/footer.component';
     RouterModule,
     RouterOutlet,
     NavbarComponent,
-    FooterComponent
+    FooterComponent,
+    LoadingScreenComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
@@ -23,22 +25,65 @@ import { FooterComponent } from './component_files/footer/footer.component';
 export class AppComponent implements OnInit {
   title = 'volunera';
   currentRoute: string = '';
+  loading: boolean = true;
   
-  constructor(private router: Router) {
-    // Subscribe to router events to track current route
-    this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.currentRoute = event.url;
+  constructor(private router: Router, private renderer: Renderer2) {
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        const urlToNavigate = this.getBaseUrl(event.url);
+        const currentBaseUrl = this.getBaseUrl(this.currentRoute);
+        
+        if (urlToNavigate !== currentBaseUrl) {
+          this.loading = true;
+        }
+      } else if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        if (this.loading) {
+          setTimeout(() => {
+            this.exitLoadingScreen();
+          }, 800);
+        }
+        
+        if (event instanceof NavigationEnd) {
+          this.currentRoute = event.url;
+        }
+      }
     });
   }
   
   ngOnInit() {
-    // Add scroll event listener for navbar color change
     window.addEventListener('scroll', this.handleScroll);
-    
-    // Load Font Awesome icons
     this.loadFontAwesome();
+    
+    setTimeout(() => {
+      this.exitLoadingScreen();
+    }, 2500);
+  }
+  
+  getBaseUrl(url: string): string {
+    return url.split('?')[0].split('#')[0];
+  }
+  
+  exitLoadingScreen() {
+    const loadingScreen = document.querySelector('.loading-screen');
+    if (loadingScreen) {
+      this.renderer.addClass(loadingScreen, 'exit');
+      
+      setTimeout(() => {
+        this.loading = false;
+        
+        setTimeout(() => {
+          if (loadingScreen) {
+            this.renderer.removeClass(loadingScreen, 'exit');
+          }
+        }, 100);
+      }, 900);
+    } else {
+      this.loading = false;
+    }
   }
   
   isHomeRoute() {
@@ -51,18 +96,22 @@ export class AppComponent implements OnInit {
   }
   
   isOnboardingRoute(): boolean {
-    return this.currentRoute.includes('/onboarding-volunteer') || 
-           this.currentRoute.includes('/onboarding-ngo');
+    return this.currentRoute.includes('/auth/volunteer/onboarding') || 
+           this.currentRoute.includes('/auth/ngo/onboarding');
+  }
+  
+  isAuthRoute(): boolean {
+    return this.currentRoute.includes('/auth/volunteer/login') || 
+           this.currentRoute.includes('/auth/ngo/login');
   }
   
   shouldShowNavbarFooter(): boolean {
-    // Don't show navbar and footer on dashboard or onboarding routes
-    return !this.isDashboardRoute() && !this.isOnboardingRoute();
+    return !this.isDashboardRoute() && !this.isOnboardingRoute() && !this.isAuthRoute();
   }
   
   handleScroll = () => {
     const navbar = document.querySelector('.navbar-container') as HTMLElement;
-    if (!navbar) return; // Guard clause in case navbar isn't available yet
+    if (!navbar) return;
     
     if (window.scrollY > 50) {
       navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';
@@ -74,7 +123,6 @@ export class AppComponent implements OnInit {
   }
   
   loadFontAwesome() {
-    // Create a link element for Font Awesome
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';

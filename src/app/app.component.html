@@ -1,10 +1,21 @@
 <div class="container">
-  <!-- Navbar - only show on regular pages (not dashboard or onboarding) -->
+
+  <app-loading-screen [loading]="loading"></app-loading-screen>
+
+  <ng-container *ngIf="isAuthRoute()">
+
+    <a routerLink="/" class="volunera-logo">
+      <img src="images/volunera-logo-black.svg" alt="VolunEra" class="logo-image">
+    </a>
+
+    <a routerLink="/" class="back-button">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </ng-container>
+
   <app-navbar *ngIf="shouldShowNavbarFooter()"></app-navbar>
 
-  <!-- Router Outlet for dynamic content -->
   <router-outlet></router-outlet>
 
-  <!-- Footer - only show on regular pages (not dashboard or onboarding) -->
   <app-footer *ngIf="shouldShowNavbarFooter()"></app-footer>
 </div>
