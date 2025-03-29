@@ -1,17 +1,21 @@
 // Variables
 $sidebar-width: 260px;
-$primary-color: #3b82f6;
-$secondary-color: #6366f1;
+$sidebar-collapsed-width: 70px;
+$primary-color: #021a02; // Dark green
+$accent-color: #337060; // Medium green
 $text-color: #1f2937;
 $text-light: #9ca3af;
-$background-light: #f3f4f6;
-$background-dark: #111827;
+$background-light: #f9fafb;
+$background-dark: #021a02; // Sidebar color
 $card-background: #ffffff;
 $success-color: #10b981;
 $danger-color: #ef4444;
 $warning-color: #f59e0b;
-$border-radius: 8px;
-$box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$border-radius: 36px; // Very rounded corners matching image
+$card-border-radius: 36px; // Very rounded corners for cards
+$button-radius: 32px; // For buttons and smaller elements
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
+$mobile-breakpoint: 768px;
 
 // Global styles
 * {
@@ -25,41 +29,140 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   display: flex;
   height: 100vh;
   overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: $background-dark; // Make the entire background match the sidebar
+  position: relative; // For absolute positioning of elements
+}
+
+// Content wrapper to create the "white area inside brown area" effect
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: $background-light;
+  border-radius: $border-radius 0 0 $border-radius;
+  margin: 8px 0 8px 0; // Thin border
+  overflow: hidden; // Keep content inside the rounded corners
+  min-width: 0; // Prevent horizontal scrolling
+}
+
+// Mobile nav close button
+.mobile-nav-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  display: none; // Hidden by default, shown in mobile
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
 }
 
 // Sidebar styles
 .sidebar {
   width: $sidebar-width;
+  min-width: $sidebar-width;
   background-color: $background-dark;
   color: white;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   overflow-y: auto;
-  padding: 20px;
+  overflow-x: hidden;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
+  position: relative; // For the close button
+  
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+    min-width: $sidebar-collapsed-width;
+    padding: 24px 10px;
+    
+    .logo-container {
+      justify-content: center;
+      
+      .logo-text {
+        display: none;
+      }
+      
+      .logo-image {
+        height: 30px;
+        content: url('/home/user/volunera/public/images/volunera-logo-white.svg');
+      }
+    }
+    
+    .nav-item {
+      justify-content: center;
+      padding: 12px;
+      
+      span {
+        display: none;
+      }
+      
+      i {
+        margin-right: 0;
+      }
+    }
+    
+    .sidebar-footer {
+      .profile-completion {
+        display: none;
+      }
+      
+      .user-profile {
+        justify-content: center;
+        
+        .user-info {
+          display: none;
+        }
+        
+        .avatar {
+          margin-right: 0;
+        }
+      }
+    }
+  }
 
   .sidebar-header {
-    padding-bottom: 24px;
+    padding-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     
     .logo-container {
       display: flex;
       align-items: center;
       
-      .logo-circle {
-        width: 40px;
+      .logo-image {
         height: 40px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $background-dark;
-        margin-right: 12px;
+        width: auto;
       }
+    }
+    
+    .collapse-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       
-      .logo-text {
-        font-size: 1.5rem;
-        font-weight: 700;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -72,25 +175,37 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
       display: flex;
       align-items: center;
       padding: 12px 16px;
-      margin-bottom: 8px;
-      border-radius: $border-radius;
+      margin-bottom: 10px;
+      border-radius: $button-radius;
       color: #9ca3af;
       text-decoration: none;
       transition: all 0.2s ease;
       
+      &.active {
+        background-color: $accent-color;
+        color: white;
+        
+        i {
+          color: white;
+        }
+      }
+      
       i {
-        width: 20px;
+        width: 24px;
+        font-size: 18px;
         margin-right: 12px;
         text-align: center;
+        color: currentColor;
+        display: flex;
+        justify-content: center;
+      }
+      
+      span {
+        white-space: nowrap;
       }
       
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
-      }
-      
-      &.active {
-        background-color: $primary-color;
-        color: white;
       }
     }
   }
@@ -100,8 +215,8 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     padding-top: 24px;
     
     .profile-completion {
-      background-color: #1f2937;
-      border-radius: $border-radius;
+      background-color: lighten($background-dark, 5%);
+      border-radius: $button-radius;
       padding: 16px;
       margin-bottom: 16px;
       display: flex;
@@ -111,13 +226,28 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: $primary-color;
+        background-color: $accent-color;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-size: 0.75rem;
         font-weight: 700;
+        overflow: hidden; // Ensure circular shape
+        
+        .progress-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 100%;
+          background-color: lighten($accent-color, 15%);
+          z-index: 1;
+        }
+        
+        span {
+          position: relative;
+          z-index: 2;
+        }
         
         &::after {
           content: '';
@@ -177,512 +307,657 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 .main-content {
   flex: 1;
   overflow-y: auto;
-  background-color: $background-light;
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // Prevent horizontal scrolling
+}
+
+// Top Bar - flat to the page
+.top-bar {
+  background-color: transparent;
+  display: flex;
+  align-items: center; // Align items vertically
+  padding: 16px 24px;
   
-  .top-bar {
-    background-color: $card-background;
-    border-bottom: 1px solid #e5e7eb;
-    display: flex;
-    justify-content: space-between;
+  .mobile-nav-toggle {
+    width: 44px; // Match the size of other buttons
+    height: 44px;
+    border-radius: 50%;
+    background-color: $accent-color;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 12px;
+    box-shadow: $box-shadow;
+    display: flex; // Keep visible on desktop
     align-items: center;
-    padding: 12px 24px;
+    justify-content: center;
     
-    .search-container {
-      position: relative;
-      width: 400px;
-      
-      .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: $text-light;
-      }
-      
-      .search-input {
-        width: 100%;
-        padding: 8px 12px 8px 36px;
-        border-radius: $border-radius;
-        border: none;
-        background-color: $background-light;
-        font-size: 0.875rem;
-        
-        &:focus {
-          outline: none;
-          box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
-        }
-      }
+    i {
+      font-size: 1.25rem;
+    }
+  }
+  
+  .search-container {
+    position: relative;
+    width: 400px;
+    margin-right: auto; // Push other elements to the right
+    
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-light;
     }
     
-    .top-bar-actions {
-      display: flex;
-      align-items: center;
+    .search-input {
+      width: 100%;
+      padding: 12px 18px 12px 46px;
+      border-radius: $button-radius;
+      border: none;
+      background-color: $card-background;
+      font-size: 0.875rem;
+      box-shadow: $box-shadow;
       
-      .action-button {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: none;
-        border: none;
-        color: $text-color;
-        margin-left: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        
-        &:hover {
-          background-color: $background-light;
-        }
-        
-        .notification-indicator {
-          position: absolute;
-          top: 8px;
-          right: 8px;
-          width: 8px;
-          height: 8px;
-          background-color: $danger-color;
-          border-radius: 50%;
-        }
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($accent-color, 0.3);
       }
     }
   }
   
-  .dashboard-content {
-    padding: 24px;
+  .top-bar-actions {
+    display: flex;
+    align-items: center;
     
-    .quick-actions {
-      display: flex;
-      margin-bottom: 24px;
-      
-      .quick-action-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 20px;
-        border-radius: $border-radius;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
-        margin-right: 12px;
-        box-shadow: $box-shadow;
-        
-        i {
-          margin-right: 8px;
-        }
-        
-        &.primary {
-          background-color: $primary-color;
-          color: white;
-        }
-        
-        &.secondary {
-          background-color: white;
-          color: $text-color;
-          border: 1px solid #e5e7eb;
-        }
-      }
-    }
-    
-    .stats-section {
-      margin-bottom: 24px;
-      
-      .stats-card {
-        background-color: $card-background;
-        border-radius: $border-radius;
-        padding: 24px;
-        box-shadow: $box-shadow;
-        display: flex;
-        justify-content: space-between;
-        
-        .stat-item {
-          flex: 1;
-          padding: 0 16px;
-          border-right: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-right: none;
-          }
-          
-          .stat-title {
-            font-size: 0.875rem;
-            color: $text-light;
-            margin-bottom: 8px;
-          }
-          
-          .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-          }
-          
-          .stat-trend {
-            display: flex;
-            align-items: center;
-            font-size: 0.75rem;
-            
-            i {
-              margin-right: 4px;
-            }
-            
-            &.positive {
-              color: $success-color;
-            }
-            
-            &.negative {
-              color: $danger-color;
-            }
-          }
-        }
-      }
-    }
-    
-    .two-column-layout {
-      display: flex;
-      gap: 24px;
-      
-      .column {
-        flex: 1;
-      }
-    }
-    
-    .card {
+    .action-button {
+      position: relative;
+      width: 44px; // Same size as the burger menu
+      height: 44px;
+      border-radius: 50%;
       background-color: $card-background;
-      border-radius: $border-radius;
+      border: none;
+      color: $text-color;
+      margin-left: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
       box-shadow: $box-shadow;
-      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       
-      .card-header {
-        padding: 16px 24px;
-        border-bottom: 1px solid #e5e7eb;
+      &:hover {
+        background-color: darken($card-background, 3%);
+      }
+      
+      .notification-indicator {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        background-color: $danger-color;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+// Dashboard content area
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  min-height: 0; // Allow proper flex sizing
+  max-height: calc(100vh - 100px); // Prevent page scrolling in desktop
+}
+
+// Three column layout
+.three-column-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr; // Posts section is wider, calendar & suggestions stacked
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 100px);
+  
+  .column {
+    min-width: 0; // Prevent overflow
+    height: 100%;
+    overflow-y: hidden; // Hide overflow, cards will handle scrolling
+  }
+  
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+}
+
+// Card styling
+.card {
+  background-color: $card-background;
+  border-radius: $card-border-radius;
+  box-shadow: $box-shadow;
+  margin-bottom: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  .card-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $primary-color;
+    }
+    
+    .card-link {
+      color: $accent-color;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  
+  .card-content {
+    padding: 18px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+}
+
+// Make posts card full height
+.posts-card {
+  height: calc(100vh - 132px); // Adjust to prevent scrolling on desktop
+  
+  .card-content {
+    overflow-y: auto;
+  }
+}
+
+// Calendar and NGO suggestions cards
+.calendar-card {
+  flex: 3; // Give more height to calendar than NGO suggestions
+  
+  .calendar-container {
+    height: 250px; // Fixed height for calendar
+  }
+}
+
+.ngo-suggestions-card {
+  max-height: calc(40vh); // Limit height to 40% of viewport height
+  
+  .card-content {
+    max-height: calc(40vh - 70px); // Account for card header height
+    overflow-y: auto; // Enable scrolling within the card
+  }
+}
+
+// Mobile nav overlay
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Posts card styling
+.posts-card {
+  .posts-list {
+    .post-item {
+      border-bottom: 1px solid #e5e7eb;
+      padding: 16px 0;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .post-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        margin-bottom: 12px;
         
-        .card-title {
-          font-size: 1.125rem;
-          font-weight: 600;
-        }
-        
-        .card-link {
-          color: $primary-color;
-          text-decoration: none;
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-        
-        .period-selector {
-          display: flex;
-          
-          .period-btn {
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: $text-light;
-            
-            &.active {
-              background-color: rgba($primary-color, 0.1);
-              color: $primary-color;
-              border-radius: 16px;
-              font-weight: 500;
-            }
-          }
-        }
-      }
-      
-      .card-content {
-        padding: 16px 24px;
-      }
-    }
-    
-    // Recent Activity
-    .recent-activity {
-      .activity-list {
-        .activity-item {
+        .ngo-info {
           display: flex;
           align-items: center;
-          padding: 12px 0;
-          border-bottom: 1px solid #e5e7eb;
           
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .activity-icon {
-            width: 40px;
-            height: 40px;
+          .ngo-avatar {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 16px;
+            overflow: hidden;
+            margin-right: 12px;
             
-            &.event {
-              background-color: rgba($primary-color, 0.1);
-              color: $primary-color;
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
             }
-            
-            &.donation {
-              background-color: rgba($warning-color, 0.1);
-              color: $warning-color;
-            }
-          }
-          
-          .activity-details {
-            flex: 1;
-            
-            .activity-title {
-              font-size: 0.875rem;
-              font-weight: 500;
-              margin-bottom: 2px;
-            }
-            
-            .activity-organization {
-              font-size: 0.75rem;
-              color: $text-light;
-              margin-bottom: 2px;
-            }
-            
-            .activity-date {
-              font-size: 0.75rem;
-              color: $text-light;
-            }
-          }
-          
-          .activity-points {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-weight: 600;
-            color: $success-color;
-            
-            .points-label {
-              font-size: 0.6875rem;
-              color: $text-light;
-              font-weight: normal;
-            }
-          }
-        }
-      }
-    }
-    
-    // Upcoming Events
-    .upcoming-events {
-      .event-list {
-        .event-item {
-          display: flex;
-          align-items: center;
-          padding: 16px 0;
-          border-bottom: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .event-date {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 48px;
-            margin-right: 16px;
-            
-            .date-day {
-              font-size: 1.25rem;
-              font-weight: 700;
-            }
-            
-            .date-month {
-              font-size: 0.75rem;
-              color: $text-light;
-            }
-          }
-          
-          .event-details {
-            flex: 1;
-            
-            .event-title {
-              font-size: 0.875rem;
-              font-weight: 500;
-              margin-bottom: 2px;
-            }
-            
-            .event-organization {
-              font-size: 0.75rem;
-              color: $text-light;
-              margin-bottom: 2px;
-            }
-            
-            .event-location {
-              font-size: 0.75rem;
-              color: $text-light;
-              
-              i {
-                margin-right: 4px;
-              }
-            }
-          }
-          
-          .event-action {
-            .registered-btn, .register-btn {
-              padding: 6px 12px;
-              border-radius: $border-radius;
-              font-size: 0.75rem;
-              font-weight: 500;
-              border: none;
-              cursor: pointer;
-            }
-            
-            .registered-btn {
-              background-color: rgba($success-color, 0.1);
-              color: $success-color;
-              
-              i {
-                margin-right: 4px;
-              }
-            }
-            
-            .register-btn {
-              background-color: $primary-color;
-              color: white;
-            }
-          }
-        }
-      }
-    }
-    
-    // Recommended NGOs
-    .recommended-ngos {
-      .ngo-list {
-        .ngo-item {
-          display: flex;
-          align-items: center;
-          padding: 16px 0;
-          border-bottom: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .ngo-logo {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: rgba($primary-color, 0.1);
-            color: $primary-color;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            margin-right: 16px;
           }
           
           .ngo-details {
-            flex: 1;
-            
             .ngo-name {
               font-size: 0.875rem;
-              font-weight: 500;
+              font-weight: 600;
               margin-bottom: 2px;
             }
             
-            .ngo-category {
+            .post-date {
               font-size: 0.75rem;
               color: $text-light;
             }
           }
-          
-          .ngo-match {
-            margin-right: 16px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            
-            .match-percentage {
-              font-size: 0.875rem;
-              font-weight: 600;
-              color: $primary-color;
-            }
-            
-            .match-label {
-              font-size: 0.6875rem;
-              color: $text-light;
-            }
-          }
-          
-          .follow-btn {
-            padding: 6px 12px;
-            border-radius: $border-radius;
-            font-size: 0.75rem;
-            font-weight: 500;
-            background-color: $background-light;
-            border: none;
-            cursor: pointer;
-          }
         }
-      }
-    }
-    
-    // Impact Visualization
-    .impact-visualization {
-      .impact-chart {
-        height: 200px;
-        margin-bottom: 16px;
         
-        .placeholder-chart {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          
-          .chart-bars {
-            display: flex;
-            height: 100%;
-            align-items: flex-end;
+        .post-actions {
+          .action-btn {
+            background: none;
+            border: none;
+            color: $text-light;
+            cursor: pointer;
             
-            .chart-bar {
-              flex: 1;
-              margin: 0 6px;
-              background-color: rgba($primary-color, 0.6);
-              border-radius: 4px 4px 0 0;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
-              align-items: center;
-              position: relative;
-              
-              .bar-label {
-                position: absolute;
-                bottom: -24px;
-                font-size: 0.75rem;
-                color: $text-light;
-              }
+            &:hover {
+              color: $text-color;
             }
           }
         }
       }
       
-      .impact-metrics {
-        display: flex;
-        justify-content: space-around;
+      .post-content {
+        margin-bottom: 12px;
         
-        .metric {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
+        .post-text {
+          font-size: 0.875rem;
+          line-height: 1.5;
+          margin-bottom: 12px;
+        }
+        
+        .post-image {
+          border-radius: $button-radius;
+          overflow: hidden;
+          margin-bottom: 12px;
           
-          .metric-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: $text-color;
-          }
-          
-          .metric-label {
-            font-size: 0.75rem;
-            color: $text-light;
+          img {
+            width: 100%;
+            height: auto;
+            display: block;
           }
         }
+      }
+      
+      .post-footer {
+        display: flex;
+        flex-wrap: wrap;
+        
+        .post-action-btn {
+          display: flex;
+          align-items: center;
+          background: none;
+          border: none;
+          color: $text-light;
+          font-size: 0.75rem;
+          margin-right: 16px;
+          margin-bottom: 8px;
+          cursor: pointer;
+          padding: 8px 12px;
+          border-radius: 24px;
+          
+          i {
+            margin-right: 4px;
+          }
+          
+          &:hover {
+            background-color: rgba($accent-color, 0.1);
+          }
+          
+          &.active {
+            color: $accent-color;
+          }
+          
+          &.like-btn.active {
+            color: $accent-color;
+            
+            i {
+              color: $accent-color;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Calendar styling
+.calendar-card {
+  .calendar-container {
+    height: 300px;
+    overflow: hidden;
+    
+    .google-calendar {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  }
+  
+  .upcoming-reminder {
+    margin-top: 16px;
+    border-top: 1px solid #e5e7eb;
+    padding-top: 16px;
+    
+    .reminder-header {
+      margin-bottom: 12px;
+      
+      h4 {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: $primary-color;
+      }
+    }
+    
+    .reminder-content {
+      display: flex;
+      align-items: center;
+      
+      .event-date-badge {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        background-color: $accent-color;
+        color: white;
+        border-radius: $button-radius;
+        margin-right: 16px;
+        
+        .date-month {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+        }
+        
+        .date-day {
+          font-size: 1.25rem;
+          font-weight: 600;
+        }
+      }
+      
+      .event-details {
+        flex: 1;
+        
+        .event-title {
+          font-size: 0.875rem;
+          font-weight: 600;
+          margin-bottom: 4px;
+        }
+        
+        .event-org {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 4px;
+        }
+        
+        .event-time {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+      }
+    }
+  }
+}
+
+// NGO Suggestions styling
+.ngo-suggestions-card {
+  .ngo-suggestions-list {
+    .ngo-suggestion-item {
+      display: flex;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .ngo-logo {
+        width: 48px;
+        height: 48px;
+        border-radius: $button-radius;
+        overflow: hidden;
+        margin-right: 16px;
+        background-color: $background-light;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      .ngo-suggestion-details {
+        flex: 1;
+        
+        .ngo-name {
+          font-size: 0.875rem;
+          font-weight: 600;
+          margin-bottom: 2px;
+        }
+        
+        .ngo-category {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 4px;
+        }
+        
+        .ngo-match-rate {
+          display: flex;
+          align-items: center;
+          
+          .match-progress {
+            flex: 1;
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            margin-right: 8px;
+            overflow: hidden;
+            
+            .match-bar {
+              height: 100%;
+              background-color: $accent-color;
+              border-radius: 3px;
+            }
+          }
+          
+          .match-percentage {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: $accent-color;
+          }
+        }
+      }
+      
+      .follow-btn {
+        background-color: $accent-color;
+        color: white;
+        border: none;
+        border-radius: $button-radius;
+        padding: 8px 16px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        cursor: pointer;
+        
+        &:hover {
+          background-color: darken($accent-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+// Media queries for responsiveness
+@media (max-width: 1280px) {
+  .three-column-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Mobile styles
+@media (max-width: $mobile-breakpoint) {
+  // Content wrapper adjustments
+  .content-wrapper {
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  // Allow scrolling on mobile
+  .dashboard-content {
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  .three-column-layout {
+    max-height: none;
+    height: auto;
+    overflow-y: visible;
+    
+    .column {
+      height: auto;
+      overflow-y: visible;
+    }
+    
+    .right-column {
+      height: auto;
+    }
+  }
+  
+  // Adjust calendar and NGO cards for mobile
+  .calendar-card, .ngo-suggestions-card {
+    flex: none;
+    max-height: none;
+    margin-bottom: 24px;
+    
+    .card-content {
+      max-height: none;
+    }
+  }
+  
+  // Ensure calendar is visible on mobile
+  .calendar-card {
+    display: block;
+    
+    .calendar-container {
+      height: 250px;
+    }
+  }
+  
+  // Hide sidebar by default on mobile
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    z-index: 1000;
+    width: 80%;
+    max-width: 300px;
+    border-radius: 0;
+    box-shadow: $box-shadow;
+    
+    &.mobile-active {
+      left: 0;
+    }
+    
+    .sidebar-header {
+      .collapse-btn {
+        display: none;
+      }
+    }
+    
+    // Show mobile close button
+    .mobile-nav-close {
+      display: flex;
+    }
+  }
+  
+  // Adjust search container
+  .top-bar {
+    padding: 16px 16px;
+    
+    .search-container {
+      flex: 1;
+      margin: 0 10px;
+    }
+    
+    // Show mobile nav toggle on mobile only
+    .mobile-nav-toggle {
+      display: flex;
+    }
+  }
+  
+  // More accent color on mobile
+  .card {
+    border: 2px solid rgba($accent-color, 0.1);
+    
+    .card-header {
+      background-color: rgba($accent-color, 0.05);
+      
+      .card-title {
+        color: $accent-color;
+      }
+    }
+  }
+  
+  .follow-btn, .event-date-badge, .mobile-nav-toggle {
+    background-color: $accent-color;
+  }
+  
+  .main-content {
+    padding: 0 16px 16px 16px;
+    overflow-y: auto; // Allow scrolling on mobile
+  }
+  
+  // Fix posts card height on mobile
+  .posts-card {
+    height: auto;
+    margin-bottom: 24px;
+  }
+}
+
+// Specific adjustments for very small screens
+@media (max-width: 576px) {
+  .top-bar {
+    padding: 12px;
+    
+    .search-container {
+      .search-input {
+        padding: 10px 12px 10px 36px;
+      }
+    }
+    
+    .top-bar-actions {
+      .action-button {
+        width: 40px;
+        height: 40px;
+        margin-left: 8px;
       }
     }
   }
