@@ -89,8 +89,13 @@ export class LoginVolunteerComponent implements OnInit {
     
     if (this.authMode === 'login') {
       this.authService.loginWithEmail(email, password, 'volunteer')
-        .then(() => {
-          this.router.navigate(['/volunteer/dashboard']);
+        .then(async (userProfile) => {
+          // Check if user has completed onboarding
+          if (userProfile.isOnboarded) {
+            this.router.navigate(['/volunteer/dashboard']);
+          } else {
+            this.router.navigate(['/auth/volunteer/onboarding']);
+          }
         })
         .catch(error => {
           this.handleAuthError(error);
@@ -99,9 +104,10 @@ export class LoginVolunteerComponent implements OnInit {
           this.isLoading = false;
         });
     } else {
+      // Sign up logic remains the same
       this.authService.signupWithEmail(email, password, 'volunteer')
         .then(() => {
-          this.router.navigate(['/volunteer/onboarding']);
+          this.router.navigate(['/auth/volunteer/onboarding']);
         })
         .catch(error => {
           this.handleAuthError(error);
@@ -111,12 +117,16 @@ export class LoginVolunteerComponent implements OnInit {
         });
     }
   }
-
   signInWithGoogle(): void {
     this.isLoading = true;
     this.authService.signInWithGoogle('volunteer')
-      .then(() => {
-        this.router.navigate(['/volunteer/dashboard']);
+      .then((userProfile) => {
+        // Check if user has completed onboarding
+        if (userProfile.isOnboarded) {
+          this.router.navigate(['/volunteer/dashboard']);
+        } else {
+          this.router.navigate(['/auth/volunteer/onboarding']);
+        }
       })
       .catch(error => {
         this.handleAuthError(error);

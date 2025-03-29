@@ -27,8 +27,8 @@ export class AppComponent implements OnInit {
   constructor(private router: Router) {
     // Subscribe to router events to track current route
     this.router.events.pipe(
-      filter((event): event is NavigationEnd => event instanceof NavigationEnd) // Fixed typing
-    ).subscribe((event: NavigationEnd) => { // Fixed typing
+      filter((event): event is NavigationEnd => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
       this.currentRoute = event.url;
     });
   }
@@ -45,8 +45,24 @@ export class AppComponent implements OnInit {
     return this.currentRoute === '/' || this.currentRoute === '';
   }
   
+  isDashboardRoute(): boolean {
+    return this.currentRoute.includes('/volunteer/dashboard') || 
+           this.currentRoute.includes('/ngo/dashboard');
+  }
+  
+  isOnboardingRoute(): boolean {
+    return this.currentRoute.includes('/onboarding-volunteer') || 
+           this.currentRoute.includes('/onboarding-ngo');
+  }
+  
+  shouldShowNavbarFooter(): boolean {
+    // Don't show navbar and footer on dashboard or onboarding routes
+    return !this.isDashboardRoute() && !this.isOnboardingRoute();
+  }
+  
   handleScroll = () => {
     const navbar = document.querySelector('.navbar-container') as HTMLElement;
+    if (!navbar) return; // Guard clause in case navbar isn't available yet
     
     if (window.scrollY > 50) {
       navbar.style.backgroundColor = 'rgba(255, 255, 255, 0.95)';

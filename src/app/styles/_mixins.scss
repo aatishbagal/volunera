@@ -7,3 +7,21 @@
   padding: 24px;
   overflow: hidden;
 }
+@mixin button-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: $border-radius;
+  background-color: $primary-color;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover {
+    background-color: darken($primary-color, 10%);
+  }
+}

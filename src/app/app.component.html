@@ -1,11 +1,10 @@
 <div class="container">
-  <!-- Navbar -->
-  <app-navbar></app-navbar>
+  <!-- Navbar - only show on regular pages (not dashboard or onboarding) -->
+  <app-navbar *ngIf="shouldShowNavbarFooter()"></app-navbar>
 
   <!-- Router Outlet for dynamic content -->
   <router-outlet></router-outlet>
 
-  <!-- Footer -->
-  <app-footer></app-footer>
-  
+  <!-- Footer - only show on regular pages (not dashboard or onboarding) -->
+  <app-footer *ngIf="shouldShowNavbarFooter()"></app-footer>
 </div>

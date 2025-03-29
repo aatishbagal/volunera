@@ -89,8 +89,15 @@ export class LoginNgoComponent implements OnInit {
     
     if (this.authMode === 'login') {
       this.authService.loginWithEmail(email, password, 'ngo')
-        .then(() => {
-          this.router.navigate(['/ngo/dashboard']);
+        .then((userProfile) => {
+          // Check onboarding and verification status
+          if (!userProfile.isOnboarded) {
+            this.router.navigate(['/auth/ngo/onboarding']);
+          } else if (!userProfile.isVerified) {
+            this.router.navigate(['/ngo/verification-pending']);
+          } else {
+            this.router.navigate(['/ngo/dashboard']);
+          }
         })
         .catch(error => {
           this.handleAuthError(error);
@@ -99,9 +106,10 @@ export class LoginNgoComponent implements OnInit {
           this.isLoading = false;
         });
     } else {
+      // Sign up logic
       this.authService.signupWithEmail(email, password, 'ngo')
         .then(() => {
-          this.router.navigate(['/ngo/onboarding']);
+          this.router.navigate(['/auth/ngo/onboarding']);
         })
         .catch(error => {
           this.handleAuthError(error);
@@ -115,8 +123,15 @@ export class LoginNgoComponent implements OnInit {
   signInWithGoogle(): void {
     this.isLoading = true;
     this.authService.signInWithGoogle('ngo')
-      .then(() => {
-        this.router.navigate(['/ngo/dashboard']);
+      .then((userProfile) => {
+        // Check onboarding and verification status
+        if (!userProfile.isOnboarded) {
+          this.router.navigate(['/auth/ngo/onboarding']);
+        } else if (!userProfile.isVerified) {
+          this.router.navigate(['/ngo/verification-pending']);
+        } else {
+          this.router.navigate(['/ngo/dashboard']);
+        }
       })
       .catch(error => {
         this.handleAuthError(error);

@@ -3,13 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { AuthService } from '../services/auth.service';
-import { 
-  Storage, 
-  ref, 
-  uploadBytesResumable, 
-  getDownloadURL 
-} from '@angular/fire/storage';
+import { AuthService, UserProfile } from '../services/auth.service';
+import { Firestore, doc, setDoc, updateDoc, serverTimestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-onboarding-volunteer',
@@ -49,7 +44,7 @@ export class OnboardingVolunteerComponent implements OnInit {
   loadingMessage = 'Processing...';
   errorMessage = '';
   imagePreview: string | null = null;
-  selectedImageFile: File | null = null;
+  imageDataUrl: string | null = null;
   
   // Data for form options
   interests = [
@@ -73,7 +68,7 @@ export class OnboardingVolunteerComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private storage: Storage
+    private firestore: Firestore
   ) {
     this.basicInfoForm = this.createBasicInfoForm();
     this.skillsForm = this.createSkillsForm();
@@ -232,12 +227,11 @@ export class OnboardingVolunteerComponent implements OnInit {
   onImageSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.selectedImageFile = file;
-      
-      // Create preview
+      // Create a data URL for the image
       const reader = new FileReader();
       reader.onload = () => {
         this.imagePreview = reader.result as string;
+        this.imageDataUrl = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -245,7 +239,7 @@ export class OnboardingVolunteerComponent implements OnInit {
   
   removeImage(): void {
     this.imagePreview = null;
-    this.selectedImageFile = null;
+    this.imageDataUrl = null;
   }
   
   // Final submission
@@ -262,22 +256,25 @@ export class OnboardingVolunteerComponent implements OnInit {
     this.loadingMessage = 'Creating your profile...';
     
     try {
-      // 1. Upload profile image if selected
-      let profileImageUrl = '';
-      if (this.selectedImageFile) {
-        this.loadingMessage = 'Uploading profile image...';
-        profileImageUrl = await this.uploadProfileImage(this.selectedImageFile);
-      }
-      
-      // 2. Get user ID
+      // 1. Get user ID
       const user = await this.authService.getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
       
-      // 3. Prepare volunteer profile data
+      // 2. Prepare volunteer profile data for user update
+      const userProfileUpdate: Partial<UserProfile> = {
+        displayName: this.basicInfoForm.get('displayName')?.value,
+        photoURL: this.imageDataUrl || user.photoURL,
+        isOnboarded: true
+      };
+      
+      // 3. Prepare volunteer-specific data for separate collection
       const volunteerProfile = {
-        ...this.basicInfoForm.value,
+        firstName: this.basicInfoForm.get('firstName')?.value,
+        lastName: this.basicInfoForm.get('lastName')?.value,
+        displayName: this.basicInfoForm.get('displayName')?.value,
+        bio: this.basicInfoForm.get('bio')?.value,
         skills: this.selectedSkills,
         interests: this.skillsForm.get('interests')?.value || [],
         availability: this.preferencesForm.get('availability')?.value,
@@ -286,13 +283,24 @@ export class OnboardingVolunteerComponent implements OnInit {
         radius: this.preferencesForm.get('radius')?.value,
         emailNotifications: this.preferencesForm.get('emailNotifications')?.value,
         smsNotifications: this.preferencesForm.get('smsNotifications')?.value,
-        profileImage: profileImageUrl,
-        isOnboarded: true
+        profileImage: this.imageDataUrl, // Store image directly as a data URL
+        userId: user.uid,
+        email: user.email
       };
       
       // 4. Update user profile in Firestore
       this.loadingMessage = 'Saving your profile...';
-      await this.authService.updateUserProfile(user.uid, volunteerProfile);
+      
+      // Update the user profile via auth service
+      await this.authService.updateUserProfile(user.uid, userProfileUpdate);
+      
+      // Create a volunteer document in a separate collection
+      const volunteerDocRef = doc(this.firestore, 'volunteers', user.uid);
+      await setDoc(volunteerDocRef, {
+        ...volunteerProfile,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
       
       // 5. Navigate to dashboard
       this.router.navigate(['/volunteer/dashboard']);
@@ -304,44 +312,6 @@ export class OnboardingVolunteerComponent implements OnInit {
       }, 5000);
     } finally {
       this.isLoading = false;
-    }
-  }
-  
-  // Upload profile image to Firebase Storage
-  private async uploadProfileImage(file: File): Promise<string> {
-    try {
-      const userId = (await this.authService.getCurrentUser())?.uid;
-      if (!userId) throw new Error('User not authenticated');
-      
-      const filePath = `profile-images/${userId}/${new Date().getTime()}_${file.name}`;
-      const storageRef = ref(this.storage, filePath);
-      
-      // Upload file with progress tracking
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      // Wait for upload to complete
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Get upload progress
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            this.loadingMessage = `Uploading image: ${Math.round(progress)}%`;
-          },
-          (error) => {
-            reject(error);
-          },
-          () => {
-            resolve();
-          }
-        );
-      });
-      
-      // Get download URL
-      return await getDownloadURL(storageRef);
-    } catch (error) {
-      console.error('Image upload error:', error);
-      throw error;
     }
   }
 }

@@ -3,13 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
-import { AuthService } from '../services/auth.service';
-import { 
-  Storage, 
-  ref, 
-  uploadBytesResumable, 
-  getDownloadURL 
-} from '@angular/fire/storage';
+import { AuthService, UserProfile } from '../services/auth.service';
+import { Firestore, doc, setDoc, updateDoc, serverTimestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-onboarding-ngo',
@@ -49,10 +44,10 @@ export class OnboardingNgoComponent implements OnInit {
   loadingMessage = 'Processing...';
   errorMessage = '';
   logoPreview: string | null = null;
-  selectedLogoFile: File | null = null;
-  registrationDoc: File | null = null;
-  taxDoc: File | null = null;
-  letterDoc: File | null = null;
+  logoDataUrl: string | null = null;
+  registrationDocName: string | null = null;
+  taxDocName: string | null = null;
+  letterDocName: string | null = null;
   verificationAttempted = false;
   
   // Data for form options
@@ -71,7 +66,7 @@ export class OnboardingNgoComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private storage: Storage
+    private firestore: Firestore
   ) {
     this.orgInfoForm = this.createOrgInfoForm();
     this.missionForm = this.createMissionForm();
@@ -204,12 +199,11 @@ export class OnboardingNgoComponent implements OnInit {
   onLogoSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.selectedLogoFile = file;
-      
-      // Create preview
+      // Create a data URL for the logo
       const reader = new FileReader();
       reader.onload = () => {
         this.logoPreview = reader.result as string;
+        this.logoDataUrl = reader.result as string;
       };
       reader.readAsDataURL(file);
     }
@@ -217,32 +211,33 @@ export class OnboardingNgoComponent implements OnInit {
   
   removeLogo(): void {
     this.logoPreview = null;
-    this.selectedLogoFile = null;
+    this.logoDataUrl = null;
   }
   
   onRegistrationDocSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.registrationDoc = file;
+      this.registrationDocName = file.name;
+      // We don't actually save the file content, just record that it was "uploaded"
     }
   }
   
   onTaxDocSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.taxDoc = file;
+      this.taxDocName = file.name;
     }
   }
   
   onLetterDocSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.letterDoc = file;
+      this.letterDocName = file.name;
     }
   }
   
   isAnyDocumentUploaded(): boolean {
-    return this.registrationDoc !== null || this.taxDoc !== null || this.letterDoc !== null;
+    return this.registrationDocName !== null || this.taxDocName !== null || this.letterDocName !== null;
   }
   
   // Final submission
@@ -260,39 +255,49 @@ export class OnboardingNgoComponent implements OnInit {
     this.loadingMessage = 'Creating your organization profile...';
     
     try {
-      // 1. Upload logo if selected
-      let logoUrl = '';
-      if (this.selectedLogoFile) {
-        this.loadingMessage = 'Uploading logo...';
-        logoUrl = await this.uploadFile(this.selectedLogoFile, 'logos');
-      }
-      
-      // 2. Upload verification documents
-      this.loadingMessage = 'Uploading verification documents...';
-      const verificationDocs: { type: string; url: string }[] = [];
-      
-      if (this.registrationDoc) {
-        const url = await this.uploadFile(this.registrationDoc, 'verification-docs');
-        verificationDocs.push({ type: 'registration', url });
-      }
-      
-      if (this.taxDoc) {
-        const url = await this.uploadFile(this.taxDoc, 'verification-docs');
-        verificationDocs.push({ type: 'tax', url });
-      }
-      
-      if (this.letterDoc) {
-        const url = await this.uploadFile(this.letterDoc, 'verification-docs');
-        verificationDocs.push({ type: 'letter', url });
-      }
-      
-      // 3. Get user ID
+      // 1. Get user ID
       const user = await this.authService.getCurrentUser();
       if (!user) {
         throw new Error('User not authenticated');
       }
       
-      // 4. Prepare NGO profile data
+      // 2. Prepare verification documents info
+      // Instead of storing the actual files, we just store metadata
+      const verificationDocs: { type: string; name: string; uploadedAt: any }[] = [];
+      
+      if (this.registrationDocName) {
+        verificationDocs.push({ 
+          type: 'registration', 
+          name: this.registrationDocName,
+          uploadedAt: serverTimestamp()
+        });
+      }
+      
+      if (this.taxDocName) {
+        verificationDocs.push({ 
+          type: 'tax', 
+          name: this.taxDocName,
+          uploadedAt: serverTimestamp()
+        });
+      }
+      
+      if (this.letterDocName) {
+        verificationDocs.push({ 
+          type: 'letter', 
+          name: this.letterDocName,
+          uploadedAt: serverTimestamp()
+        });
+      }
+      
+      // 3. Prepare NGO profile data to update user profile
+      const userProfileUpdate: Partial<UserProfile> = {
+        displayName: this.orgInfoForm.get('displayName')?.value,
+        isOnboarded: true,
+        isVerified: false,
+        photoURL: this.logoDataUrl || user.photoURL
+      };
+      
+      // 4. Prepare NGO-specific data for separate collection
       const ngoProfile = {
         orgName: this.orgInfoForm.get('orgName')?.value,
         displayName: this.orgInfoForm.get('displayName')?.value,
@@ -301,7 +306,7 @@ export class OnboardingNgoComponent implements OnInit {
         phone: this.orgInfoForm.get('phone')?.value,
         description: this.orgInfoForm.get('description')?.value,
         establishedYear: this.orgInfoForm.get('establishedYear')?.value,
-        logo: logoUrl,
+        logo: this.logoDataUrl, // Store the logo directly as a data URL
         address: {
           street: this.missionForm.get('street')?.value,
           city: this.missionForm.get('city')?.value,
@@ -324,14 +329,24 @@ export class OnboardingNgoComponent implements OnInit {
         },
         verificationDocs: verificationDocs,
         isVerified: false, // Will be set to true after admin review
-        isOnboarded: true,
         verificationStatus: 'pending',
-        verificationSubmittedAt: new Date().toISOString()
+        verificationSubmittedAt: serverTimestamp(),
+        userId: user.uid
       };
       
       // 5. Update user profile in Firestore
       this.loadingMessage = 'Saving your profile...';
-      await this.authService.updateUserProfile(user.uid, ngoProfile);
+      
+      // Update the user profile via auth service
+      await this.authService.updateUserProfile(user.uid, userProfileUpdate);
+      
+      // Create an NGO document in a separate collection
+      const ngoDocRef = doc(this.firestore, 'ngos', user.uid);
+      await setDoc(ngoDocRef, {
+        ...ngoProfile,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
       
       // 6. Navigate to verification pending page
       this.router.navigate(['/ngo/verification-pending']);
@@ -343,44 +358,6 @@ export class OnboardingNgoComponent implements OnInit {
       }, 5000);
     } finally {
       this.isLoading = false;
-    }
-  }
-  
-  // Upload file to Firebase Storage
-  private async uploadFile(file: File, folder: string): Promise<string> {
-    try {
-      const userId = (await this.authService.getCurrentUser())?.uid;
-      if (!userId) throw new Error('User not authenticated');
-      
-      const filePath = `${folder}/${userId}/${new Date().getTime()}_${file.name}`;
-      const storageRef = ref(this.storage, filePath);
-      
-      // Upload file with progress tracking
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      
-      // Wait for upload to complete
-      await new Promise<void>((resolve, reject) => {
-        uploadTask.on(
-          'state_changed',
-          (snapshot) => {
-            // Get upload progress
-            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-            this.loadingMessage = `Uploading ${file.name}: ${Math.round(progress)}%`;
-          },
-          (error) => {
-            reject(error);
-          },
-          () => {
-            resolve();
-          }
-        );
-      });
-      
-      // Get download URL
-      return await getDownloadURL(storageRef);
-    } catch (error) {
-      console.error('File upload error:', error);
-      throw error;
     }
   }
 }
