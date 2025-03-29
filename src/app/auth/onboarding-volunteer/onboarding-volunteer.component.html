@@ -1,4 +1,5 @@
-<div class="onboarding-container">
+<div class="onboarding-wrapper">
+  <div class="onboarding-container">
     <div class="onboarding-sidebar">
       <div class="sidebar-header">
         <img src="assets/images/volunera-logo.svg" alt="VolunEra Logo" class="onboarding-logo">
@@ -100,6 +101,101 @@
                 <button type="button" class="remove-image" (click)="removeImage()">
                   <i class="fas fa-times"></i>
                 </button>
+              </div>
+              
+              <div class="location-fields" *ngIf="showLocationFields">
+                <div class="form-group">
+                  <label for="city">City *</label>
+                  <input 
+                    type="text" 
+                    id="city" 
+                    formControlName="city" 
+                    class="form-control"
+                    [class.is-invalid]="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
+                  <div class="error-message" *ngIf="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
+                    City is required for local volunteering
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="radius">Distance Range (km) *</label>
+                  <input 
+                    type="range" 
+                    id="radius"
+                    formControlName="radius"
+                    min="5"
+                    max="100"
+                    step="5"
+                    class="form-range">
+                  <div class="range-values">
+                    <span>{{ preferencesForm.get('radius')?.value }} km</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Communication Preferences</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="emailNotifications">
+                <span class="custom-checkbox"></span>
+                <span>Email notifications about new opportunities</span>
+              </label>
+              
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="smsNotifications">
+                <span class="custom-checkbox"></span>
+                <span>SMS notifications for urgent volunteer needs</span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn-secondary" 
+          *ngIf="currentStep > 0"
+          (click)="prevStep()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn-primary" 
+          [disabled]="isNextDisabled()"
+          (click)="nextStep()">
+          {{ currentStep < steps.length - 1 ? 'Continue' : 'Complete' }}
+          <i class="fas" [ngClass]="currentStep < steps.length - 1 ? 'fa-arrow-right' : 'fa-check'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p>{{ loadingMessage }}</p>
+    </div>
+  </div>
+  
+  <!-- Error Toast -->
+  <div class="toast error" *ngIf="errorMessage" [@fadeInOut]>
+    <div class="toast-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <div class="toast-content">
+      <p>{{ errorMessage }}</p>
+    </div>
+    <button class="toast-close" (click)="errorMessage = ''">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>
               </div>
               <label for="profileImage" class="image-upload-button" *ngIf="!imagePreview">
                 <i class="fas fa-cloud-upload-alt"></i>
@@ -217,97 +313,3 @@
                   (click)="preferencesForm.get('locationType')?.setValue('both')">
                   <i class="fas fa-globe"></i> Both
                 </button>
-              </div>
-              
-              <div class="location-fields" *ngIf="showLocationFields">
-                <div class="form-group">
-                  <label for="city">City *</label>
-                  <input 
-                    type="text" 
-                    id="city" 
-                    formControlName="city" 
-                    class="form-control"
-                    [class.is-invalid]="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
-                  <div class="error-message" *ngIf="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
-                    City is required for local volunteering
-                  </div>
-                </div>
-                
-                <div class="form-group">
-                  <label for="radius">Distance Range (km) *</label>
-                  <input 
-                    type="range" 
-                    id="radius"
-                    formControlName="radius"
-                    min="5"
-                    max="100"
-                    step="5"
-                    class="form-range">
-                  <div class="range-values">
-                    <span>{{ preferencesForm.get('radius')?.value }} km</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          <div class="form-group">
-            <label>Communication Preferences</label>
-            <div class="checkbox-group">
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="emailNotifications">
-                <span class="custom-checkbox"></span>
-                <span>Email notifications about new opportunities</span>
-              </label>
-              
-              <label class="checkbox-label">
-                <input type="checkbox" formControlName="smsNotifications">
-                <span class="custom-checkbox"></span>
-                <span>SMS notifications for urgent volunteer needs</span>
-              </label>
-            </div>
-          </div>
-        </form>
-      </div>
-      
-      <div class="form-actions">
-        <button 
-          type="button" 
-          class="btn-secondary" 
-          *ngIf="currentStep > 0"
-          (click)="prevStep()">
-          <i class="fas fa-arrow-left"></i> Back
-        </button>
-        
-        <button 
-          type="button" 
-          class="btn-primary" 
-          [disabled]="isNextDisabled()"
-          (click)="nextStep()">
-          {{ currentStep < steps.length - 1 ? 'Continue' : 'Complete' }}
-          <i class="fas" [ngClass]="currentStep < steps.length - 1 ? 'fa-arrow-right' : 'fa-check'"></i>
-        </button>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Loading Overlay -->
-  <div class="loading-overlay" *ngIf="isLoading">
-    <div class="spinner-container">
-      <div class="spinner"></div>
-      <p>{{ loadingMessage }}</p>
-    </div>
-  </div>
-  
-  <!-- Error Toast -->
-  <div class="toast error" *ngIf="errorMessage" [@fadeInOut]>
-    <div class="toast-icon">
-      <i class="fas fa-exclamation-circle"></i>
-    </div>
-    <div class="toast-content">
-      <p>{{ errorMessage }}</p>
-    </div>
-    <button class="toast-close" (click)="errorMessage = ''">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
