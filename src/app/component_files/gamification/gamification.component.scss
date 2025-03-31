@@ -1,0 +1,208 @@
+$primary-color: #021a02;
+$accent-color: #3b826f;
+$black-color: #000000;
+$white-color: #FFFFFF;
+$light-green: rgba(2, 26, 2, 0.05);
+$medium-green: rgba(2, 26, 2, 0.1);
+$border-radius: 16px;
+$box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+
+.section {
+  padding: 100px 0;
+  background-color: rgba(59, 130, 111, 0.15);
+  position: relative;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: rgba(59, 130, 111, 0.1);
+  color: $accent-color;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0 0 20px 0;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: $accent-color;
+    border-radius: 2px;
+  }
+}
+
+.section-subtitle {
+  max-width: 600px;
+  margin: 20px auto 0;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 18px;
+}
+
+.gamification-container {
+  display: flex;
+  gap: 40px;
+  
+  @media (max-width: 992px) {
+    flex-direction: column;
+  }
+}
+
+.gamification-column {
+  flex: 1;
+}
+
+.column-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.column-icon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(59, 130, 111, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  
+  svg {
+    width: 24px;
+    height: 24px;
+    fill: $accent-color;
+  }
+}
+
+.column-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0;
+}
+
+.points-card {
+  background-color: $white-color;
+  border-radius: $border-radius;
+  overflow: hidden;
+  box-shadow: $box-shadow;
+}
+
+.points-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  
+  li {
+    &:not(:last-child) {
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+  }
+}
+
+.point-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 30px;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: $light-green;
+  }
+}
+
+.point-activity {
+  font-weight: 600;
+  color: $primary-color;
+}
+
+.point-value {
+  font-weight: 600;
+  color: $accent-color;
+}
+
+
+
+.badges-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.badge-card {
+  background-color: $white-color;
+  border-radius: $border-radius;
+  padding: 24px;
+  display: flex;
+  align-items: flex-start;
+  transition: all 0.3s ease;
+  box-shadow: $box-shadow;
+  
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.badge-icon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(59, 130, 111, 0.15);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+  flex-shrink: 0;
+  
+  i {
+    font-size: 24px;
+    color: $accent-color;
+  }
+}
+
+.badge-content {
+  flex: 1;
+}
+
+.badge-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0 0 8px 0;
+}
+
+.badge-description {
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+}

@@ -1,0 +1,58 @@
+<section class="section">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Engagement</div>
+      <h2 class="section-title">Gamification System</h2>
+      <p class="section-subtitle">Track your impact and earn recognition for your contributions</p>
+    </div>
+    
+    <div class="gamification-container">
+      <div class="gamification-column points-column">
+        <div class="column-header">
+          <div class="column-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 15.5h-1.5V14h-1v3H8v-3H7v4.5H5.5v-5c0-.55.45-1 1-1H11c.55 0 1 .45 1 1v5zm3.5 0H14v-6h3.5c.55 0 1 .45 1 1V16c0 .55-.45 1-1 1h-2v1.5zm-1-4.5H16v1.5h-1.5V14zM12 10h-1.5V9h-1v1H8V7.5h3V7h-3V5.5h3.5c.55 0 1 .45 1 1V8c0 .55-.45 1-1 1h-1v1zm7 0h-4V8.5h4V7h-4V5.5H19v3c0 .55-.45 1-1 1h-1V10z"/>
+            </svg>
+          </div>
+          <h3 class="column-title">Points System</h3>
+        </div>
+        
+        <div class="points-card">
+          <ul class="points-list">
+            <li *ngFor="let point of pointSystem">
+              <div class="point-item">
+                <div class="point-activity">{{ point.activity }}</div>
+                <div class="point-value">{{ point.points }}</div>
+              </div>
+            </li>
+          </ul>
+          
+
+        </div>
+      </div>
+      
+      <div class="gamification-column badges-column">
+        <div class="column-header">
+          <div class="column-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm4.24 16L12 15.45 7.77 18l1.12-4.81-3.73-3.23 4.92-.42L12 5l1.92 4.53 4.92.42-3.73 3.23L16.23 18z"/>
+            </svg>
+          </div>
+          <h3 class="column-title">Achievement Badges</h3>
+        </div>
+        
+        <div class="badges-grid">
+          <div class="badge-card" *ngFor="let badge of badges">
+            <div class="badge-icon">
+              <i class="fas {{ badge.icon }}"></i>
+            </div>
+            <div class="badge-content">
+              <h4 class="badge-name">{{ badge.name }}</h4>
+              <p class="badge-description">{{ badge.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

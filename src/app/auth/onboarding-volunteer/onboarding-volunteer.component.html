@@ -1,0 +1,315 @@
+<div class="onboarding-wrapper">
+  <div class="onboarding-container">
+    <div class="onboarding-sidebar">
+      <div class="sidebar-header">
+        <img src="assets/images/volunera-logo.svg" alt="VolunEra Logo" class="onboarding-logo">
+      </div>
+      
+      <div class="step-list">
+        <div 
+          *ngFor="let step of steps; let i = index" 
+          class="step-item"
+          [class.active]="currentStep === i"
+          [class.completed]="currentStep > i">
+          <div class="step-indicator">
+            <div class="step-number" *ngIf="currentStep <= i">{{ i + 1 }}</div>
+            <div class="step-check" *ngIf="currentStep > i">
+              <i class="fas fa-check"></i>
+            </div>
+          </div>
+          <div class="step-content">
+            <div class="step-title">{{ step.title }}</div>
+            <div class="step-description">{{ step.description }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="onboarding-content">
+      <div class="onboarding-header">
+        <h1 class="onboarding-title">{{ steps[currentStep].title }}</h1>
+        <p class="onboarding-subtitle">{{ steps[currentStep].description }}</p>
+      </div>
+      
+      <div class="onboarding-form-container">
+        <!-- Step 1: Basic Information -->
+        <form *ngIf="currentStep === 0" [formGroup]="basicInfoForm" class="onboarding-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="firstName">First Name *</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                formControlName="firstName" 
+                class="form-control"
+                [class.is-invalid]="basicInfoForm.get('firstName')?.invalid && basicInfoForm.get('firstName')?.touched">
+              <div class="error-message" *ngIf="basicInfoForm.get('firstName')?.invalid && basicInfoForm.get('firstName')?.touched">
+                First name is required
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="lastName">Last Name *</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                formControlName="lastName" 
+                class="form-control"
+                [class.is-invalid]="basicInfoForm.get('lastName')?.invalid && basicInfoForm.get('lastName')?.touched">
+              <div class="error-message" *ngIf="basicInfoForm.get('lastName')?.invalid && basicInfoForm.get('lastName')?.touched">
+                Last name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="displayName">Display Name *</label>
+            <input 
+              type="text" 
+              id="displayName" 
+              formControlName="displayName" 
+              class="form-control"
+              [class.is-invalid]="basicInfoForm.get('displayName')?.invalid && basicInfoForm.get('displayName')?.touched">
+            <div class="error-message" *ngIf="basicInfoForm.get('displayName')?.invalid && basicInfoForm.get('displayName')?.touched">
+              Display name is required
+            </div>
+            <div class="helper-text">This is the name that will be visible to others on the platform</div>
+          </div>
+          
+          <div class="form-group">
+            <label for="bio">Short Bio</label>
+            <textarea 
+              id="bio" 
+              formControlName="bio" 
+              class="form-control textarea"
+              placeholder="Tell us a bit about yourself..."
+              [class.is-invalid]="basicInfoForm.get('bio')?.invalid && basicInfoForm.get('bio')?.touched">
+            </textarea>
+            <div class="error-message" *ngIf="basicInfoForm.get('bio')?.invalid && basicInfoForm.get('bio')?.touched">
+              Bio must be less than 500 characters
+            </div>
+            <div class="character-count" [class.limit-reached]="bioLength >= 500">
+              {{ bioLength }}/500
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="profileImage">Profile Image</label>
+            <div class="image-upload-container">
+              <div class="image-preview" *ngIf="imagePreview">
+                <img [src]="imagePreview" alt="Profile preview">
+                <button type="button" class="remove-image" (click)="removeImage()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              <label for="profileImage" class="image-upload-button" *ngIf="!imagePreview">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span>Upload Image</span>
+              </label>
+              <input 
+                type="file" 
+                id="profileImage" 
+                (change)="onImageSelected($event)"
+                accept="image/*"
+                class="file-input">
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Communication Preferences</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="emailNotifications">
+                <span class="custom-checkbox"></span>
+                <span>Email notifications about new opportunities</span>
+              </label>
+              
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="smsNotifications">
+                <span class="custom-checkbox"></span>
+                <span>SMS notifications for urgent volunteer needs</span>
+              </label>
+            </div>
+          </div>
+        </form>
+        
+        <!-- Step 2: Skills & Interests -->
+        <form *ngIf="currentStep === 1" [formGroup]="skillsForm" class="onboarding-form">
+          <div class="form-group">
+            <label>Your Skills *</label>
+            <div class="skills-input-container">
+              <div class="skills-tags">
+                <div *ngFor="let skill of selectedSkills" class="skill-tag">
+                  {{ skill }}
+                  <button type="button" class="remove-tag" (click)="removeSkill(skill)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="skill-input-wrapper">
+                <input 
+                  type="text" 
+                  formControlName="skillInput" 
+                  class="form-control skill-input"
+                  placeholder="Type a skill and press Enter"
+                  (keydown.enter)="addSkill($event)">
+                <button type="button" class="add-skill-btn" (click)="addSkill()">Add</button>
+              </div>
+            </div>
+            <div class="error-message" *ngIf="skillsForm.get('skills')?.invalid && skillsForm.get('skills')?.touched">
+              Please add at least one skill
+            </div>
+            <div class="helper-text">Add skills you have that might be useful for volunteering (e.g., teaching, web design, project management)</div>
+          </div>
+          
+          <div class="form-group">
+            <label>Areas of Interest *</label>
+            <div class="interests-container">
+              <div 
+                *ngFor="let interest of interests" 
+                class="interest-checkbox"
+                [class.selected]="isInterestSelected(interest.value)"
+                (click)="toggleInterest(interest.value)">
+                <div class="interest-icon">
+                  <i class="fas {{ interest.icon }}"></i>
+                </div>
+                <div class="interest-content">
+                  <div class="interest-name">{{ interest.name }}</div>
+                  <div class="interest-description">{{ interest.description }}</div>
+                </div>
+                <div class="interest-check">
+                  <i class="fas fa-check"></i>
+                </div>
+              </div>
+            </div>
+            <div class="error-message" *ngIf="skillsForm.get('interests')?.invalid && skillsForm.get('interests')?.touched">
+              Please select at least one area of interest
+            </div>
+          </div>
+        </form>
+        
+        <!-- Step 3: Availability & Preferences -->
+        <form *ngIf="currentStep === 2" [formGroup]="preferencesForm" class="onboarding-form">
+          <div class="form-group">
+            <label>Availability</label>
+            <div class="availability-options">
+              <div 
+                *ngFor="let option of availabilityOptions" 
+                class="availability-option"
+                [class.selected]="preferencesForm.get('availability')?.value === option.value"
+                (click)="preferencesForm.get('availability')?.setValue(option.value)">
+                <div class="option-icon">
+                  <i class="fas {{ option.icon }}"></i>
+                </div>
+                <div class="option-content">
+                  <div class="option-title">{{ option.title }}</div>
+                  <div class="option-description">{{ option.description }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label>Preferred Location *</label>
+            <div class="location-container">
+              <div class="location-tabs">
+                <button 
+                  type="button" 
+                  class="location-tab" 
+                  [class.active]="preferencesForm.get('locationType')?.value === 'remote'"
+                  (click)="preferencesForm.get('locationType')?.setValue('remote')">
+                  <i class="fas fa-laptop-house"></i> Remote
+                </button>
+                <button 
+                  type="button" 
+                  class="location-tab" 
+                  [class.active]="preferencesForm.get('locationType')?.value === 'local'"
+                  (click)="preferencesForm.get('locationType')?.setValue('local')">
+                  <i class="fas fa-map-marker-alt"></i> Local
+                </button>
+                <button 
+                  type="button" 
+                  class="location-tab" 
+                  [class.active]="preferencesForm.get('locationType')?.value === 'both'"
+                  (click)="preferencesForm.get('locationType')?.setValue('both')">
+                  <i class="fas fa-globe"></i> Both
+                </button>
+              </div>
+              
+              <div class="location-fields" *ngIf="showLocationFields">
+                <div class="form-group">
+                  <label for="city">City *</label>
+                  <input 
+                    type="text" 
+                    id="city" 
+                    formControlName="city" 
+                    class="form-control"
+                    [class.is-invalid]="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
+                  <div class="error-message" *ngIf="preferencesForm.get('city')?.invalid && preferencesForm.get('city')?.touched">
+                    City is required for local volunteering
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="radius">Distance Range (km) *</label>
+                  <input 
+                    type="range" 
+                    id="radius"
+                    formControlName="radius"
+                    min="5"
+                    max="100"
+                    step="5"
+                    class="form-range">
+                  <div class="range-values">
+                    <span>{{ preferencesForm.get('radius')?.value }} km</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="form-actions">
+        <button 
+          type="button" 
+          class="btn-secondary" 
+          *ngIf="currentStep > 0"
+          (click)="prevStep()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        
+        <button 
+          type="button" 
+          class="btn-primary" 
+          [disabled]="isNextDisabled()"
+          (click)="nextStep()">
+          {{ currentStep < steps.length - 1 ? 'Continue' : 'Complete' }}
+          <i class="fas" [ngClass]="currentStep < steps.length - 1 ? 'fa-arrow-right' : 'fa-check'"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+      <p>{{ loadingMessage }}</p>
+    </div>
+  </div>
+  
+  <!-- Error Toast -->
+  <div class="toast error" *ngIf="errorMessage" [@fadeInOut]>
+    <div class="toast-icon">
+      <i class="fas fa-exclamation-circle"></i>
+    </div>
+    <div class="toast-content">
+      <p>{{ errorMessage }}</p>
+    </div>
+    <button class="toast-close" (click)="errorMessage = ''">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+</div>

@@ -1,0 +1,149 @@
+$primary-color: #021a02;
+$accent-color: #3b826f;
+$black-color: #000000;
+$white-color: #FFFFFF;
+$light-green: rgba(2, 26, 2, 0.05);
+$medium-green: rgba(2, 26, 2, 0.1);
+$border-radius: 16px;
+$box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+
+.section {
+  padding: 100px 0;
+  background-color: $white-color;
+  position: relative;
+}
+
+.section-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  background-color: rgba(59, 130, 111, 0.1);
+  color: $accent-color;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0 0 20px 0;
+  position: relative;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background-color: $accent-color;
+    border-radius: 2px;
+  }
+}
+
+.section-subtitle {
+  max-width: 600px;
+  margin: 20px auto 0;
+  color: rgba(0, 0, 0, 0.7);
+  font-size: 18px;
+}
+
+.donation-impact-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.impact-card {
+  background-color: $white-color;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: $border-radius;
+  padding: 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: $box-shadow;
+    border-color: transparent;
+  }
+}
+
+.impact-icon {
+  width: 64px;
+  height: 64px;
+  background-color: rgba(59, 130, 111, 0.1);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  
+  i {
+    font-size: 30px;
+    color: $accent-color;
+  }
+}
+
+.impact-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: $primary-color;
+  margin: 0 0 16px 0;
+}
+
+.impact-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+
+
+
+.donation-cta {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.donate-button {
+  background-color: $accent-color;
+  color: $white-color;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 14px 36px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  
+  &:hover {
+    background-color: darken($accent-color, 5%);
+  }
+}

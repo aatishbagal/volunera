@@ -1,0 +1,129 @@
+$primary-color: #021a02;
+$accent-color: #3b826f;
+$black-color: #000000;
+$white-color: #FFFFFF;
+$light-green: rgba(2, 26, 2, 0.05);
+$medium-green: rgba(2, 26, 2, 0.1);
+$border-radius: 16px;
+$box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+
+.section {
+  padding: 100px 0;
+  background-color: $primary-color;
+  color: $white-color;
+  position: relative;
+  overflow: hidden;
+}
+
+.features-header {
+  max-width: 1200px;
+  margin: 0 auto 60px;
+  padding: 0 30px;
+  text-align: left;
+}
+
+.feature-tag-container {
+  margin-bottom: 20px;
+}
+
+.feature-tag {
+  display: inline-block;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: $white-color;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.section-title {
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1.2;
+  margin: 0 0 24px 0;
+  max-width: 700px;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  line-height: 1.6;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0;
+}
+
+.features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.feature-card {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: $border-radius;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.card-content {
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.feature-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  background-color: $accent-color;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  
+  i {
+    font-size: 24px;
+    color: $white-color;
+  }
+}
+
+.feature-title {
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: $white-color;
+}
+
+.feature-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  flex-grow: 1;
+}

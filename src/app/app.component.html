@@ -1,29 +1,21 @@
-<!-- Main Container -->
 <div class="container">
-  <!-- Navbar -->
-  <app-navbar></app-navbar>
 
-  <!-- Hero Section -->
-  <app-hero></app-hero>
+  <app-loading-screen [loading]="loading"></app-loading-screen>
 
-  <!-- How It Works Section -->
-  <app-how-it-works></app-how-it-works>
+  <ng-container *ngIf="isAuthRoute()">
 
-  <!-- Key Features Section -->
-  <app-features></app-features>
+    <a routerLink="/" class="volunera-logo">
+      <img src="images/volunera-logo-black.svg" alt="VolunEra" class="logo-image">
+    </a>
 
-  <!-- NGO Spotlight Section -->
-  <app-ngo-spotlight></app-ngo-spotlight>
+    <a routerLink="/" class="back-button">
+      <i class="fas fa-arrow-left"></i>
+    </a>
+  </ng-container>
 
-  <!-- Gamification Section -->
-  <app-gamification></app-gamification>
+  <app-navbar *ngIf="shouldShowNavbarFooter()"></app-navbar>
 
-  <!-- Donation Impact Section -->
-  <app-donation></app-donation>
+  <router-outlet></router-outlet>
 
-  <!-- CTA Section -->
-  <app-cta></app-cta>
-
-  <!-- Footer -->
-  <app-footer></app-footer>
+  <app-footer *ngIf="shouldShowNavbarFooter()"></app-footer>
 </div>

@@ -133,7 +133,6 @@ a {
   }
 }
 
-// Navbar Styles
 .navbar {
   position: fixed;
   top: 20px;
@@ -584,6 +583,73 @@ a {
     
     &:hover {
       color: $secondary-color;
+    }
+  }
+}
+
+.volunera-logo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: block;
+  transition: transform 0.3s ease;
+  
+  &:hover {
+    transform: translateX(-50%) scale(1.05);
+  }
+  
+  .logo-image {
+    height: 40px;
+    width: auto;
+  }
+  
+  @media (max-width: 768px) {
+    top: 15px;
+    
+    .logo-image {
+      height: 32px;
+    }
+  }
+}
+
+// Back button in top left
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  color: #021a02;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  
+  i {
+    font-size: 18px;
+  }
+  
+  &:hover {
+    background-color: #ffffff;
+    transform: scale(1.05);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  @media (max-width: 768px) {
+    top: 15px;
+    left: 15px;
+    width: 32px;
+    height: 32px;
+    
+    i {
+      font-size: 16px;
     }
   }
 }

@@ -1,0 +1,159 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.volunteer-management-container {
+  width: 100%;
+}
+
+.card {
+  @include card;
+  margin-bottom: 24px;
+  min-height: 350px; // Minimum height to make card larger
+  
+  .card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .card-link {
+      color: $primary-color;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  
+  .card-content {
+    padding: 16px 24px;
+    flex: 1; // Make content take available space
+    display: flex; // Use flexbox for content
+    flex-direction: column; // Stack children vertically
+  }
+  
+  .volunteers-list {
+    flex: 1; // Take up available space
+    
+    .volunteer-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .volunteer-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
+        
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      .volunteer-details {
+        flex: 1;
+        
+        .volunteer-name {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 4px;
+          margin-top: 0;
+        }
+        
+        .volunteer-info {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 4px;
+          margin-top: 0;
+        }
+        
+        .volunteer-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          
+          .skill-badge {
+            font-size: 0.6875rem;
+            padding: 2px 8px;
+            background-color: transparentize($accent-color, 0.9);
+            color: $accent-color;
+            border-radius: 16px;
+            white-space: nowrap;
+          }
+        }
+      }
+      
+      .volunteer-actions {
+        display: flex;
+        gap: 8px;
+        
+        .action-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: none;
+          background-color: transparentize($accent-color, 0.9);
+          color: $accent-color;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          
+          &:hover {
+            background-color: transparentize($accent-color, 0.8);
+          }
+        }
+      }
+    }
+  }
+  
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 0;
+    flex: 1;
+    justify-content: center; // Center vertically when empty
+    
+    .empty-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background-color: transparentize($primary-color, 0.9);
+      color: $primary-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    
+    .empty-message {
+      font-size: 0.875rem;
+      color: $text-color;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+    
+    .empty-subtext {
+      font-size: 0.75rem;
+      color: $text-light;
+      margin-bottom: 0;
+    }
+  }
+}

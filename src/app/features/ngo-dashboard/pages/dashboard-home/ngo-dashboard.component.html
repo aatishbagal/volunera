@@ -1,0 +1,245 @@
+<div class="dashboard-container">
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" [class.active]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+  
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed" [class.mobile-active]="isMobileMenuOpen">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <img src="images/volunera-text-logo-white.svg" alt="VolunEra" class="logo-full">
+        <img src="images/volunera-logo-white.svg" alt="VolunEra" class="logo-icon">
+      </div>
+      <!-- No collapse button here -->
+    </div>
+
+    <nav class="sidebar-nav">
+      <a [routerLink]="['/ngo/dashboard']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a [routerLink]="['/ngo/events']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-calendar"></i>
+        <span>Events</span>
+      </a>
+      <a [routerLink]="['/ngo/donations']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Donations</span>
+      </a>
+      <a [routerLink]="['/ngo/insights']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Insights</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="profile-completion">
+        <div class="completion-circle">
+          <div class="progress-indicator" [style.width.%]="organization.profileCompletion"></div>
+          <span>{{organization.profileCompletion}}%</span>
+        </div>
+        <div class="completion-text">
+          <p>Complete profile</p>
+          <p class="subtext">Complete your organization profile</p>
+        </div>
+      </div>
+
+      <!-- Make profile info clickable -->
+      <a [routerLink]="['/ngo/profile']" class="user-profile">
+        <img [src]="organization.avatar" alt="Organization Logo" class="avatar">
+        <div class="user-info">
+          <p class="user-name">{{organization.name}}</p>
+          <p class="user-email">{{organization.email}}</p>
+        </div>
+      </a>
+    </div>
+    
+    <!-- Mobile close button -->
+    <button class="mobile-nav-close" (click)="toggleMobileMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="content-wrapper">
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Bar (now part of main content) -->
+      <header class="top-bar">
+        <!-- Burger menu toggle button - visible on both desktop and mobile -->
+        <button class="mobile-nav-toggle" (click)="toggleSidebarOrMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Search container positioned to the left -->
+        <div class="search-container">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" placeholder="Search events, donations..." class="search-input">
+        </div>
+        
+        <div class="top-bar-actions">
+          <button class="action-button notification-btn">
+            <i class="fas fa-bell"></i>
+            <span class="notification-indicator"></span>
+          </button>
+          <button class="action-button message-btn">
+            <i class="fas fa-envelope"></i>
+          </button>
+        </div>
+      </header>
+      
+      <!-- Quick Actions Section -->
+      <div class="quick-actions">
+        <button class="quick-action-btn primary" (click)="createEvent()">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Create Event</span>
+        </button>
+        <button class="quick-action-btn secondary" (click)="createPost()">
+          <i class="fas fa-edit"></i>
+          <span>Post Update</span>
+        </button>
+      </div>
+      
+      <!-- Dashboard Content -->
+      <div class="dashboard-content">
+        <!-- Two Column Layout with stacked right side -->
+        <div class="three-column-layout">
+          <!-- Left Column - Organization Stats and Events -->
+          <div class="column left-column">
+            <!-- NGO Posts Card (Main section as requested) -->
+            <section class="card posts-card">
+              <div class="card-header">
+                <h2 class="card-title">NGO Posts</h2>
+                <a href="javascript:void(0)" class="card-link">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="posts-list">
+                  <div *ngFor="let post of allNgoPosts" class="post-item">
+                    <div class="post-header">
+                      <div class="post-organization">
+                        <img [src]="post.orgAvatar" alt="Organization Logo" class="post-org-avatar">
+                        <div>
+                          <span class="post-org-name">{{post.orgName}}</span>
+                          <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+                        </div>
+                      </div>
+                      <div class="post-actions" *ngIf="post.isOwnOrg">
+                        <button class="action-btn" (click)="viewPostInsights(post)">
+                          <i class="fas fa-chart-bar"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      <p class="post-text">{{post.content}}</p>
+                      <div *ngIf="post.image" class="post-image">
+                        <img [src]="post.image" alt="Post image">
+                      </div>
+                    </div>
+                    <div class="post-stats">
+                      <div class="stat-group">
+                        <i class="fas fa-heart"></i>
+                        <span>{{post.likes}}</span>
+                      </div>
+                      <div class="stat-group">
+                        <i class="fas fa-comment"></i>
+                        <span>{{post.comments}}</span>
+                      </div>
+                      <div class="stat-group">
+                        <i class="fas fa-eye"></i>
+                        <span>{{post.reach}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="create-post-btn-container">
+                  <button class="create-post-btn" (click)="createPost()">
+                    <i class="fas fa-plus"></i>
+                    <span>Create New Post</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Column - Events and Donations (as requested) -->
+          <div class="column right-column">
+            <!-- Event Management Card -->
+            <section class="card events-card">
+              <div class="card-header">
+                <h2 class="card-title">Upcoming Events</h2>
+                <a href="javascript:void(0)" class="card-link" (click)="viewAllEvents()">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="events-list">
+                  <div *ngFor="let event of upcomingEvents" class="event-item">
+                    <div class="event-date">
+                      <span class="date-day">{{event.date | date:'d'}}</span>
+                      <span class="date-month">{{event.date | date:'MMM'}}</span>
+                    </div>
+                    <div class="event-details">
+                      <h4 class="event-title">{{event.title}}</h4>
+                      <p class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{event.location}}
+                      </p>
+                      <div class="event-stats">
+                        <div class="registration-progress">
+                          <div class="progress-bar">
+                            <div class="progress" [style.width.%]="(event.registeredVolunteers / event.capacity) * 100"></div>
+                          </div>
+                          <span class="progress-text">{{event.registeredVolunteers}}/{{event.capacity}} registered</span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="event-actions">
+                      <button class="event-action-btn manage-btn">
+                        <i class="fas fa-cog"></i>
+                        <span>Manage</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="create-event-btn-container">
+                  <button class="create-event-btn" (click)="createEvent()">
+                    <i class="fas fa-plus"></i>
+                    <span>Create New Event</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+            
+            <!-- Donations Card -->
+            <section class="card donations-card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Donations</h2>
+                <a href="javascript:void(0)" class="card-link" (click)="viewAllDonations()">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="donations-list">
+                  <div *ngFor="let donation of recentDonations" class="donation-item">
+                    <div class="donation-icon" [ngClass]="donation.type">
+                      <i class="fas" [ngClass]="donation.type === 'financial' ? 'fa-dollar-sign' : 'fa-box'"></i>
+                    </div>
+                    <div class="donation-details">
+                      <h4 class="donation-title">
+                        {{donation.type === 'financial' ? '$' + donation.amount : donation.items}}
+                      </h4>
+                      <p class="donation-info">
+                        <span class="donor-name">{{donation.donor}}</span> •
+                        <span class="donation-date">{{donation.date | date:'mediumDate'}}</span>
+                      </p>
+                    </div>
+                    <div class="donation-status" [ngClass]="donation.status">
+                      {{donation.status}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

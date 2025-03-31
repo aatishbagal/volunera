@@ -1,0 +1,49 @@
+<section class="section">
+  <div class="section-container">
+    <div class="section-header">
+      <div class="section-tag">Spotlight</div>
+      <h2 class="section-title">Featured NGO Partners</h2>
+      <p class="section-subtitle">Organizations making significant impact in their communities</p>
+    </div>
+    
+    <div class="ngo-spotlight-container">
+      <div class="ngo-card" *ngFor="let ngo of ngos">
+        <div class="ngo-card-header">
+          <div class="ngo-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-3 8h-2v2h2v2h-2v2h-2v-2h-2v-2h2v-2h-2V8h2V6h2v2h2v2z"/>
+            </svg>
+          </div>
+          <h3 class="ngo-name">{{ ngo.name }}</h3>
+        </div>
+        
+        <div class="ngo-info">
+          <div class="ngo-section">
+            <h4 class="ngo-section-title">Mission</h4>
+            <p class="ngo-section-content">{{ ngo.mission }}</p>
+          </div>
+          
+          <div class="ngo-section">
+            <h4 class="ngo-section-title">Impact</h4>
+            <p class="ngo-section-content">{{ ngo.impact }}</p>
+          </div>
+
+          <div class="ngo-metrics">
+            <div class="metric">
+              <div class="metric-value">{{ ngo.volunteers }}</div>
+              <div class="metric-label">Volunteers</div>
+            </div>
+            <div class="metric">
+              <div class="metric-value">{{ ngo.events }}</div>
+              <div class="metric-label">Events</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="ngo-action">
+          <button class="connect-button">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

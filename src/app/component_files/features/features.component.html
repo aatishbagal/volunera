@@ -1,0 +1,23 @@
+<section id="features" class="section">
+  <div class="features-header">
+    <div class="feature-tag-container">
+      <div class="feature-tag">Key Features</div>
+    </div>
+    <h2 class="section-title">Building a New Era of Volunteering</h2>
+    <p class="section-subtitle">Connecting passionate volunteers with NGOs through innovative technology</p>
+  </div>
+  
+  <div class="features-container">
+    <div class="features-grid">
+      <div class="feature-card" *ngFor="let feature of features">
+        <div class="card-content">
+          <div class="feature-icon">
+            <i class="fas {{ feature.icon }}"></i>
+          </div>
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-description">{{ feature.description }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
