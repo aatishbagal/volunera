@@ -1,62 +1,103 @@
-// Import the same variables to maintain consistency
-@import '../../../../styles/variables';
-
-// Variables (same as volunteer dashboard)
+// Variables
 $sidebar-width: 260px;
-$primary-color: #3b82f6;
-$secondary-color: #6366f1;
+$sidebar-collapsed-width: 70px;
+$primary-color: #021a02; // Dark green
+$accent-color: #337060; // Medium green
 $text-color: #1f2937;
 $text-light: #9ca3af;
-$background-light: #f3f4f6;
-$background-dark: #111827;
+$background-light: #f9fafb;
+$background-dark: #021a02; // Sidebar color
 $card-background: #ffffff;
 $success-color: #10b981;
 $danger-color: #ef4444;
 $warning-color: #f59e0b;
-$border-radius: 8px;
-$box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$secondary-color: #6b7280;
+$border-radius: 36px; // Very rounded corners matching image
+$card-border-radius: 36px; // Very rounded corners for cards
+$button-radius: 32px; // For buttons and smaller elements
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
+$mobile-breakpoint: 768px;
 
-// Import the basic structure from volunteer dashboard to maintain consistency
+// Global styles
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Main container
 .dashboard-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: $background-dark; // Make the entire background match the sidebar
+  position: relative; // For absolute positioning of elements
 }
 
-// Sidebar styles (same as volunteer dashboard)
-.sidebar {
-  width: $sidebar-width;
-  background-color: $background-dark;
-  color: white;
+// Content wrapper to create the "white area inside brown area" effect
+.content-wrapper {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow-y: auto;
-  padding: 20px;
+  background-color: $background-light;
+  border-radius: $border-radius 0 0 $border-radius;
+  margin: 8px 0 8px 0; // Thin border
+  overflow: hidden; // Keep content inside the rounded corners
+  min-width: 0; // Prevent horizontal scrolling
+}
 
-  // Same sidebar styling as volunteer dashboard
+// Mobile nav close button
+.mobile-nav-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  cursor: pointer;
+  z-index: 1001;
+  display: none; // Hidden by default, shown in mobile
+  align-items: center;
+  justify-content: center;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+
   .sidebar-header {
-    padding-bottom: 24px;
+    padding-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     
     .logo-container {
       display: flex;
       align-items: center;
       
-      .logo-circle {
-        width: 40px;
+      .logo-image {
         height: 40px;
-        background-color: white;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: $background-dark;
-        margin-right: 12px;
+        width: auto;
       }
+    }
+    
+    .collapse-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       
-      .logo-text {
-        font-size: 1.5rem;
-        font-weight: 700;
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
       }
     }
   }
@@ -69,25 +110,37 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
       display: flex;
       align-items: center;
       padding: 12px 16px;
-      margin-bottom: 8px;
-      border-radius: $border-radius;
+      margin-bottom: 10px;
+      border-radius: $button-radius;
       color: #9ca3af;
       text-decoration: none;
       transition: all 0.2s ease;
       
+      &.active {
+        background-color: $accent-color;
+        color: white;
+        
+        i {
+          color: white;
+        }
+      }
+      
       i {
-        width: 20px;
+        width: 24px;
+        font-size: 18px;
         margin-right: 12px;
         text-align: center;
+        color: currentColor;
+        display: flex;
+        justify-content: center;
+      }
+      
+      span {
+        white-space: nowrap;
       }
       
       &:hover {
         background-color: rgba(255, 255, 255, 0.1);
-      }
-      
-      &.active {
-        background-color: $primary-color;
-        color: white;
       }
     }
   }
@@ -97,8 +150,8 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     padding-top: 24px;
     
     .profile-completion {
-      background-color: #1f2937;
-      border-radius: $border-radius;
+      background-color: lighten($background-dark, 5%);
+      border-radius: $button-radius;
       padding: 16px;
       margin-bottom: 16px;
       display: flex;
@@ -108,13 +161,28 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background-color: $primary-color;
+        background-color: $accent-color;
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-size: 0.75rem;
         font-weight: 700;
+        overflow: hidden; // Ensure circular shape
+        
+        .progress-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 100%;
+          background-color: lighten($accent-color, 15%);
+          z-index: 1;
+        }
+        
+        span {
+          position: relative;
+          z-index: 2;
+        }
         
         &::after {
           content: '';
@@ -170,601 +238,958 @@ $box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   }
 }
 
-// Main content styles (same structure as volunteer dashboard)
+// Main content styles
 .main-content {
   flex: 1;
   overflow-y: auto;
-  background-color: $background-light;
+  padding: 0 24px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; // Prevent horizontal scrolling
+}
+
+// Top Bar - flat to the page
+.top-bar {
+  background-color: transparent;
+  display: flex;
+  align-items: center; // Align items vertically
+  padding: 16px 24px;
   
-  .top-bar {
-    background-color: $card-background;
+  .mobile-nav-toggle {
+    width: 44px; // Match the size of other buttons
+    height: 44px;
+    border-radius: 50%;
+    background-color: $accent-color;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-right: 12px;
+    box-shadow: $box-shadow;
+    display: flex; // Keep visible on desktop
+    align-items: center;
+    justify-content: center;
+    
+    i {
+      font-size: 1.25rem;
+    }
+  }
+  
+  .search-container {
+    position: relative;
+    width: 400px;
+    margin-right: auto; // Push other elements to the right
+    
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: $text-light;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 12px 18px 12px 46px;
+      border-radius: $button-radius;
+      border: none;
+      background-color: $card-background;
+      font-size: 0.875rem;
+      box-shadow: $box-shadow;
+      
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba($accent-color, 0.3);
+      }
+    }
+  }
+  
+  .top-bar-actions {
+    display: flex;
+    align-items: center;
+    
+    .action-button {
+      position: relative;
+      width: 44px; // Same size as the burger menu
+      height: 44px;
+      border-radius: 50%;
+      background-color: $card-background;
+      border: none;
+      color: $text-color;
+      margin-left: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: $box-shadow;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:hover {
+        background-color: darken($card-background, 3%);
+      }
+      
+      .notification-indicator {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 8px;
+        height: 8px;
+        background-color: $danger-color;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+// Quick Actions Section
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin: 0 24px 24px;
+  
+  .quick-action-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    border-radius: $button-radius;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    box-shadow: $box-shadow;
+    transition: all 0.2s ease;
+    
+    i {
+      margin-right: 8px;
+    }
+    
+    &.primary {
+      background-color: $accent-color;
+      color: white;
+      
+      &:hover {
+        background-color: darken($accent-color, 5%);
+      }
+    }
+    
+    &.secondary {
+      background-color: white;
+      color: $accent-color;
+      border: 1px solid rgba($accent-color, 0.3);
+      
+      &:hover {
+        background-color: rgba($accent-color, 0.05);
+      }
+    }
+  }
+}
+
+// Dashboard content area
+.dashboard-content {
+  flex: 1;
+  display: flex;
+  min-height: 0; // Allow proper flex sizing
+  max-height: calc(100vh - 160px); // Prevent page scrolling in desktop, adjusted for quick actions
+}
+
+// Three column layout
+.three-column-layout {
+  display: grid;
+  grid-template-columns: 2fr 1fr; // Left section is wider, right column stacked
+  gap: 24px;
+  width: 100%;
+  height: 100%;
+  max-height: calc(100vh - 160px); // Prevent page scrolling in desktop, adjusted for quick actions
+  
+  .column {
+    min-width: 0; // Prevent overflow
+    height: 100%;
+    overflow-y: hidden; // Hide overflow, cards will handle scrolling
+  }
+  
+  .right-column {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow-y: auto;
+  }
+}
+
+// Card styling
+.card {
+  background-color: $card-background;
+  border-radius: $card-border-radius;
+  box-shadow: $box-shadow;
+  margin-bottom: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  
+  .card-header {
+    padding: 18px 24px;
     border-bottom: 1px solid #e5e7eb;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 12px 24px;
     
-    .search-container {
-      position: relative;
-      width: 400px;
-      
-      .search-icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: $text-light;
-      }
-      
-      .search-input {
-        width: 100%;
-        padding: 8px 12px 8px 36px;
-        border-radius: $border-radius;
-        border: none;
-        background-color: $background-light;
-        font-size: 0.875rem;
-        
-        &:focus {
-          outline: none;
-          box-shadow: 0 0 0 2px rgba($primary-color, 0.3);
-        }
-      }
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: $primary-color;
     }
     
-    .top-bar-actions {
+    .card-link {
+      color: $accent-color;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+    }
+  }
+  
+  .card-content {
+    padding: 18px 24px;
+    overflow-y: auto;
+    flex: 1;
+  }
+}
+
+// Organization Stats Card
+.organization-stats-card {
+  .stats-overview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 24px;
+    
+    .stat-item {
+      flex: 1;
+      min-width: 120px;
       display: flex;
+      flex-direction: column;
       align-items: center;
+      padding: 16px;
+      background-color: rgba($accent-color, 0.05);
+      border-radius: $button-radius;
       
-      .action-button {
+      .stat-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: $primary-color;
+        margin-bottom: 4px;
+      }
+      
+      .stat-label {
+        font-size: 0.75rem;
+        color: $text-light;
+      }
+    }
+  }
+  
+  .engagement-chart {
+    margin-bottom: 24px;
+    
+    .chart-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: $text-color;
+    }
+    
+    .chart-bars {
+      display: flex;
+      height: 160px;
+      align-items: flex-end;
+      
+      .chart-bar {
+        flex: 1;
+        margin: 0 6px;
+        background-color: rgba($accent-color, 0.6);
+        border-radius: 4px 4px 0 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        align-items: center;
         position: relative;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: none;
-        border: none;
-        color: $text-color;
-        margin-left: 8px;
-        cursor: pointer;
-        transition: all 0.2s ease;
+        transition: height 0.3s ease;
         
         &:hover {
-          background-color: $background-light;
+          background-color: $accent-color;
         }
         
-        .notification-indicator {
+        .bar-label {
           position: absolute;
-          top: 8px;
-          right: 8px;
-          width: 8px;
-          height: 8px;
-          background-color: $danger-color;
-          border-radius: 50%;
+          bottom: -24px;
+          font-size: 0.75rem;
+          color: $text-light;
         }
       }
     }
   }
   
-  .dashboard-content {
-    padding: 24px;
+  .stats-highlights {
+    display: flex;
+    gap: 16px;
     
-    .quick-actions {
+    .highlight-card {
+      flex: 1;
       display: flex;
-      margin-bottom: 24px;
+      align-items: center;
+      padding: 16px;
+      background-color: rgba($primary-color, 0.05);
+      border-radius: $button-radius;
       
-      .quick-action-btn {
+      .highlight-icon {
+        width: 40px;
+        height: 40px;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 10px 20px;
-        border-radius: $border-radius;
-        font-weight: 500;
-        border: none;
-        cursor: pointer;
+        background-color: rgba($primary-color, 0.1);
+        color: $primary-color;
+        border-radius: 50%;
         margin-right: 12px;
-        box-shadow: $box-shadow;
-        
-        i {
-          margin-right: 8px;
-        }
-        
-        &.primary {
-          background-color: $primary-color;
-          color: white;
-        }
-        
-        &.secondary {
-          background-color: white;
-          color: $text-color;
-          border: 1px solid #e5e7eb;
-        }
+        font-size: 1rem;
       }
-    }
-    
-    .stats-section {
-      margin-bottom: 24px;
       
-      .stats-card {
-        background-color: $card-background;
-        border-radius: $border-radius;
-        padding: 24px;
-        box-shadow: $box-shadow;
+      .highlight-content {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
         
-        .stat-item {
-          flex: 1;
-          padding: 0 16px;
-          border-right: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-right: none;
-          }
-          
-          .stat-title {
-            font-size: 0.875rem;
-            color: $text-light;
-            margin-bottom: 8px;
-          }
-          
-          .stat-value {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 8px;
-          }
-          
-          .stat-trend {
-            display: flex;
-            align-items: center;
-            font-size: 0.75rem;
-            
-            i {
-              margin-right: 4px;
-            }
-            
-            &.positive {
-              color: $success-color;
-            }
-            
-            &.negative {
-              color: $danger-color;
-            }
-          }
-        }
-      }
-    }
-    
-    .two-column-layout {
-      display: flex;
-      gap: 24px;
-      
-      .column {
-        flex: 1;
-      }
-    }
-    
-    .card {
-      background-color: $card-background;
-      border-radius: $border-radius;
-      box-shadow: $box-shadow;
-      margin-bottom: 24px;
-      
-      .card-header {
-        padding: 16px 24px;
-        border-bottom: 1px solid #e5e7eb;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        
-        .card-title {
+        .highlight-value {
           font-size: 1.125rem;
           font-weight: 600;
+          color: $primary-color;
         }
         
-        .card-link {
-          color: $primary-color;
-          text-decoration: none;
+        .highlight-label {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+      }
+    }
+  }
+}
+
+// Events Card
+.events-card {
+  .events-list {
+    .event-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .event-date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 48px;
+        margin-right: 16px;
+        
+        .date-day {
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+        
+        .date-month {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+      }
+      
+      .event-details {
+        flex: 1;
+        
+        .event-title {
           font-size: 0.875rem;
           font-weight: 500;
+          margin-bottom: 4px;
+          margin-top: 0;
         }
         
-        .period-selector {
-          display: flex;
+        .event-location {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 8px;
           
-          .period-btn {
-            padding: 4px 12px;
-            font-size: 0.75rem;
-            border: none;
-            background: none;
-            cursor: pointer;
-            color: $text-light;
-            
-            &.active {
-              background-color: rgba($primary-color, 0.1);
-              color: $primary-color;
-              border-radius: 16px;
-              font-weight: 500;
-            }
+          i {
+            margin-right: 4px;
           }
         }
-      }
-      
-      .card-content {
-        padding: 16px 24px;
-      }
-    }
-    
-    // NGO Dashboard specific styles
-    
-    // Recent Registrations
-    .recent-registrations {
-      .registrations-list {
-        .registration-item {
-          display: flex;
-          align-items: center;
-          padding: 12px 0;
-          border-bottom: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .volunteer-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 16px;
-            
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-          }
-          
-          .volunteer-details {
-            flex: 1;
-            
-            .volunteer-name {
-              font-size: 0.875rem;
-              font-weight: 500;
-              margin-bottom: 2px;
-            }
-            
-            .volunteer-email, .registration-date {
-              font-size: 0.75rem;
-              color: $text-light;
-              margin-bottom: 2px;
-            }
-          }
-          
-          .volunteer-actions {
-            display: flex;
-            
-            .action-btn {
-              width: 32px;
-              height: 32px;
-              border-radius: 50%;
-              border: none;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin-left: 8px;
-              cursor: pointer;
-              
-              &.message {
-                background-color: rgba($primary-color, 0.1);
-                color: $primary-color;
-              }
-              
-              &.profile {
-                background-color: rgba($text-light, 0.1);
-                color: $text-light;
-              }
-            }
-          }
-        }
-      }
-    }
-    
-    // Active Events
-    .active-events {
-      .event-list {
-        .event-item {
-          display: flex;
-          align-items: center;
-          padding: 16px 0;
-          border-bottom: 1px solid #e5e7eb;
-          
-          &:last-child {
-            border-bottom: none;
-          }
-          
-          .event-date {
+        
+        .event-stats {
+          .registration-progress {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            width: 48px;
-            margin-right: 16px;
             
-            .date-day {
-              font-size: 1.25rem;
-              font-weight: 700;
+            .progress-bar {
+              height: 6px;
+              background-color: #e5e7eb;
+              border-radius: 3px;
+              margin-bottom: 4px;
+              overflow: hidden;
+              
+              .progress {
+                height: 100%;
+                background-color: $accent-color;
+              }
             }
             
-            .date-month {
-              font-size: 0.75rem;
+            .progress-text {
+              font-size: 0.6875rem;
               color: $text-light;
-            }
-          }
-          
-          .event-details {
-            flex: 1;
-            
-            .event-title {
-              font-size: 0.875rem;
-              font-weight: 500;
-              margin-bottom: 6px;
-            }
-            
-            .event-location {
-              font-size: 0.75rem;
-              color: $text-light;
-              margin-bottom: 10px;
-              
-              i {
-                margin-right: 4px;
-              }
-            }
-            
-            .registration-progress {
-              .progress-bar {
-                height: 6px;
-                background-color: #e5e7eb;
-                border-radius: 3px;
-                overflow: hidden;
-                margin-bottom: 4px;
-                
-                .progress-fill {
-                  height: 100%;
-                  background-color: $primary-color;
-                  border-radius: 3px;
-                }
-              }
-              
-              .registration-text {
-                font-size: 0.6875rem;
-                color: $text-light;
-              }
-            }
-          }
-          
-          .event-actions {
-            display: flex;
-            
-            .event-action-btn {
-              width: 32px;
-              height: 32px;
-              border-radius: 50%;
-              border: none;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              margin-left: 8px;
-              cursor: pointer;
-              
-              &.edit {
-                background-color: rgba($primary-color, 0.1);
-                color: $primary-color;
-              }
-              
-              &.share {
-                background-color: rgba($text-light, 0.1);
-                color: $text-light;
-              }
             }
           }
         }
       }
       
-      .create-event-action {
-        padding-top: 16px;
+      .event-actions {
+        .event-action-btn {
+          padding: 6px 12px;
+          border-radius: $button-radius;
+          font-size: 0.75rem;
+          background-color: rgba($accent-color, 0.1);
+          color: $accent-color;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          
+          i {
+            margin-right: 4px;
+          }
+          
+          &:hover {
+            background-color: rgba($accent-color, 0.2);
+          }
+        }
+      }
+    }
+  }
+  
+  .create-event-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    
+    .create-event-btn {
+      padding: 8px 16px;
+      border-radius: $button-radius;
+      font-size: 0.875rem;
+      background-color: $accent-color;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      
+      i {
+        margin-right: 8px;
+      }
+      
+      &:hover {
+        background-color: darken($accent-color, 5%);
+      }
+    }
+  }
+}
+
+// Volunteers Card
+.volunteers-card {
+  .volunteers-list {
+    .volunteer-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .volunteer-avatar {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin-right: 12px;
         
-        .create-event-btn {
+        img {
           width: 100%;
-          padding: 10px;
-          border-radius: $border-radius;
-          border: 1px dashed #e5e7eb;
-          background-color: rgba($primary-color, 0.05);
-          color: $primary-color;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+      
+      .volunteer-details {
+        flex: 1;
+        
+        .volunteer-name {
+          font-size: 0.875rem;
           font-weight: 500;
+          margin-bottom: 4px;
+          margin-top: 0;
+        }
+        
+        .volunteer-info {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 4px;
+        }
+        
+        .volunteer-skills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px;
+          
+          .skill-badge {
+            font-size: 0.6875rem;
+            padding: 2px 8px;
+            background-color: rgba($accent-color, 0.1);
+            color: $accent-color;
+            border-radius: 16px;
+            white-space: nowrap;
+          }
+        }
+      }
+      
+      .volunteer-actions {
+        display: flex;
+        gap: 8px;
+        
+        .action-btn {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: none;
+          background-color: rgba($accent-color, 0.1);
+          color: $accent-color;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           
-          i {
-            margin-right: 8px;
+          &:hover {
+            background-color: rgba($accent-color, 0.2);
           }
         }
       }
     }
-    
-    // Donation Stats
-    .donation-stats {
-      .donation-metrics {
+  }
+}
+
+// Donations Card
+.donations-card {
+  .donations-list {
+    .donation-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .donation-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
         display: flex;
-        gap: 24px;
-        margin-bottom: 24px;
+        align-items: center;
+        justify-content: center;
+        margin-right: 12px;
         
-        .donation-metric {
-          flex: 1;
-          padding: 16px;
-          border-radius: $border-radius;
+        &.financial {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+        }
+        
+        &.items {
+          background-color: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+      }
+      
+      .donation-details {
+        flex: 1;
+        
+        .donation-title {
+          font-size: 0.875rem;
+          font-weight: 500;
+          margin-bottom: 4px;
+          margin-top: 0;
+        }
+        
+        .donation-info {
+          font-size: 0.75rem;
+          color: $text-light;
+          margin-bottom: 0;
           
-          &.financial {
-            background-color: rgba($primary-color, 0.05);
-            
-            .metric-value {
-              color: $primary-color;
-            }
+          .donor-name {
+            font-weight: 500;
           }
-          
-          &.items {
-            background-color: rgba($secondary-color, 0.05);
-            
-            .metric-value {
-              color: $secondary-color;
-            }
-          }
-          
-          .metric-header {
+        }
+      }
+      
+      .donation-status {
+        font-size: 0.75rem;
+        font-weight: 500;
+        padding: 4px 8px;
+        border-radius: 16px;
+        text-transform: capitalize;
+        
+        &.received {
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+        }
+        
+        &.pending {
+          background-color: rgba($warning-color, 0.1);
+          color: $warning-color;
+        }
+      }
+    }
+  }
+}
+
+// Posts Card
+.posts-card {
+  .posts-list {
+    .post-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #e5e7eb;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+        
+        .post-date {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+        
+        .post-actions {
+          .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background-color: rgba($accent-color, 0.1);
+            color: $accent-color;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 8px;
+            justify-content: center;
+            cursor: pointer;
             
-            .metric-title {
-              font-size: 0.875rem;
-              font-weight: 500;
-              color: $text-color;
+            &:hover {
+              background-color: rgba($accent-color, 0.2);
             }
-            
-            .metric-change {
-              font-size: 0.75rem;
-              font-weight: 500;
-              
-              &.positive {
-                color: $success-color;
-              }
-              
-              &.negative {
-                color: $danger-color;
-              }
-              
-              i {
-                margin-right: 2px;
-              }
-            }
-          }
-          
-          .metric-value {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 4px;
-          }
-          
-          .metric-comparison {
-            font-size: 0.75rem;
-            color: $text-light;
           }
         }
       }
       
-      .donation-chart {
-        height: 200px;
+      .post-content {
+        margin-bottom: 12px;
         
-        .placeholder-chart {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
+        .post-text {
+          font-size: 0.875rem;
+          line-height: 1.5;
+          margin-bottom: 12px;
+        }
+        
+        .post-image {
+          border-radius: $button-radius;
+          overflow: hidden;
+          margin-bottom: 12px;
           
-          .chart-bars {
-            display: flex;
-            height: 100%;
-            align-items: flex-end;
-            
-            .chart-bar {
-              flex: 1;
-              margin: 0 6px;
-              background-color: rgba($primary-color, 0.6);
-              border-radius: 4px 4px 0 0;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
-              align-items: center;
-              position: relative;
-              
-              &.active {
-                background-color: $primary-color;
-              }
-              
-              .bar-label {
-                position: absolute;
-                bottom: -24px;
-                font-size: 0.75rem;
-                color: $text-light;
-              }
-            }
+          img {
+            width: 100%;
+            height: auto;
+            display: block;
+          }
+        }
+      }
+      
+      .post-stats {
+        display: flex;
+        gap: 16px;
+        
+        .stat-group {
+          display: flex;
+          align-items: center;
+          font-size: 0.75rem;
+          color: $text-light;
+          
+          i {
+            margin-right: 4px;
           }
         }
       }
     }
+  }
+  
+  .create-post-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
     
-    // Volunteer Engagement
-    .volunteer-engagement {
-      .engagement-chart {
-        height: 200px;
-        margin-bottom: 16px;
-        
-        .placeholder-chart {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-end;
-          
-          .chart-bars {
-            display: flex;
-            height: 100%;
-            align-items: flex-end;
-            
-            .chart-bar {
-              flex: 1;
-              margin: 0 6px;
-              background-color: rgba($primary-color, 0.6);
-              border-radius: 4px 4px 0 0;
-              display: flex;
-              flex-direction: column;
-              justify-content: flex-end;
-              align-items: center;
-              position: relative;
-              
-              .bar-label {
-                position: absolute;
-                bottom: -24px;
-                font-size: 0.75rem;
-                color: $text-light;
-                text-align: center;
-                width: 100%;
-                white-space: nowrap;
-              }
-            }
-          }
-        }
+    .create-post-btn {
+      padding: 8px 16px;
+      border-radius: $button-radius;
+      font-size: 0.875rem;
+      background-color: rgba($accent-color, 0.1);
+      color: $accent-color;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      
+      i {
+        margin-right: 8px;
       }
       
-      .engagement-metrics {
-        display: flex;
-        justify-content: space-around;
+      &:hover {
+        background-color: rgba($accent-color, 0.2);
+      }
+    }
+  }
+}
+
+// Mobile nav overlay
+.mobile-nav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+// Media queries for responsiveness
+@media (max-width: 1280px) {
+  .three-column-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Mobile styles
+@media (max-width: $mobile-breakpoint) {
+  // Content wrapper adjustments
+  .content-wrapper {
+    margin: 0;
+    border-radius: 0;
+  }
+  
+  // Allow scrolling on mobile
+  .dashboard-content {
+    max-height: none;
+    overflow-y: visible;
+  }
+  
+  .three-column-layout {
+    max-height: none;
+    height: auto;
+    overflow-y: visible;
+    
+    .column {
+      height: auto;
+      overflow-y: visible;
+    }
+    
+    .right-column {
+      height: auto;
+      overflow-y: visible;
+    }
+  }
+  
+  // Hide sidebar by default on mobile
+  .sidebar {
+    position: fixed;
+    left: -100%;
+    z-index: 1000;
+    width: 80%;
+    max-width: 300px;
+    border-radius: 0;
+    box-shadow: $box-shadow;
+    
+    &.mobile-active {
+      left: 0;
+    }
+    
+    .sidebar-header {
+      .collapse-btn {
+        display: none;
+      }
+    }
+    
+    // Show mobile close button
+    .mobile-nav-close {
+      display: flex;
+    }
+  }
+  
+  // Adjust search container
+  .top-bar {
+    padding: 16px 16px;
+    
+    .search-container {
+      flex: 1;
+      margin: 0 10px;
+    }
+    
+    // Show mobile nav toggle on mobile only
+    .mobile-nav-toggle {
+      display: flex;
+    }
+  }
+  
+  // More accent color on mobile
+  .card {
+    border: 2px solid rgba($accent-color, 0.1);
+    
+    .card-header {
+      background-color: rgba($accent-color, 0.05);
+      
+      .card-title {
+        color: $accent-color;
+      }
+    }
+  }
+  
+  .main-content {
+    padding: 0 16px 16px 16px;
+    overflow-y: auto; // Allow scrolling on mobile
+  }
+  
+  // Quick actions responsive
+  .quick-actions {
+    flex-direction: column;
+    margin: 0 16px 16px;
+    
+    .quick-action-btn {
+      width: 100%;
+    }
+  }
+  
+  // Adjust stats grid for mobile
+  .stats-overview {
+    gap: 8px !important;
+    
+    .stat-item {
+      min-width: calc(50% - 4px) !important;
+      padding: 12px !important;
+    }
+  }
+  
+  // Adjust highlights for mobile
+  .stats-highlights {
+    flex-direction: column !important;
+  }
+}
+
+// Specific adjustments for very small screens
+@media (max-width: 576px) {
+  .top-bar {
+    padding: 12px;
+    
+    .search-container {
+      .search-input {
+        padding: 10px 12px 10px 36px;
+      }
+    }
+    
+    .top-bar-actions {
+      .action-button {
+        width: 40px;
+        height: 40px;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+// Sidebar styles
+.sidebar {
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  background-color: $background-dark;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 20px;
+  transition: all 0.3s ease;
+  position: relative; // For the close button
+  z-index: 1000; // Ensure sidebar sits above content
+  
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+    min-width: $sidebar-collapsed-width;
+    padding: 24px 10px;
+    
+    .logo-container {
+      justify-content: center;
+      
+      .logo-text {
+        display: none;
+      }
+      
+      .logo-image {
+        height: 30px;
+        content: url('/home/user/volunera/public/images/volunera-logo-white.svg');
+      }
+    }
+    
+    .nav-item {
+      justify-content: center;
+      padding: 12px;
+      
+      span {
+        display: none;
+      }
+      
+      i {
+        margin-right: 0;
+      }
+    }
+    
+    .sidebar-footer {
+      .profile-completion {
+        display: none;
+      }
+      
+      .user-profile {
+        justify-content: center;
         
-        .metric {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          
-          .metric-value {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: $text-color;
-          }
-          
-          .metric-label {
-            font-size: 0.75rem;
-            color: $text-light;
-          }
+        .user-info {
+          display: none;
+        }
+        
+        .avatar {
+          margin-right: 0;
         }
       }
     }

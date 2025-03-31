@@ -1,7 +1,7 @@
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
 
-.volunteer-management-container {
+.event-management-container {
   width: 100%;
 }
 
@@ -34,8 +34,8 @@
     padding: 16px 24px;
   }
   
-  .volunteers-list {
-    .volunteer-item {
+  .events-list {
+    .event-item {
       display: flex;
       align-items: center;
       padding: 16px 0;
@@ -45,68 +45,86 @@
         border-bottom: none;
       }
       
-      .volunteer-avatar {
+      .event-date {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 12px;
+        margin-right: 16px;
         
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+        .date-day {
+          font-size: 1.25rem;
+          font-weight: 700;
+        }
+        
+        .date-month {
+          font-size: 0.75rem;
+          color: $text-light;
         }
       }
       
-      .volunteer-details {
+      .event-details {
         flex: 1;
         
-        .volunteer-name {
+        .event-title {
           font-size: 0.875rem;
           font-weight: 500;
           margin-bottom: 4px;
           margin-top: 0;
         }
         
-        .volunteer-info {
+        .event-location {
           font-size: 0.75rem;
           color: $text-light;
-          margin-bottom: 4px;
+          margin-bottom: 8px;
           margin-top: 0;
+          
+          i {
+            margin-right: 4px;
+          }
         }
         
-        .volunteer-skills {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-          
-          .skill-badge {
-            font-size: 0.6875rem;
-            padding: 2px 8px;
-            background-color: rgba($accent-color, 0.1);
-            color: $accent-color;
-            border-radius: 16px;
-            white-space: nowrap;
+        .event-stats {
+          .registration-progress {
+            display: flex;
+            flex-direction: column;
+            
+            .progress-bar {
+              height: 6px;
+              background-color: #e5e7eb;
+              border-radius: 3px;
+              margin-bottom: 4px;
+              overflow: hidden;
+              
+              .progress {
+                height: 100%;
+                background-color: $accent-color;
+              }
+            }
+            
+            .progress-text {
+              font-size: 0.6875rem;
+              color: $text-light;
+            }
           }
         }
       }
       
-      .volunteer-actions {
-        display: flex;
-        gap: 8px;
-        
-        .action-btn {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: none;
+      .event-actions {
+        .event-action-btn {
+          padding: 6px 12px;
+          border-radius: $button-radius;
+          font-size: 0.75rem;
           background-color: rgba($accent-color, 0.1);
           color: $accent-color;
+          border: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
-          justify-content: center;
-          cursor: pointer;
+          
+          i {
+            margin-right: 4px;
+          }
           
           &:hover {
             background-color: rgba($accent-color, 0.2);
@@ -145,7 +163,33 @@
     .empty-subtext {
       font-size: 0.75rem;
       color: $text-light;
-      margin-bottom: 0;
+      margin-bottom: 16px;
+    }
+  }
+  
+  .create-event-btn-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    
+    .create-event-btn {
+      padding: 8px 16px;
+      border-radius: $button-radius;
+      font-size: 0.875rem;
+      background-color: $accent-color;
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      
+      i {
+        margin-right: 8px;
+      }
+      
+      &:hover {
+        background-color: darken($accent-color, 5%);
+      }
     }
   }
 }

@@ -1,0 +1,183 @@
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.organization-stats-container {
+  width: 100%;
+}
+
+.card {
+  @include card;
+  margin-bottom: 24px;
+  
+  .card-header {
+    padding: 16px 24px;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin: 0;
+    }
+    
+    .period-selector {
+      display: flex;
+      
+      .period-btn {
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        border: none;
+        background: none;
+        cursor: pointer;
+        color: $text-light;
+        
+        &.active {
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+          border-radius: 16px;
+          font-weight: 500;
+        }
+        
+        &:hover:not(.active) {
+          color: $text-color;
+        }
+      }
+    }
+  }
+  
+  .card-content {
+    padding: 16px 24px;
+    
+    .stats-overview {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 24px;
+      
+      .stat-item {
+        flex: 1;
+        min-width: 120px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+        background-color: rgba($accent-color, 0.05);
+        border-radius: $button-radius;
+        
+        .stat-value {
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: $primary-color;
+          margin-bottom: 4px;
+        }
+        
+        .stat-label {
+          font-size: 0.75rem;
+          color: $text-light;
+        }
+      }
+    }
+    
+    .engagement-chart {
+      margin-bottom: 24px;
+      
+      .chart-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: $text-color;
+      }
+      
+      .chart-bars {
+        display: flex;
+        height: 160px;
+        align-items: flex-end;
+        
+        .chart-bar {
+          flex: 1;
+          margin: 0 6px;
+          background-color: rgba($accent-color, 0.6);
+          border-radius: 4px 4px 0 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: center;
+          position: relative;
+          transition: height 0.3s ease;
+          
+          &:hover {
+            background-color: $accent-color;
+          }
+          
+          .bar-label {
+            position: absolute;
+            bottom: -24px;
+            font-size: 0.75rem;
+            color: $text-light;
+          }
+        }
+      }
+    }
+    
+    .stats-highlights {
+      display: flex;
+      gap: 16px;
+      
+      .highlight-card {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        padding: 16px;
+        background-color: rgba($primary-color, 0.05);
+        border-radius: $button-radius;
+        
+        .highlight-icon {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: rgba($primary-color, 0.1);
+          color: $primary-color;
+          border-radius: 50%;
+          margin-right: 12px;
+          font-size: 1rem;
+        }
+        
+        .highlight-content {
+          display: flex;
+          flex-direction: column;
+          
+          .highlight-value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: $primary-color;
+          }
+          
+          .highlight-label {
+            font-size: 0.75rem;
+            color: $text-light;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Media queries for responsiveness
+@media (max-width: 768px) {
+  .stats-overview {
+    gap: 8px !important;
+    
+    .stat-item {
+      min-width: calc(50% - 4px) !important;
+      padding: 12px !important;
+    }
+  }
+  
+  .stats-highlights {
+    flex-direction: column !important;
+  }
+}

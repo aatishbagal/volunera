@@ -1,72 +1,95 @@
 <div class="dashboard-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="sidebar-header">
-        <div class="logo-container">
-          <div class="logo-circle">
-            <i class="fas fa-heart"></i>
-          </div>
-          <h1 class="logo-text">VolunEra</h1>
+  <!-- Mobile Nav Overlay -->
+  <div class="mobile-nav-overlay" [class.active]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
+  
+  <!-- Sidebar -->
+  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed" [class.mobile-active]="isMobileMenuOpen">
+    <div class="sidebar-header">
+      <div class="logo-container">
+        <img src="assets/images/volunera-text-logo-white.svg" alt="VolunEra" class="logo-image">
+      </div>
+      <!-- No collapse button here -->
+    </div>
+
+    <nav class="sidebar-nav">
+      <a [routerLink]="['/ngo/dashboard']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-th-large"></i>
+        <span>Dashboard</span>
+      </a>
+      <a [routerLink]="['/ngo/profile']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-building"></i>
+        <span>Organization</span>
+      </a>
+      <a [routerLink]="['/ngo/events']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-calendar"></i>
+        <span>Events</span>
+      </a>
+      <a [routerLink]="['/ngo/volunteers']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-users"></i>
+        <span>Volunteers</span>
+      </a>
+      <a [routerLink]="['/ngo/donations']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-gift"></i>
+        <span>Donations</span>
+      </a>
+      <a [routerLink]="['/ngo/content']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-bullhorn"></i>
+        <span>Content</span>
+      </a>
+      <a [routerLink]="['/ngo/insights']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-chart-line"></i>
+        <span>Insights</span>
+      </a>
+      <a [routerLink]="['/ngo/settings']" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="profile-completion">
+        <div class="completion-circle">
+          <div class="progress-indicator" [style.width.%]="organization.profileCompletion"></div>
+          <span>{{organization.profileCompletion}}%</span>
+        </div>
+        <div class="completion-text">
+          <p>Complete profile</p>
+          <p class="subtext">Complete your organization profile</p>
         </div>
       </div>
-  
-      <nav class="sidebar-nav">
-        <a [routerLink]="['/ngo/dashboard']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-th-large"></i>
-          <span>Dashboard</span>
-        </a>
-        <a [routerLink]="['/ngo/profile']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-building"></i>
-          <span>Organization</span>
-        </a>
-        <a [routerLink]="['/ngo/events']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-calendar"></i>
-          <span>Events</span>
-        </a>
-        <a [routerLink]="['/ngo/volunteers']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-users"></i>
-          <span>Volunteers</span>
-        </a>
-        <a [routerLink]="['/ngo/donations']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-gift"></i>
-          <span>Donations</span>
-        </a>
-        <a [routerLink]="['/ngo/settings']" routerLinkActive="active" class="nav-item">
-          <i class="fas fa-cog"></i>
-          <span>Settings</span>
-        </a>
-      </nav>
-  
-      <div class="sidebar-footer">
-        <div class="profile-completion">
-          <div class="completion-circle">
-            <div class="progress-indicator" [style.width.%]="organization.profileCompletion"></div>
-            <span>{{organization.profileCompletion}}%</span>
-          </div>
-          <div class="completion-text">
-            <p>Complete profile</p>
-            <p class="subtext">Complete your NGO profile to attract more volunteers</p>
-          </div>
-        </div>
-  
-        <div class="user-profile">
-          <img [src]="organization.avatar" alt="Organization Logo" class="avatar">
-          <div class="user-info">
-            <p class="user-name">{{organization.name}}</p>
-            <p class="user-email">{{organization.email}}</p>
-          </div>
+
+      <div class="user-profile">
+        <img [src]="organization.avatar" alt="Organization Logo" class="avatar">
+        <div class="user-info">
+          <p class="user-name">{{organization.name}}</p>
+          <p class="user-email">{{organization.email}}</p>
         </div>
       </div>
-    </aside>
-  
+    </div>
+    
+    <!-- Mobile close button -->
+    <button class="mobile-nav-close" (click)="toggleMobileMenu()">
+      <i class="fas fa-times"></i>
+    </button>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="content-wrapper">
     <!-- Main Content -->
     <main class="main-content">
-      <!-- Top Bar -->
+      <!-- Top Bar (now part of main content) -->
       <header class="top-bar">
+        <!-- Burger menu toggle button - visible on both desktop and mobile -->
+        <button class="mobile-nav-toggle" (click)="toggleSidebarOrMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- Search container positioned to the left -->
         <div class="search-container">
           <i class="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Search anything..." class="search-input">
+          <input type="text" placeholder="Search volunteers, events, donations..." class="search-input">
         </div>
+        
         <div class="top-bar-actions">
           <button class="action-button notification-btn">
             <i class="fas fa-bell"></i>
@@ -77,174 +100,239 @@
           </button>
         </div>
       </header>
-  
+      
+      <!-- Quick Actions Section -->
+      <div class="quick-actions">
+        <button class="quick-action-btn primary" (click)="createEvent()">
+          <i class="fas fa-calendar-plus"></i>
+          <span>Create Event</span>
+        </button>
+        <button class="quick-action-btn secondary" (click)="createPost()">
+          <i class="fas fa-edit"></i>
+          <span>Post Update</span>
+        </button>
+      </div>
+      
       <!-- Dashboard Content -->
       <div class="dashboard-content">
-        <!-- Quick Actions -->
-        <section class="quick-actions">
-          <button class="quick-action-btn primary">
-            <i class="fas fa-calendar-plus"></i>
-            Create Event
-          </button>
-          <button class="quick-action-btn secondary">
-            <i class="fas fa-bullhorn"></i>
-            Post Update
-          </button>
-        </section>
-  
-        <!-- Stats Section -->
-        <section class="stats-section">
-          <div class="stats-card">
-            <div class="stat-item">
-              <h3 class="stat-title">Total Volunteers</h3>
-              <p class="stat-value">{{stats.totalVolunteers}}</p>
-              <div class="stat-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>12% from last month</span>
-              </div>
-            </div>
-            <div class="stat-item">
-              <h3 class="stat-title">Active Volunteers</h3>
-              <p class="stat-value">{{stats.activeVolunteers}}</p>
-              <div class="stat-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>5% from last month</span>
-              </div>
-            </div>
-            <div class="stat-item">
-              <h3 class="stat-title">Hours Contributed</h3>
-              <p class="stat-value">{{stats.hoursContributed}}</p>
-              <div class="stat-trend positive">
-                <i class="fas fa-arrow-up"></i>
-                <span>15% from last month</span>
-              </div>
-            </div>
-            <div class="stat-item">
-              <h3 class="stat-title">Events Completed</h3>
-              <p class="stat-value">{{stats.eventsCompleted}}</p>
-            </div>
-          </div>
-        </section>
-  
-        <!-- Two Column Layout -->
-        <div class="two-column-layout">
-          <!-- Left Column -->
-          <div class="column">
-            <!-- Recent Registrations -->
-            <app-volunteer-management [volunteers]="recentRegistrations"></app-volunteer-management>
-  
-            <!-- Donation Statistics -->
-            <section class="card donation-stats">
+        <!-- Two Column Layout with stacked right side -->
+        <div class="three-column-layout">
+          <!-- Left Column - Organization Stats and Events -->
+          <div class="column left-column">
+            <!-- Organization Stats Card -->
+            <section class="card organization-stats-card">
               <div class="card-header">
-                <h2 class="card-title">Donation Statistics</h2>
-                <div class="period-selector">
-                  <button class="period-btn active">Month</button>
-                  <button class="period-btn">Quarter</button>
-                  <button class="period-btn">Year</button>
-                </div>
+                <h2 class="card-title">Organization Stats</h2>
+                <a href="javascript:void(0)" class="card-link">View Insights</a>
               </div>
               <div class="card-content">
-                <div class="donation-metrics">
-                  <div class="donation-metric financial">
-                    <div class="metric-header">
-                      <h3 class="metric-title">Financial Donations</h3>
-                      <span class="metric-change" [ngClass]="{'positive': donationStats.monthlyChange > 0, 'negative': donationStats.monthlyChange < 0}">
-                        <i class="fas" [ngClass]="{'fa-arrow-up': donationStats.monthlyChange > 0, 'fa-arrow-down': donationStats.monthlyChange < 0}"></i>
-                        {{donationStats.monthlyChange}}%
-                      </span>
-                    </div>
-                    <p class="metric-value">${{donationStats.monthly}}</p>
-                    <p class="metric-comparison">vs ${{donationStats.previousMonth}} last month</p>
+                <div class="stats-overview">
+                  <div class="stat-item">
+                    <span class="stat-value">{{organizationStats.totalVolunteers}}</span>
+                    <span class="stat-label">Total Volunteers</span>
                   </div>
-                  <div class="donation-metric items">
-                    <div class="metric-header">
-                      <h3 class="metric-title">Item Donations</h3>
-                      <span class="metric-change" [ngClass]="{'positive': donationStats.itemsChange > 0, 'negative': donationStats.itemsChange < 0}">
-                        <i class="fas" [ngClass]="{'fa-arrow-up': donationStats.itemsChange > 0, 'fa-arrow-down': donationStats.itemsChange < 0}"></i>
-                        {{donationStats.itemsChange}}%
-                      </span>
-                    </div>
-                    <p class="metric-value">{{donationStats.totalItems}} items</p>
-                    <p class="metric-comparison">vs {{donationStats.previousItems}} items last month</p>
+                  <div class="stat-item">
+                    <span class="stat-value">{{organizationStats.activeVolunteers}}</span>
+                    <span class="stat-label">Active Volunteers</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{organizationStats.totalHours | number}}</span>
+                    <span class="stat-label">Volunteer Hours</span>
+                  </div>
+                  <div class="stat-item">
+                    <span class="stat-value">{{organizationStats.totalEvents}}</span>
+                    <span class="stat-label">Total Events</span>
                   </div>
                 </div>
-                <div class="donation-chart">
-                  <!-- This would be replaced with an actual chart component -->
-                  <div class="placeholder-chart">
-                    <div class="chart-bars">
-                      <div class="chart-bar" style="height: 40%;">
-                        <span class="bar-label">Feb</span>
-                      </div>
-                      <div class="chart-bar" style="height: 65%;">
-                        <span class="bar-label">Mar</span>
-                      </div>
-                      <div class="chart-bar active" style="height: 85%;">
-                        <span class="bar-label">Apr</span>
-                      </div>
-                      <div class="chart-bar" style="height: 50%;">
-                        <span class="bar-label">May</span>
-                      </div>
-                      <div class="chart-bar" style="height: 75%;">
-                        <span class="bar-label">Jun</span>
-                      </div>
-                      <div class="chart-bar" style="height: 60%;">
-                        <span class="bar-label">Jul</span>
-                      </div>
+                
+                <div class="engagement-chart">
+                  <h3 class="chart-title">Volunteer Engagement (Last 7 days)</h3>
+                  <div class="chart-bars">
+                    <div class="chart-bar" *ngFor="let value of organizationStats.weeklyData; let i = index" [style.height.%]="value">
+                      <span class="bar-label">{{['M', 'T', 'W', 'T', 'F', 'S', 'S'][i]}}</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="stats-highlights">
+                  <div class="highlight-card">
+                    <i class="fas fa-donate highlight-icon"></i>
+                    <div class="highlight-content">
+                      <span class="highlight-value">${{organizationStats.totalDonations | number}}</span>
+                      <span class="highlight-label">Total Donations</span>
+                    </div>
+                  </div>
+                  <div class="highlight-card">
+                    <i class="fas fa-star highlight-icon"></i>
+                    <div class="highlight-content">
+                      <span class="highlight-value">{{organizationStats.averageRating}}/5</span>
+                      <span class="highlight-label">Average Rating</span>
                     </div>
                   </div>
                 </div>
               </div>
             </section>
-          </div>
-  
-          <!-- Right Column -->
-          <div class="column">
-            <!-- Active Events -->
-            <app-active-events [events]="activeEvents"></app-active-events>
             
-            <!-- Volunteer Engagement -->
-            <section class="card volunteer-engagement">
+            <!-- Event Management Card -->
+            <section class="card events-card">
               <div class="card-header">
-                <h2 class="card-title">Volunteer Engagement</h2>
-                <div class="period-selector">
-                  <button class="period-btn">Week</button>
-                  <button class="period-btn active">Month</button>
-                  <button class="period-btn">Year</button>
-                </div>
+                <h2 class="card-title">Upcoming Events</h2>
+                <a href="javascript:void(0)" class="card-link" (click)="viewAllEvents()">View All</a>
               </div>
               <div class="card-content">
-                <div class="engagement-chart">
-                  <!-- This would be replaced with an actual chart component -->
-                  <div class="placeholder-chart">
-                    <div class="chart-bars">
-                      <div class="chart-bar" style="height: 70%;">
-                        <span class="bar-label">Registrations</span>
+                <div class="events-list">
+                  <div *ngFor="let event of upcomingEvents" class="event-item">
+                    <div class="event-date">
+                      <span class="date-day">{{event.date | date:'d'}}</span>
+                      <span class="date-month">{{event.date | date:'MMM'}}</span>
+                    </div>
+                    <div class="event-details">
+                      <h4 class="event-title">{{event.title}}</h4>
+                      <p class="event-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{event.location}}
+                      </p>
+                      <div class="event-stats">
+                        <div class="registration-progress">
+                          <div class="progress-bar">
+                            <div class="progress" [style.width.%]="(event.registeredVolunteers / event.capacity) * 100"></div>
+                          </div>
+                          <span class="progress-text">{{event.registeredVolunteers}}/{{event.capacity}} registered</span>
+                        </div>
                       </div>
-                      <div class="chart-bar" style="height: 85%;">
-                        <span class="bar-label">Attendance</span>
+                    </div>
+                    <div class="event-actions">
+                      <button class="event-action-btn manage-btn">
+                        <i class="fas fa-cog"></i>
+                        <span>Manage</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="create-event-btn-container">
+                  <button class="create-event-btn" (click)="createEvent()">
+                    <i class="fas fa-plus"></i>
+                    <span>Create New Event</span>
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right Column - Volunteers, Donations, and Posts -->
+          <div class="column right-column">
+            <!-- Volunteer Management Card -->
+            <section class="card volunteers-card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Volunteers</h2>
+                <a href="javascript:void(0)" class="card-link" (click)="viewAllVolunteers()">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="volunteers-list">
+                  <div *ngFor="let volunteer of recentVolunteers" class="volunteer-item">
+                    <div class="volunteer-avatar">
+                      <img [src]="volunteer.avatar || '/assets/images/placeholder-avatar.png'" [alt]="volunteer.name + ' avatar'">
+                    </div>
+                    <div class="volunteer-details">
+                      <h4 class="volunteer-name">{{volunteer.name}}</h4>
+                      <p class="volunteer-info">
+                        <span class="volunteer-hours">{{volunteer.hoursContributed}} hrs</span> •
+                        <span class="volunteer-points">{{volunteer.points}} pts</span>
+                      </p>
+                      <div class="volunteer-skills">
+                        <span *ngFor="let skill of volunteer.skills" class="skill-badge">{{skill}}</span>
                       </div>
-                      <div class="chart-bar" style="height: 50%;">
-                        <span class="bar-label">Return Rate</span>
+                    </div>
+                    <div class="volunteer-actions">
+                      <button class="action-btn contact-btn">
+                        <i class="fas fa-envelope"></i>
+                      </button>
+                      <button class="action-btn manage-btn">
+                        <i class="fas fa-ellipsis-v"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            <!-- Donations Card -->
+            <section class="card donations-card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Donations</h2>
+                <a href="javascript:void(0)" class="card-link" (click)="viewAllDonations()">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="donations-list">
+                  <div *ngFor="let donation of recentDonations" class="donation-item">
+                    <div class="donation-icon" [ngClass]="donation.type">
+                      <i class="fas" [ngClass]="donation.type === 'financial' ? 'fa-dollar-sign' : 'fa-box'"></i>
+                    </div>
+                    <div class="donation-details">
+                      <h4 class="donation-title">
+                        {{donation.type === 'financial' ? '$' + donation.amount : donation.items}}
+                      </h4>
+                      <p class="donation-info">
+                        <span class="donor-name">{{donation.donor}}</span> •
+                        <span class="donation-date">{{donation.date | date:'mediumDate'}}</span>
+                      </p>
+                    </div>
+                    <div class="donation-status" [ngClass]="donation.status">
+                      {{donation.status}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            
+            <!-- Content Management / Posts Card -->
+            <section class="card posts-card">
+              <div class="card-header">
+                <h2 class="card-title">Recent Posts</h2>
+                <a href="javascript:void(0)" class="card-link">View All</a>
+              </div>
+              <div class="card-content">
+                <div class="posts-list">
+                  <div *ngFor="let post of recentPosts" class="post-item">
+                    <div class="post-header">
+                      <div class="post-date">
+                        {{post.date | date:'MMM d, yyyy'}}
                       </div>
-                      <div class="chart-bar" style="height: 65%;">
-                        <span class="bar-label">Feedback</span>
+                      <div class="post-actions">
+                        <button class="action-btn" (click)="viewPostInsights(post)">
+                          <i class="fas fa-chart-bar"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="post-content">
+                      <p class="post-text">{{post.content}}</p>
+                      <div *ngIf="post.image" class="post-image">
+                        <img [src]="post.image" alt="Post image">
+                      </div>
+                    </div>
+                    <div class="post-stats">
+                      <div class="stat-group">
+                        <i class="fas fa-heart"></i>
+                        <span>{{post.likes}}</span>
+                      </div>
+                      <div class="stat-group">
+                        <i class="fas fa-comment"></i>
+                        <span>{{post.comments}}</span>
+                      </div>
+                      <div class="stat-group">
+                        <i class="fas fa-eye"></i>
+                        <span>{{post.reach}}</span>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="engagement-metrics">
-                  <div class="metric">
-                    <span class="metric-value">82%</span>
-                    <span class="metric-label">Attendance Rate</span>
-                  </div>
-                  <div class="metric">
-                    <span class="metric-value">68%</span>
-                    <span class="metric-label">Return Rate</span>
-                  </div>
-                  <div class="metric">
-                    <span class="metric-value">4.8/5</span>
-                    <span class="metric-label">Volunteer Rating</span>
-                  </div>
+                
+                <div class="create-post-btn-container">
+                  <button class="create-post-btn" (click)="createPost()">
+                    <i class="fas fa-plus"></i>
+                    <span>Create New Post</span>
+                  </button>
                 </div>
               </div>
             </section>
@@ -253,3 +341,4 @@
       </div>
     </main>
   </div>
+</div>

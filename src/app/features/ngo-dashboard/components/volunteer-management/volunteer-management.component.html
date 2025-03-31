@@ -1,30 +1,43 @@
 <div class="volunteer-management-container">
-    <div class="card">
-      <div class="card-header">
-        <h2 class="card-title">Recent Registrations</h2>
-        <a href="#" class="card-link">View All</a>
-      </div>
-      <div class="card-content">
-        <div class="registrations-list">
-          <div *ngFor="let volunteer of volunteers" class="registration-item">
-            <div class="volunteer-avatar">
-              <img [src]="volunteer.avatar" alt="Volunteer Avatar">
+  <div class="card">
+    <div class="card-header">
+      <h2 class="card-title">Recent Volunteers</h2>
+      <a href="javascript:void(0)" class="card-link" (click)="viewAllVolunteers()">View All</a>
+    </div>
+    <div class="card-content">
+      <div class="volunteers-list">
+        <div *ngFor="let volunteer of volunteers" class="volunteer-item">
+          <div class="volunteer-avatar">
+            <img [src]="volunteer.avatar || '/assets/images/placeholder-avatar.png'" [alt]="volunteer.name + ' avatar'">
+          </div>
+          <div class="volunteer-details">
+            <h4 class="volunteer-name">{{volunteer.name}}</h4>
+            <p class="volunteer-info">
+              <span class="volunteer-hours">{{volunteer.hoursContributed}} hrs</span> •
+              <span class="volunteer-points">{{volunteer.points}} pts</span>
+            </p>
+            <div class="volunteer-skills">
+              <span *ngFor="let skill of volunteer.skills" class="skill-badge">{{skill}}</span>
             </div>
-            <div class="volunteer-details">
-              <h4 class="volunteer-name">{{volunteer.name}}</h4>
-              <p class="volunteer-email">{{volunteer.email}}</p>
-              <p class="registration-date">Joined {{volunteer.date | date:'mediumDate'}}</p>
-            </div>
-            <div class="volunteer-actions">
-              <button class="action-btn message" (click)="sendMessage(volunteer)">
-                <i class="fas fa-envelope"></i>
-              </button>
-              <button class="action-btn profile" (click)="viewProfile(volunteer)">
-                <i class="fas fa-user"></i>
-              </button>
-            </div>
+          </div>
+          <div class="volunteer-actions">
+            <button class="action-btn contact-btn" (click)="contactVolunteer(volunteer)">
+              <i class="fas fa-envelope"></i>
+            </button>
+            <button class="action-btn manage-btn" (click)="manageVolunteer(volunteer)">
+              <i class="fas fa-ellipsis-v"></i>
+            </button>
           </div>
         </div>
       </div>
+      
+      <div *ngIf="volunteers.length === 0" class="empty-state">
+        <div class="empty-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <p class="empty-message">No volunteers yet</p>
+        <p class="empty-subtext">Create and share events to attract volunteers</p>
+      </div>
     </div>
   </div>
+</div>

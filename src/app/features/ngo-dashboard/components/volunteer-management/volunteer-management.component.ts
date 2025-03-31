@@ -4,9 +4,12 @@ import { CommonModule } from '@angular/common';
 interface Volunteer {
   id: number;
   name: string;
-  email: string;
-  date: Date;
-  avatar: string;
+  avatar?: string;
+  joinedDate: Date;
+  hoursContributed: number;
+  points: number;
+  skills: string[];
+  status: 'active' | 'inactive';
 }
 
 @Component({
@@ -25,20 +28,52 @@ export class VolunteerManagementComponent implements OnInit {
     // If no volunteers are provided, use default data
     if (!this.volunteers || this.volunteers.length === 0) {
       this.volunteers = [
-        { id: 1, name: 'James Wilson', email: 'james.w@example.com', date: new Date(2025, 2, 21), avatar: '/assets/images/avatars/james.jpg' },
-        { id: 2, name: 'Emma Davis', email: 'emma.d@example.com', date: new Date(2025, 2, 20), avatar: '/assets/images/avatars/emma.jpg' },
-        { id: 3, name: 'Michael Brown', email: 'michael.b@example.com', date: new Date(2025, 2, 19), avatar: '/assets/images/avatars/michael.jpg' }
+        {
+          id: 1,
+          name: 'Sarah Johnson',
+          avatar: '/assets/images/avatars/avatar1.png',
+          joinedDate: new Date(2025, 2, 20),
+          hoursContributed: 12,
+          points: 350,
+          skills: ['Gardening', 'Teaching'],
+          status: 'active'
+        },
+        {
+          id: 2,
+          name: 'Michael Chen',
+          avatar: '/assets/images/avatars/avatar2.png',
+          joinedDate: new Date(2025, 2, 18),
+          hoursContributed: 8,
+          points: 220,
+          skills: ['Photography', 'Social Media'],
+          status: 'active'
+        },
+        {
+          id: 3,
+          name: 'Emma Wilson',
+          avatar: '/assets/images/avatars/avatar3.png',
+          joinedDate: new Date(2025, 2, 15),
+          hoursContributed: 5,
+          points: 150,
+          skills: ['Event Planning', 'Leadership'],
+          status: 'active'
+        }
       ];
     }
   }
 
-  viewProfile(volunteer: Volunteer): void {
-    console.log('View profile for:', volunteer.name);
-    // Implement navigation to volunteer profile
+  contactVolunteer(volunteer: Volunteer): void {
+    // This would open a contact modal or navigate to the volunteer contact page
+    console.log('Contact volunteer:', volunteer.name);
   }
 
-  sendMessage(volunteer: Volunteer): void {
-    console.log('Send message to:', volunteer.name);
-    // Implement messaging functionality
+  manageVolunteer(volunteer: Volunteer): void {
+    // This would open a management dropdown or modal
+    console.log('Manage volunteer:', volunteer.name);
+  }
+
+  viewAllVolunteers(): void {
+    // This would navigate to the volunteer management page
+    console.log('View all volunteers');
   }
 }
