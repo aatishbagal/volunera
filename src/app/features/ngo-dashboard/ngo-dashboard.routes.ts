@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { NgoDashboardComponent } from './pages/dashboard-home/ngo-dashboard.component';
-import { PageNotFoundComponent } from '../../shared/components/page-not-found/page-not-found.component';
+import { DashboardNotFoundComponent } from '../../shared/components/dashboard-not-found/dashboard-not-found.component';
 
 export const NGO_ROUTES: Routes = [
   {
@@ -14,26 +14,34 @@ export const NGO_ROUTES: Routes = [
   },
   {
     path: 'profile',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
   },
   {
     path: 'events',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
   },
   {
     path: 'volunteers',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
   },
   {
     path: 'donations',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
+  },
+  {
+    path: 'content',
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
+  },
+  {
+    path: 'insights',
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
   },
   {
     path: 'settings',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent // Will be replaced with actual component later
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    component: DashboardNotFoundComponent // Use our custom dashboard not found component
   }
 ];

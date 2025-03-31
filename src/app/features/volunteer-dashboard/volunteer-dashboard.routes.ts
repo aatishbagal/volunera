@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { VolunteerDashboardComponent } from './pages/dashboard-home/volunteer-dashboard.component';
-import { PageNotFoundComponent } from '../../shared/components/page-not-found/page-not-found.component';
+import { DashboardNotFoundComponent } from '../../shared/components/dashboard-not-found/dashboard-not-found.component';
 
 export const VOLUNTEER_ROUTES: Routes = [
   {
@@ -14,26 +14,26 @@ export const VOLUNTEER_ROUTES: Routes = [
   },
   {
     path: 'profile',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent  // Will be replaced with actual component later
   },
   {
     path: 'events',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent  // Will be replaced with actual component later
   },
   {
     path: 'leaderboards',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent  // Will be replaced with actual component later
   },
   {
     path: 'settings',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent  // Will be replaced with actual component later
   },
   {
     path: 'history',
-    component: PageNotFoundComponent // Will be replaced with actual component later
+    component: DashboardNotFoundComponent  // Will be replaced with actual component later
   },
   {
     path: '**',
-    redirectTo: 'dashboard'
+    component: DashboardNotFoundComponent 
   }
 ];

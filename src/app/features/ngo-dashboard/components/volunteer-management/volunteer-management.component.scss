@@ -8,6 +8,7 @@
 .card {
   @include card;
   margin-bottom: 24px;
+  min-height: 350px; // Minimum height to make card larger
   
   .card-header {
     padding: 16px 24px;
@@ -32,9 +33,14 @@
   
   .card-content {
     padding: 16px 24px;
+    flex: 1; // Make content take available space
+    display: flex; // Use flexbox for content
+    flex-direction: column; // Stack children vertically
   }
   
   .volunteers-list {
+    flex: 1; // Take up available space
+    
     .volunteer-item {
       display: flex;
       align-items: center;
@@ -84,7 +90,7 @@
           .skill-badge {
             font-size: 0.6875rem;
             padding: 2px 8px;
-            background-color: rgba($accent-color, 0.1);
+            background-color: transparentize($accent-color, 0.9);
             color: $accent-color;
             border-radius: 16px;
             white-space: nowrap;
@@ -101,7 +107,7 @@
           height: 32px;
           border-radius: 50%;
           border: none;
-          background-color: rgba($accent-color, 0.1);
+          background-color: transparentize($accent-color, 0.9);
           color: $accent-color;
           display: flex;
           align-items: center;
@@ -109,7 +115,7 @@
           cursor: pointer;
           
           &:hover {
-            background-color: rgba($accent-color, 0.2);
+            background-color: transparentize($accent-color, 0.8);
           }
         }
       }
@@ -121,12 +127,14 @@
     flex-direction: column;
     align-items: center;
     padding: 32px 0;
+    flex: 1;
+    justify-content: center; // Center vertically when empty
     
     .empty-icon {
       width: 64px;
       height: 64px;
       border-radius: 50%;
-      background-color: rgba($primary-color, 0.1);
+      background-color: transparentize($primary-color, 0.9);
       color: $primary-color;
       display: flex;
       align-items: center;

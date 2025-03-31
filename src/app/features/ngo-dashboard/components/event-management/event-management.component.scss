@@ -8,6 +8,7 @@
 .card {
   @include card;
   margin-bottom: 24px;
+  min-height: 400px; // Minimum height to make card larger
   
   .card-header {
     padding: 16px 24px;
@@ -32,9 +33,14 @@
   
   .card-content {
     padding: 16px 24px;
+    flex: 1; // Make content take available space
+    display: flex; // Use flexbox for content
+    flex-direction: column; // Stack children vertically
   }
   
   .events-list {
+    flex: 1; // Take up available space
+    
     .event-item {
       display: flex;
       align-items: center;
@@ -115,7 +121,7 @@
           padding: 6px 12px;
           border-radius: $button-radius;
           font-size: 0.75rem;
-          background-color: rgba($accent-color, 0.1);
+          background-color: transparentize($accent-color, 0.9);
           color: $accent-color;
           border: none;
           cursor: pointer;
@@ -127,7 +133,7 @@
           }
           
           &:hover {
-            background-color: rgba($accent-color, 0.2);
+            background-color: transparentize($accent-color, 0.8);
           }
         }
       }
@@ -139,12 +145,14 @@
     flex-direction: column;
     align-items: center;
     padding: 32px 0;
+    flex: 1;
+    justify-content: center; // Center vertically when empty
     
     .empty-icon {
       width: 64px;
       height: 64px;
       border-radius: 50%;
-      background-color: rgba($primary-color, 0.1);
+      background-color: transparentize($primary-color, 0.9);
       color: $primary-color;
       display: flex;
       align-items: center;
@@ -168,9 +176,10 @@
   }
   
   .create-event-btn-container {
+    margin-top: auto; // Push to bottom when there's space
     display: flex;
     justify-content: center;
-    margin-top: 16px;
+    padding-top: 16px;
     
     .create-event-btn {
       padding: 8px 16px;

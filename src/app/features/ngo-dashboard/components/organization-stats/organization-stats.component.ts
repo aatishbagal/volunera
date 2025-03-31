@@ -23,6 +23,12 @@ export class OrganizationStatsComponent implements OnInit {
   activePeriod: 'week' | 'month' | 'year' = 'week';
   dayLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
   
+  changePeriod(period: 'week' | 'month' | 'year'): void {
+    this.activePeriod = period;
+    // In a real app, this would fetch new data for the selected period
+    console.log('Changed period to:', period);
+  }
+
   constructor() { }
 
   ngOnInit(): void {

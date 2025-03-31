@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OrganizationStatsComponent } from '../../components/organization-stats/organization-stats.component';
 import { EventManagementComponent } from '../../components/event-management/event-management.component';
-import { VolunteerManagementComponent } from '../../components/volunteer-management/volunteer-management.component';
 
 // Create a pipe for safe URLs
 import { Pipe, PipeTransform } from '@angular/core';
@@ -22,17 +21,6 @@ export class SafePipe implements PipeTransform {
 }
 
 // Interface definitions
-interface Volunteer {
-  id: number;
-  name: string;
-  avatar?: string;
-  joinedDate: Date;
-  hoursContributed: number;
-  points: number;
-  skills: string[];
-  status: 'active' | 'inactive';
-}
-
 interface Event {
   id: number;
   title: string;
@@ -55,12 +43,15 @@ interface Donation {
 
 interface Post {
   id: number;
+  orgName: string;
+  orgAvatar: string;
   content: string;
   date: Date;
   image?: string;
   likes: number;
   comments: number;
   reach: number;
+  isOwnOrg: boolean;
 }
 
 @Component({
@@ -73,7 +64,6 @@ interface Post {
     RouterModule,
     OrganizationStatsComponent,
     EventManagementComponent,
-    VolunteerManagementComponent,
     SafePipe
   ]
 })
@@ -89,20 +79,6 @@ export class NgoDashboardComponent implements OnInit {
     email: 'info@greenearthfoundation.org',
     avatar: '/assets/images/orgs/greenearth.png',
     profileCompletion: 75
-  };
-
-  // Dashboard data
-  calendarUrl: string = 'https://calendar.google.com/calendar/embed?src=c_classroomf65b04c4%40group.calendar.google.com&ctz=America%2FNew_York&mode=AGENDA';
-
-  // Organization stats
-  organizationStats = {
-    totalVolunteers: 572,
-    activeVolunteers: 312,
-    totalHours: 4856,
-    totalEvents: 145,
-    totalDonations: 28300,
-    averageRating: 4.8,
-    weeklyData: [65, 72, 85, 78, 90, 76, 82] // Percentages for chart bars
   };
 
   // Upcoming events
@@ -136,40 +112,6 @@ export class NgoDashboardComponent implements OnInit {
     }
   ];
 
-  // Recent volunteers
-  recentVolunteers: Volunteer[] = [
-    {
-      id: 1,
-      name: 'Sarah Johnson',
-      avatar: '/assets/images/avatars/avatar1.png',
-      joinedDate: new Date(2025, 2, 20),
-      hoursContributed: 12,
-      points: 350,
-      skills: ['Gardening', 'Teaching'],
-      status: 'active'
-    },
-    {
-      id: 2,
-      name: 'Michael Chen',
-      avatar: '/assets/images/avatars/avatar2.png',
-      joinedDate: new Date(2025, 2, 18),
-      hoursContributed: 8,
-      points: 220,
-      skills: ['Photography', 'Social Media'],
-      status: 'active'
-    },
-    {
-      id: 3,
-      name: 'Emma Wilson',
-      avatar: '/assets/images/avatars/avatar3.png',
-      joinedDate: new Date(2025, 2, 15),
-      hoursContributed: 5,
-      points: 150,
-      skills: ['Event Planning', 'Leadership'],
-      status: 'active'
-    }
-  ];
-
   // Recent donations
   recentDonations: Donation[] = [
     {
@@ -198,33 +140,66 @@ export class NgoDashboardComponent implements OnInit {
     }
   ];
 
-  // Recent posts
-  recentPosts: Post[] = [
+  // All NGO posts (including own and other NGOs)
+  allNgoPosts: Post[] = [
     {
       id: 1,
+      orgName: 'GreenEarth Foundation',
+      orgAvatar: '/assets/images/orgs/greenearth.png',
       content: 'Join us for our upcoming tree planting event this weekend! We\'ll be planting 100 native trees in Central Park to combat urban heat and improve air quality.',
       date: new Date(2025, 2, 28),
       image: '/assets/images/posts/tree-planting.jpg',
       likes: 42,
       comments: 7,
-      reach: 523
+      reach: 523,
+      isOwnOrg: true
     },
     {
       id: 2,
+      orgName: 'GreenEarth Foundation',
+      orgAvatar: '/assets/images/orgs/greenearth.png',
       content: 'Thanks to all our amazing volunteers who helped with last week\'s park cleanup! Together we collected over 200 lbs of trash and recyclables.',
       date: new Date(2025, 2, 20),
       image: '/assets/images/posts/cleanup-results.jpg',
       likes: 35,
       comments: 5,
-      reach: 412
+      reach: 412,
+      isOwnOrg: true
     },
     {
       id: 3,
+      orgName: 'Tech4All',
+      orgAvatar: '/assets/images/orgs/tech4all.png',
+      content: 'We\'re excited to announce our new digital literacy program for underserved communities! Starting next month, we\'ll be offering free computer skills workshops every weekend.',
+      date: new Date(2025, 2, 27),
+      image: '/assets/images/posts/digital-literacy.jpg',
+      likes: 38,
+      comments: 6,
+      reach: 470,
+      isOwnOrg: false
+    },
+    {
+      id: 4,
+      orgName: 'Urban Wildlife Protection',
+      orgAvatar: '/assets/images/orgs/wildlife.png',
+      content: 'Our wildlife rescue team successfully rehabilitated and released 5 injured birds back into their natural habitat this week! We\'re grateful for the support of our volunteers and donors.',
+      date: new Date(2025, 2, 25),
+      image: '/assets/images/posts/wildlife-release.jpg',
+      likes: 51,
+      comments: 8,
+      reach: 612,
+      isOwnOrg: false
+    },
+    {
+      id: 5,
+      orgName: 'GreenEarth Foundation',
+      orgAvatar: '/assets/images/orgs/greenearth.png',
       content: 'We\'re excited to announce our new partnership with the City Parks Department to expand our urban forestry initiative!',
       date: new Date(2025, 2, 15),
       likes: 28,
       comments: 4,
-      reach: 378
+      reach: 378,
+      isOwnOrg: true
     }
   ];
 
@@ -290,12 +265,6 @@ export class NgoDashboardComponent implements OnInit {
   viewAllEvents(): void {
     console.log('View all events');
     // This would navigate to events management page
-  }
-
-  // Method to view all volunteers
-  viewAllVolunteers(): void {
-    console.log('View all volunteers');
-    // This would navigate to volunteer management page
   }
 
   // Method to view all donations

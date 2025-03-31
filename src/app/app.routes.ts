@@ -48,8 +48,14 @@ export const routes: Routes = [
         loadChildren: () => import('./features/volunteer-dashboard/volunteer-dashboard.module').then(m => m.VolunteerDashboardModule),
         canActivate: [AuthGuard],
         data: { userType: 'volunteer', requiresOnboarding: true }
+      },
+      // Catch-all route for volunteer section
+      { 
+        path: '**', 
+        loadComponent: () => import('./shared/components/dashboard-not-found/dashboard-not-found.component').then(m => m.DashboardNotFoundComponent),
+        canActivate: [AuthGuard],
+        data: { userType: 'volunteer', requiresOnboarding: true, dashboardType: 'volunteer' }
       }
-      // Add other volunteer routes here as they are developed
     ] 
   },
   { 
@@ -66,8 +72,14 @@ export const routes: Routes = [
         loadComponent: () => import('./auth/verification-pending/verification-pending.component').then(m => m.VerificationPendingComponent),
         canActivate: [AuthGuard],
         data: { userType: 'ngo', requiresOnboarding: true }
+      },
+      // Catch-all route for ngo section
+      { 
+        path: '**', 
+        loadComponent: () => import('./shared/components/dashboard-not-found/dashboard-not-found.component').then(m => m.DashboardNotFoundComponent),
+        canActivate: [AuthGuard],
+        data: { userType: 'ngo', requiresOnboarding: true, dashboardType: 'ngo' }
       }
-      // Add other NGO routes here as they are developed
     ] 
   },
   { path: 'join-volunteer', redirectTo: '/auth/volunteer/login', pathMatch: 'full' },
