@@ -2,10 +2,12 @@
   "name": "volunera",
   "version": "1.0.5",
   "scripts": {
-    "config": "node set-env.js",
+    "config:dev": "node set-dev-env.js",
+    "config:prod": "node set-prod-env.js",
     "ng": "ng",
-    "start": "npm run config && ng serve",
-    "build": "npm run config && ng build",
+    "start": "npm run config:dev && ng serve",
+    "build": "npm run config:dev && ng build",
+    "build:prod": "npm run config:prod && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
