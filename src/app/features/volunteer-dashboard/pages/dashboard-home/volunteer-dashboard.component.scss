@@ -1,6 +1,4 @@
-// Variables
-$sidebar-width: 260px;
-$sidebar-collapsed-width: 70px;
+// Variables - using the same variables as the dashboard layout
 $primary-color: #021a02; // Dark green
 $accent-color: #337060; // Medium green
 $text-color: #1f2937;
@@ -11,427 +9,39 @@ $card-background: #ffffff;
 $success-color: #10b981;
 $danger-color: #ef4444;
 $warning-color: #f59e0b;
+$secondary-color: #6b7280;
 $border-radius: 36px; // Very rounded corners matching image
 $card-border-radius: 36px; // Very rounded corners for cards
 $button-radius: 32px; // For buttons and smaller elements
 $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
-$mobile-breakpoint: 768px;
-
-// Global styles
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-// Main container
-.dashboard-container {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: $background-dark; // Make the entire background match the sidebar
-  position: relative; // For absolute positioning of elements
-}
-
-// Content wrapper to create the "white area inside brown area" effect
-.content-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: $background-light;
-  border-radius: $border-radius 0 0 $border-radius;
-  margin: 8px 0 8px 0; // Thin border
-  overflow: hidden; // Keep content inside the rounded corners
-  min-width: 0; // Prevent horizontal scrolling
-}
-
-// Mobile nav close button
-.mobile-nav-close {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  border: none;
-  cursor: pointer;
-  z-index: 1001;
-  display: none; // Hidden by default, shown in mobile
-  align-items: center;
-  justify-content: center;
-  
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-}
-
-// Sidebar styles
-.sidebar {
-  width: $sidebar-width;
-  min-width: $sidebar-width;
-  background-color: $background-dark;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 24px 20px;
-  transition: all 0.3s ease;
-  position: relative; // For the close button
-  
-  &.collapsed {
-    width: $sidebar-collapsed-width;
-    min-width: $sidebar-collapsed-width;
-    padding: 24px 10px;
-    
-    .logo-container {
-      justify-content: center;
-      
-      .logo-text {
-        display: none;
-      }
-      
-      .logo-image {
-        height: 30px;
-        content: url('/home/user/volunera/public/images/volunera-logo-white.svg');
-      }
-    }
-    
-    .nav-item {
-      justify-content: center;
-      padding: 12px;
-      
-      span {
-        display: none;
-      }
-      
-      i {
-        margin-right: 0;
-      }
-    }
-    
-    .sidebar-footer {
-      .profile-completion {
-        display: none;
-      }
-      
-      .user-profile {
-        justify-content: center;
-        
-        .user-info {
-          display: none;
-        }
-        
-        .avatar {
-          margin-right: 0;
-        }
-      }
-    }
-  }
-
-  .sidebar-header {
-    padding-bottom: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    
-    .logo-container {
-      display: flex;
-      align-items: center;
-      
-      .logo-image {
-        height: 40px;
-        width: auto;
-      }
-    }
-    
-    .collapse-btn {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.1);
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.2);
-      }
-    }
-  }
-
-  .sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    
-    .nav-item {
-      display: flex;
-      align-items: center;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      border-radius: $button-radius;
-      color: #9ca3af;
-      text-decoration: none;
-      transition: all 0.2s ease;
-      
-      &.active {
-        background-color: $accent-color;
-        color: white;
-        
-        i {
-          color: white;
-        }
-      }
-      
-      i {
-        width: 24px;
-        font-size: 18px;
-        margin-right: 12px;
-        text-align: center;
-        color: currentColor;
-        display: flex;
-        justify-content: center;
-      }
-      
-      span {
-        white-space: nowrap;
-      }
-      
-      &:hover {
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-    }
-  }
-
-  .sidebar-footer {
-    margin-top: auto;
-    padding-top: 24px;
-    
-    .profile-completion {
-      background-color: lighten($background-dark, 5%);
-      border-radius: $button-radius;
-      padding: 16px;
-      margin-bottom: 16px;
-      display: flex;
-      
-      .completion-circle {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background-color: $accent-color;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 0.75rem;
-        font-weight: 700;
-        overflow: hidden; // Ensure circular shape
-        
-        .progress-indicator {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          height: 100%;
-          background-color: lighten($accent-color, 15%);
-          z-index: 1;
-        }
-        
-        span {
-          position: relative;
-          z-index: 2;
-        }
-        
-        &::after {
-          content: '';
-          position: absolute;
-          top: -2px;
-          right: -2px;
-          width: 10px;
-          height: 10px;
-          background-color: $success-color;
-          border-radius: 50%;
-          border: 2px solid $background-dark;
-        }
-      }
-      
-      .completion-text {
-        margin-left: 12px;
-        
-        p {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-        
-        .subtext {
-          font-size: 0.75rem;
-          color: $text-light;
-        }
-      }
-    }
-    
-    .user-profile {
-      display: flex;
-      align-items: center;
-      
-      .avatar {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        margin-right: 12px;
-      }
-      
-      .user-info {
-        .user-name {
-          font-size: 0.875rem;
-          font-weight: 500;
-        }
-        
-        .user-email {
-          font-size: 0.75rem;
-          color: $text-light;
-        }
-      }
-    }
-  }
-}
-
-// Main content styles
-.main-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 24px 24px 24px;
-  display: flex;
-  flex-direction: column;
-  min-width: 0; // Prevent horizontal scrolling
-}
-
-// Top Bar - flat to the page
-.top-bar {
-  background-color: transparent;
-  display: flex;
-  align-items: center; // Align items vertically
-  padding: 16px 24px;
-  
-  .mobile-nav-toggle {
-    width: 44px; // Match the size of other buttons
-    height: 44px;
-    border-radius: 50%;
-    background-color: $accent-color;
-    color: white;
-    border: none;
-    cursor: pointer;
-    margin-right: 12px;
-    box-shadow: $box-shadow;
-    display: flex; // Keep visible on desktop
-    align-items: center;
-    justify-content: center;
-    
-    i {
-      font-size: 1.25rem;
-    }
-  }
-  
-  .search-container {
-    position: relative;
-    width: 400px;
-    margin-right: auto; // Push other elements to the right
-    
-    .search-icon {
-      position: absolute;
-      left: 18px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: $text-light;
-    }
-    
-    .search-input {
-      width: 100%;
-      padding: 12px 18px 12px 46px;
-      border-radius: $button-radius;
-      border: none;
-      background-color: $card-background;
-      font-size: 0.875rem;
-      box-shadow: $box-shadow;
-      
-      &:focus {
-        outline: none;
-        box-shadow: 0 0 0 2px rgba($accent-color, 0.3);
-      }
-    }
-  }
-  
-  .top-bar-actions {
-    display: flex;
-    align-items: center;
-    
-    .action-button {
-      position: relative;
-      width: 44px; // Same size as the burger menu
-      height: 44px;
-      border-radius: 50%;
-      background-color: $card-background;
-      border: none;
-      color: $text-color;
-      margin-left: 12px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: $box-shadow;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &:hover {
-        background-color: darken($card-background, 3%);
-      }
-      
-      .notification-indicator {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        width: 8px;
-        height: 8px;
-        background-color: $danger-color;
-        border-radius: 50%;
-      }
-    }
-  }
-}
 
 // Dashboard content area
 .dashboard-content {
-  flex: 1;
   display: flex;
+  flex: 1;
   min-height: 0; // Allow proper flex sizing
-  max-height: calc(100vh - 100px); // Prevent page scrolling in desktop
 }
 
 // Three column layout
 .three-column-layout {
   display: grid;
-  grid-template-columns: 2fr 1fr; // Posts section is wider, calendar & suggestions stacked
+  grid-template-columns: 3fr 2fr; // Left section is wider for posts
   gap: 24px;
   width: 100%;
   height: 100%;
-  max-height: calc(100vh - 100px);
   
   .column {
     min-width: 0; // Prevent overflow
-    height: 100%;
-    overflow-y: hidden; // Hide overflow, cards will handle scrolling
   }
   
   .right-column {
     display: flex;
     flex-direction: column;
-    height: 100%;
+  }
+  
+  .left-column {
+    display: flex;
+    flex-direction: column;
   }
 }
 
@@ -439,7 +49,7 @@ $mobile-breakpoint: 768px;
 .card {
   background-color: $card-background;
   border-radius: $card-border-radius;
-  box-shadow: $box-shadow;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   margin-bottom: 24px;
   overflow: hidden;
   display: flex;
@@ -482,163 +92,130 @@ $mobile-breakpoint: 768px;
   }
 }
 
-// Calendar and NGO suggestions cards
-.calendar-card {
-  flex: 3; // Give more height to calendar than NGO suggestions
-  
-  .calendar-container {
-    height: 250px; // Fixed height for calendar
-  }
-}
-
-.ngo-suggestions-card {
-  max-height: calc(40vh); // Limit height to 40% of viewport height
-  
-  .card-content {
-    max-height: calc(40vh - 70px); // Account for card header height
-    overflow-y: auto; // Enable scrolling within the card
-  }
-}
-
-// Mobile nav overlay
-.mobile-nav-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 900;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
-  
-  &.active {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
-// Posts card styling
-.posts-card {
-  .posts-list {
-    .post-item {
-      border-bottom: 1px solid #e5e7eb;
-      padding: 16px 0;
+// Posts styling
+.posts-list {
+  .post-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #e5e7eb;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+    
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
       
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .post-header {
+      .ngo-info {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        margin-bottom: 12px;
         
-        .ngo-info {
-          display: flex;
-          align-items: center;
-          
-          .ngo-avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            overflow: hidden;
-            margin-right: 12px;
-            
-            img {
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-            }
-          }
-          
-          .ngo-details {
-            .ngo-name {
-              font-size: 0.875rem;
-              font-weight: 600;
-              margin-bottom: 2px;
-            }
-            
-            .post-date {
-              font-size: 0.75rem;
-              color: $text-light;
-            }
-          }
-        }
-        
-        .post-actions {
-          .action-btn {
-            background: none;
-            border: none;
-            color: $text-light;
-            cursor: pointer;
-            
-            &:hover {
-              color: $text-color;
-            }
-          }
-        }
-      }
-      
-      .post-content {
-        margin-bottom: 12px;
-        
-        .post-text {
-          font-size: 0.875rem;
-          line-height: 1.5;
-          margin-bottom: 12px;
-        }
-        
-        .post-image {
-          border-radius: $button-radius;
+        .ngo-avatar {
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
           overflow: hidden;
-          margin-bottom: 12px;
+          margin-right: 12px;
           
           img {
             width: 100%;
-            height: auto;
-            display: block;
+            height: 100%;
+            object-fit: cover;
+          }
+        }
+        
+        .ngo-details {
+          .ngo-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+          }
+          
+          .post-date {
+            font-size: 0.75rem;
+            color: $text-light;
           }
         }
       }
       
-      .post-footer {
-        display: flex;
-        flex-wrap: wrap;
-        
-        .post-action-btn {
-          display: flex;
-          align-items: center;
+      .post-actions {
+        .action-btn {
           background: none;
           border: none;
           color: $text-light;
-          font-size: 0.75rem;
-          margin-right: 16px;
-          margin-bottom: 8px;
           cursor: pointer;
-          padding: 8px 12px;
-          border-radius: 24px;
-          
-          i {
-            margin-right: 4px;
-          }
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           
           &:hover {
             background-color: rgba($accent-color, 0.1);
           }
+        }
+      }
+    }
+    
+    .post-content {
+      margin-bottom: 12px;
+      
+      .post-text {
+        font-size: 0.875rem;
+        line-height: 1.5;
+        margin-bottom: 12px;
+      }
+      
+      .post-image {
+        border-radius: 16px;
+        overflow: hidden;
+        margin-bottom: 12px;
+        
+        img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+      }
+    }
+    
+    .post-footer {
+      display: flex;
+      flex-wrap: wrap;
+      
+      .post-action-btn {
+        display: flex;
+        align-items: center;
+        background: none;
+        border: none;
+        color: $text-light;
+        font-size: 0.75rem;
+        margin-right: 16px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 24px;
+        
+        i {
+          margin-right: 4px;
+        }
+        
+        &:hover {
+          background-color: rgba($accent-color, 0.1);
+        }
+        
+        &.active {
+          color: $accent-color;
+        }
+        
+        &.like-btn.active {
+          color: $accent-color;
           
-          &.active {
+          i {
             color: $accent-color;
-          }
-          
-          &.like-btn.active {
-            color: $accent-color;
-            
-            i {
-              color: $accent-color;
-            }
           }
         }
       }
@@ -727,6 +304,12 @@ $mobile-breakpoint: 768px;
 
 // NGO Suggestions styling
 .ngo-suggestions-card {
+  max-height: calc(40vh); // Limit height to 40% of viewport height
+  
+  .card-content {
+    max-height: calc(40vh - 70px); // Account for card header height
+  }
+  
   .ngo-suggestions-list {
     .ngo-suggestion-item {
       display: flex;
@@ -824,13 +407,7 @@ $mobile-breakpoint: 768px;
 }
 
 // Mobile styles
-@media (max-width: $mobile-breakpoint) {
-  // Content wrapper adjustments
-  .content-wrapper {
-    margin: 0;
-    border-radius: 0;
-  }
-  
+@media (max-width: 768px) {
   // Allow scrolling on mobile
   .dashboard-content {
     max-height: none;
@@ -872,93 +449,9 @@ $mobile-breakpoint: 768px;
     }
   }
   
-  // Hide sidebar by default on mobile
-  .sidebar {
-    position: fixed;
-    left: -100%;
-    z-index: 1000;
-    width: 80%;
-    max-width: 300px;
-    border-radius: 0;
-    box-shadow: $box-shadow;
-    
-    &.mobile-active {
-      left: 0;
-    }
-    
-    .sidebar-header {
-      .collapse-btn {
-        display: none;
-      }
-    }
-    
-    // Show mobile close button
-    .mobile-nav-close {
-      display: flex;
-    }
-  }
-  
-  // Adjust search container
-  .top-bar {
-    padding: 16px 16px;
-    
-    .search-container {
-      flex: 1;
-      margin: 0 10px;
-    }
-    
-    // Show mobile nav toggle on mobile only
-    .mobile-nav-toggle {
-      display: flex;
-    }
-  }
-  
-  // More accent color on mobile
-  .card {
-    border: 2px solid rgba($accent-color, 0.1);
-    
-    .card-header {
-      background-color: rgba($accent-color, 0.05);
-      
-      .card-title {
-        color: $accent-color;
-      }
-    }
-  }
-  
-  .follow-btn, .event-date-badge, .mobile-nav-toggle {
-    background-color: $accent-color;
-  }
-  
-  .main-content {
-    padding: 0 16px 16px 16px;
-    overflow-y: auto; // Allow scrolling on mobile
-  }
-  
   // Fix posts card height on mobile
   .posts-card {
     height: auto;
     margin-bottom: 24px;
-  }
-}
-
-// Specific adjustments for very small screens
-@media (max-width: 576px) {
-  .top-bar {
-    padding: 12px;
-    
-    .search-container {
-      .search-input {
-        padding: 10px 12px 10px 36px;
-      }
-    }
-    
-    .top-bar-actions {
-      .action-button {
-        width: 40px;
-        height: 40px;
-        margin-left: 8px;
-      }
-    }
   }
 }

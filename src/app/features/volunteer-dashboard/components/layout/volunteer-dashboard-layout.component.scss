@@ -1,4 +1,4 @@
-// Variables
+// Variables - using the same variables as the dashboard
 $sidebar-width: 260px;
 $sidebar-collapsed-width: 70px;
 $primary-color: #021a02; // Dark green
@@ -489,87 +489,11 @@ $mobile-breakpoint: 768px;
   }
 }
 
-// Quick Actions Section
-.quick-actions {
-  display: flex;
-  gap: 12px;
-  margin: 0 24px 24px;
-  
-  .quick-action-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 16px;
-    border-radius: $button-radius;
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    box-shadow: $box-shadow;
-    transition: all 0.2s ease;
-    
-    i {
-      margin-right: 8px;
-    }
-    
-    &.primary {
-      background-color: $accent-color;
-      color: white;
-      
-      &:hover {
-        background-color: darken($accent-color, 5%);
-      }
-    }
-    
-    &.secondary {
-      background-color: white;
-      color: $accent-color;
-      border: 1px solid rgba($accent-color, 0.3);
-      
-      &:hover {
-        background-color: rgba($accent-color, 0.05);
-      }
-    }
-  }
-}
-
-// Dashboard content area
-.dashboard-content {
-  flex: 1;
-  display: flex;
-  min-height: 0; // Allow proper flex sizing
-}
-
-// Three column layout - Updated to give more space to main content
-.three-column-layout {
-  display: grid;
-  grid-template-columns: 3fr 2fr; // Left section is wider for posts
-  gap: 24px;
-  width: 100%;
-  padding: 0 0 24px 0; // Add padding at bottom to ensure space for scrolling
-  
-  .column {
-    min-width: 0; // Prevent overflow
-  }
-  
-  .right-column {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .left-column {
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-// Card styling
+// Card styling for modals
 .card {
   background-color: $card-background;
   border-radius: $card-border-radius;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); // Reduce shadow to avoid clipping
-  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -646,375 +570,11 @@ $mobile-breakpoint: 768px;
       font-weight: 600;
       color: $primary-color;
     }
-    
-    .card-link {
-      color: $accent-color;
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 500;
-    }
   }
   
   .card-content {
     padding: 18px 24px;
     flex: 1;
-  }
-}
-
-// Card minimum heights
-.events-card {
-  min-height: 400px; // Increased height
-}
-
-.donations-card {
-  min-height: 350px; // Increased height
-}
-
-.posts-card {
-  min-height: 600px; // Increased height for main posts section
-  height: calc(100vh - 132px); // Fix to take up most of the available height
-  
-  .card-content {
-    overflow-y: auto; // Enable scrolling within the card
-    height: calc(100% - 60px); // Account for header height
-  }
-}
-
-// Enhanced styles for NGO posts section
-.posts-card {
-  .posts-list {
-    .post-item {
-      padding: 20px 0;
-      border-bottom: 1px solid #e5e7eb;
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .post-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        
-        .post-organization {
-          display: flex;
-          align-items: center;
-          
-          .post-org-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin-right: 12px;
-          }
-          
-          div {
-            display: flex;
-            flex-direction: column;
-            
-            .post-org-name {
-              font-size: 0.875rem;
-              font-weight: 600;
-              color: #021a02;
-            }
-            
-            .post-date {
-              font-size: 0.75rem;
-              color: #9ca3af;
-            }
-          }
-        }
-        
-        .post-actions {
-          .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background-color: rgba($accent-color, 0.1);
-            color: $accent-color;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            
-            &:hover {
-              background-color: rgba($accent-color, 0.2);
-            }
-          }
-        }
-      }
-      
-      .post-content {
-        margin-bottom: 16px;
-        
-        .post-text {
-          font-size: 0.9375rem;
-          line-height: 1.5;
-          margin-bottom: 16px;
-        }
-        
-        .post-image {
-          border-radius: 16px;
-          overflow: hidden;
-          margin-bottom: 16px;
-          
-          img {
-            width: 100%;
-            height: auto;
-            display: block;
-          }
-        }
-      }
-      
-      .post-stats {
-        display: flex;
-        gap: 20px;
-        
-        .stat-group {
-          display: flex;
-          align-items: center;
-          font-size: 0.75rem;
-          color: $secondary-color;
-          
-          i {
-            margin-right: 6px;
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
-  }
-  
-  .create-post-btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 24px;
-    
-    .create-post-btn {
-      padding: 10px 20px;
-      border-radius: $button-radius;
-      font-size: 0.875rem;
-      background-color: rgba($accent-color, 0.1);
-      color: $accent-color;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      
-      i {
-        margin-right: 8px;
-      }
-      
-      &:hover {
-        background-color: rgba($accent-color, 0.2);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-      }
-    }
-  }
-}
-
-// Events Card
-.events-card {
-  .events-list {
-    .event-item {
-      display: flex;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid #e5e7eb;
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .event-date {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 48px;
-        margin-right: 16px;
-        
-        .date-day {
-          font-size: 1.25rem;
-          font-weight: 700;
-        }
-        
-        .date-month {
-          font-size: 0.75rem;
-          color: $text-light;
-        }
-      }
-      
-      .event-details {
-        flex: 1;
-        
-        .event-title {
-          font-size: 0.875rem;
-          font-weight: 500;
-          margin-bottom: 4px;
-          margin-top: 0;
-        }
-        
-        .event-location {
-          font-size: 0.75rem;
-          color: $text-light;
-          margin-bottom: 8px;
-          
-          i {
-            margin-right: 4px;
-          }
-        }
-        
-        .event-stats {
-          .registration-progress {
-            display: flex;
-            flex-direction: column;
-            
-            .progress-bar {
-              height: 6px;
-              background-color: #e5e7eb;
-              border-radius: 3px;
-              margin-bottom: 4px;
-              overflow: hidden;
-              
-              .progress {
-                height: 100%;
-                background-color: $accent-color;
-              }
-            }
-            
-            .progress-text {
-              font-size: 0.6875rem;
-              color: $text-light;
-            }
-          }
-        }
-      }
-      
-      .event-actions {
-        .event-action-btn {
-          padding: 6px 12px;
-          border-radius: $button-radius;
-          font-size: 0.75rem;
-          background-color: rgba($accent-color, 0.1);
-          color: $accent-color;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          
-          i {
-            margin-right: 4px;
-          }
-          
-          &:hover {
-            background-color: rgba($accent-color, 0.2);
-          }
-        }
-      }
-    }
-  }
-  
-  .create-event-btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-    
-    .create-event-btn {
-      padding: 8px 16px;
-      border-radius: $button-radius;
-      font-size: 0.875rem;
-      background-color: $accent-color;
-      color: white;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      
-      i {
-        margin-right: 8px;
-      }
-      
-      &:hover {
-        background-color: darken($accent-color, 5%);
-      }
-    }
-  }
-}
-
-// Donations Card
-.donations-card {
-  .donations-list {
-    .donation-item {
-      display: flex;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid #e5e7eb;
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .donation-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-        
-        &.financial {
-          background-color: rgba($success-color, 0.1);
-          color: $success-color;
-        }
-        
-        &.items {
-          background-color: rgba($warning-color, 0.1);
-          color: $warning-color;
-        }
-      }
-      
-      .donation-details {
-        flex: 1;
-        
-        .donation-title {
-          font-size: 0.875rem;
-          font-weight: 500;
-          margin-bottom: 4px;
-          margin-top: 0;
-        }
-        
-        .donation-info {
-          font-size: 0.75rem;
-          color: $text-light;
-          margin-bottom: 0;
-          
-          .donor-name {
-            font-weight: 500;
-          }
-        }
-      }
-      
-      .donation-status {
-        font-size: 0.75rem;
-        font-weight: 500;
-        padding: 4px 8px;
-        border-radius: 16px;
-        text-transform: capitalize;
-        
-        &.received {
-          background-color: rgba($success-color, 0.1);
-          color: $success-color;
-        }
-        
-        &.pending {
-          background-color: rgba($warning-color, 0.1);
-          color: $warning-color;
-        }
-      }
-    }
   }
 }
 
@@ -1039,8 +599,8 @@ $mobile-breakpoint: 768px;
 
 // Media queries for responsiveness
 @media (max-width: 1280px) {
-  .three-column-layout {
-    grid-template-columns: 1fr;
+  .search-container {
+    width: 300px;
   }
 }
 
@@ -1050,28 +610,6 @@ $mobile-breakpoint: 768px;
   .content-wrapper {
     margin: 0;
     border-radius: 0;
-  }
-  
-  // Allow scrolling on mobile
-  .dashboard-content {
-    max-height: none;
-    overflow-y: visible;
-  }
-  
-  .three-column-layout {
-    max-height: none;
-    height: auto;
-    overflow-y: visible;
-    
-    .column {
-      height: auto;
-      overflow-y: visible;
-    }
-    
-    .right-column {
-      height: auto;
-      overflow-y: visible;
-    }
   }
   
   // Hide sidebar by default on mobile
@@ -1107,73 +645,28 @@ $mobile-breakpoint: 768px;
     .search-container {
       flex: 1;
       margin: 0 10px;
+      
+      .search-input {
+        padding: 10px 12px 10px 36px;
+      }
     }
     
     // Show mobile nav toggle on mobile only
     .mobile-nav-toggle {
       display: flex;
     }
-  }
-  
-  // More accent color on mobile
-  .card {
-    border: 2px solid rgba($accent-color, 0.1);
     
-    .card-header {
-      background-color: rgba($accent-color, 0.05);
-      
-      .card-title {
-        color: $accent-color;
+    .top-bar-actions {
+      .action-button {
+        width: 40px;
+        height: 40px;
+        margin-left: 8px;
       }
     }
   }
   
   .main-content {
     padding: 0 16px 16px 16px;
-    overflow-y: auto; // Allow scrolling on mobile
-  }
-  
-  // Quick actions responsive
-  .quick-actions {
-    flex-direction: column;
-    margin: 0 16px 16px;
-    
-    .quick-action-btn {
-      width: 100%;
-      margin-bottom: 8px;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-  
-  // Fix post item on mobile
-  .post-item {
-    .post-header {
-      flex-direction: column;
-      align-items: flex-start;
-      
-      .post-organization {
-        margin-bottom: 10px;
-      }
-      
-      .post-actions {
-        align-self: flex-end;
-        margin-top: -30px;
-      }
-    }
-  }
-  
-  // Adjust card heights on mobile
-  .posts-card, .events-card, .donations-card {
-    height: auto;
-    min-height: auto;
-    
-    .card-content {
-      max-height: none;
-      height: auto;
-    }
   }
   
   // Profile dropdown adjustments for mobile
@@ -1186,93 +679,6 @@ $mobile-breakpoint: 768px;
       right: 16px;
       width: auto;
       margin-bottom: 0;
-    }
-  }
-  
-  // Modal dialog adjustments for mobile
-  .card.modal-card {
-    width: 90%;
-    max-width: 350px;
-    
-    .modal-footer {
-      .modal-btn {
-        padding: 10px 12px;
-      }
-    }
-  }
-}
-
-// Specific adjustments for very small screens
-@media (max-width: 576px) {
-  .top-bar {
-    padding: 12px;
-    
-    .search-container {
-      .search-input {
-        padding: 10px 12px 10px 36px;
-        font-size: 0.75rem;
-      }
-      
-      .search-icon {
-        left: 12px;
-      }
-    }
-    
-    .mobile-nav-toggle {
-      width: 38px;
-      height: 38px;
-      
-      i {
-        font-size: 1rem;
-      }
-    }
-    
-    .top-bar-actions {
-      .action-button {
-        width: 38px;
-        height: 38px;
-        margin-left: 8px;
-      }
-    }
-  }
-  
-  .card {
-    .card-header {
-      padding: 16px 20px;
-      
-      .card-title {
-        font-size: 1rem;
-      }
-      
-      .card-link {
-        font-size: 0.75rem;
-      }
-    }
-    
-    .card-content {
-      padding: 16px 20px;
-    }
-  }
-  
-  .post-stats {
-    flex-wrap: wrap;
-    
-    .stat-group {
-      margin-bottom: 6px;
-    }
-  }
-  
-  .donation-item {
-    flex-direction: column;
-    align-items: flex-start;
-    
-    .donation-icon {
-      margin-bottom: 10px;
-    }
-    
-    .donation-status {
-      align-self: flex-start;
-      margin-top: 8px;
     }
   }
 }

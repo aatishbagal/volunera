@@ -43,14 +43,30 @@
         </div>
       </div>
 
-      <!-- Make profile info clickable -->
-      <a [routerLink]="['/ngo/profile']" class="user-profile">
-        <img [src]="organization.avatar" alt="Organization Logo" class="avatar">
-        <div class="user-info">
-          <p class="user-name">{{organization.name}}</p>
-          <p class="user-email">{{organization.email}}</p>
+      <!-- Updated profile section with dropdown -->
+      <div class="user-profile-container">
+        <div class="user-profile" (click)="toggleProfileDropdown()">
+          <img [src]="organization.avatar" alt="Organization Logo" class="avatar">
+          <div class="user-info">
+            <p class="user-name">{{organization.name}}</p>
+            <p class="user-email">{{organization.email}}</p>
+          </div>
+          <i class="fas fa-chevron-down profile-chevron"></i>
         </div>
-      </a>
+        
+        <!-- Profile dropdown menu -->
+        <div class="profile-dropdown" *ngIf="isProfileDropdownOpen">
+          <a [routerLink]="['/ngo/profile']" class="dropdown-item">
+            <i class="fas fa-user-circle"></i>
+            <span>View Profile</span>
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="javascript:void(0)" class="dropdown-item" (click)="confirmLogout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
     </div>
     
     <!-- Mobile close button -->
@@ -241,5 +257,21 @@
         </div>
       </div>
     </main>
+  </div>
+</div>
+
+<!-- Logout Confirmation Modal -->
+<div class="card modal-overlay" *ngIf="showLogoutConfirmation">
+  <div class="card modal-card">
+    <div class="card-header">
+      <h2 class="card-title">Confirm Logout</h2>
+    </div>
+    <div class="card-content">
+      <p>Are you sure you want to logout from your account?</p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn cancel" (click)="handleLogout(false)">Cancel</button>
+      <button class="modal-btn confirm" (click)="handleLogout(true)">Logout</button>
+    </div>
   </div>
 </div>

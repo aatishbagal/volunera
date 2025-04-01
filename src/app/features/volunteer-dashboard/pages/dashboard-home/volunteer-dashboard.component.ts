@@ -1,10 +1,6 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ImpactCardComponent } from '../../components/impact-card/impact-card.component';
-import { UpcomingEventsComponent } from '../../components/upcoming-events/upcoming-events.component';
-import { RecentActivityComponent } from '../../components/recent-activity/recent-activity.component';
 
 // Create a pipe for safe URLs
 import { Pipe, PipeTransform } from '@angular/core';
@@ -19,16 +15,6 @@ export class SafePipe implements PipeTransform {
   transform(url: string): SafeResourceUrl {
     return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
-}
-
-// Interface definitions
-interface Activity {
-  id: number;
-  type: 'event' | 'donation' | 'achievement';
-  title: string;
-  organization: string;
-  date: Date;
-  points: number;
 }
 
 interface NGOPost {
@@ -59,27 +45,10 @@ interface Event {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    ImpactCardComponent,
-    UpcomingEventsComponent,
-    RecentActivityComponent,
     SafePipe
   ]
 })
 export class VolunteerDashboardComponent implements OnInit {
-  // Sidebar state - we will only use this on mobile now
-  isSidebarCollapsed = false;
-  isMobileMenuOpen = false;
-  isMobileView = false;
-  
-  // User data
-  user = {
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    avatar: '/assets/images/avatar.png',
-    profileCompletion: 45
-  };
-
   // Dashboard data
   calendarUrl: string = 'https://calendar.google.com/calendar/embed?src=c_classroomf65b04c4%40group.calendar.google.com&ctz=America%2FNew_York&mode=AGENDA';
 
@@ -138,47 +107,7 @@ export class VolunteerDashboardComponent implements OnInit {
   constructor(private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
-    this.checkScreenSize();
-  }
-
-  // Check screen size on window resize
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkScreenSize();
-  }
-
-  // Check if mobile view
-  checkScreenSize() {
-    this.isMobileView = window.innerWidth <= 768;
-    
-    // Auto-collapse sidebar on desktop if width is between 768px and 1200px
-    if (window.innerWidth > 768 && window.innerWidth < 1200) {
-      this.isSidebarCollapsed = true;
-    } else if (window.innerWidth >= 1200) {
-      this.isSidebarCollapsed = false;
-    }
-  }
-
-  // Toggle mobile menu
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    
-    // Add/remove body scroll lock when mobile menu is open
-    if (this.isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-  
-  // Toggle sidebar on desktop or mobile menu on mobile
-  toggleSidebarOrMenu() {
-    if (this.isMobileView) {
-      this.toggleMobileMenu();
-    } else {
-      // On desktop, just toggle sidebar collapse state
-      this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    }
+    // Initialize the dashboard
   }
 
   // Toggle post like

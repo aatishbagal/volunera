@@ -1,0 +1,1 @@
+export * from './pages/volunteer-profile/volunteer-profile.component';

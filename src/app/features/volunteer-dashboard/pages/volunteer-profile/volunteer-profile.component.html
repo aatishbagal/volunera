@@ -1,0 +1,112 @@
+<!-- Profile Content - without sidebar and header -->
+<div class="profile-content">
+  <!-- Profile Header Card -->
+  <section class="card profile-card">
+    <div class="card-content">
+      <div class="profile-header">
+        <div class="profile-avatar-container">
+          <img [src]="user.avatar" alt="User Avatar" class="profile-avatar">
+          <button class="edit-profile-btn">
+            <i class="fas fa-camera"></i>
+          </button>
+        </div>
+        <div class="profile-details">
+          <h1 class="profile-name">{{user.name}}</h1>
+          <p class="profile-bio">{{user.bio}}</p>
+          <button class="edit-profile-btn primary">
+            <i class="fas fa-edit"></i>
+            <span>Edit Profile</span>
+          </button>
+        </div>
+        <div class="level-card">
+          <div class="level-header">
+            <span class="level-number">Level {{user.level}}</span>
+            <span class="level-title">{{getLevelTitle()}}</span>
+          </div>
+          <div class="level-progress-container">
+            <div class="level-progress-bar">
+              <div class="level-progress" [style.width.%]="getProgressToNextLevel()"></div>
+            </div>
+            <div class="level-progress-text">
+              <span>{{user.totalPoints}} points</span>
+              <span>{{getPointsToNextLevel()}} points to Level {{user.level + 1}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Stats Card -->
+  <section class="card stats-card">
+    <div class="card-header">
+      <h2 class="card-title">Volunteer Stats</h2>
+    </div>
+    <div class="card-content">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <h3 class="stat-value">{{stats.eventsThisMonth}}</h3>
+          <p class="stat-label">Events Attended<br>This Month</p>
+        </div>
+        <div class="stat-item">
+          <h3 class="stat-value">{{stats.pointsThisMonth}}</h3>
+          <p class="stat-label">Points Gained<br>This Month</p>
+        </div>
+        <div class="stat-item">
+          <h3 class="stat-value">{{stats.totalEvents}}</h3>
+          <p class="stat-label">Total Events<br>Attended</p>
+        </div>
+        <div class="stat-item">
+          <h3 class="stat-value">{{stats.totalPoints}}</h3>
+          <p class="stat-label">Total Points<br>Earned</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Activity History Card -->
+  <section class="card activity-card">
+    <div class="card-header">
+      <h2 class="card-title">My Activity</h2>
+      <a href="javascript:void(0)" class="card-link">View All</a>
+    </div>
+    <div class="card-content">
+      <div class="activity-list">
+        <div *ngFor="let activity of activityHistory" class="activity-item">
+          <div class="activity-date">
+            <span class="date-day">{{activity.date | date:'d'}}</span>
+            <span class="date-month">{{activity.date | date:'MMM'}}</span>
+          </div>
+          <div class="activity-details">
+            <h4 class="activity-title">{{activity.eventName}}</h4>
+            <p class="activity-organization">
+              <i class="fas fa-building"></i>
+              {{activity.organization}}
+            </p>
+            <p class="activity-location">
+              <i class="fas fa-map-marker-alt"></i>
+              {{activity.location}}
+            </p>
+          </div>
+          <div class="activity-role">
+            <span class="role-badge">{{activity.role}}</span>
+          </div>
+          <div class="activity-points">
+            <span class="points-badge">
+              <i class="fas fa-star"></i>
+              {{activity.points}} points
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Empty state if no activities -->
+      <div *ngIf="activityHistory.length === 0" class="empty-state">
+        <i class="fas fa-calendar-times empty-icon"></i>
+        <h3>No activities yet</h3>
+        <p>Start volunteering to see your activity history here.</p>
+        <button class="primary-button">Explore Events</button>
+      </div>
+    </div>
+  </section>
+</div>

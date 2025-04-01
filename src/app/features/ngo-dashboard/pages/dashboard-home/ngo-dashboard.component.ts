@@ -73,6 +73,12 @@ export class NgoDashboardComponent implements OnInit {
   isMobileMenuOpen = false;
   isMobileView = false;
   
+  // Profile dropdown state
+  isProfileDropdownOpen = false;
+  
+  // Logout confirmation state
+  showLogoutConfirmation = false;
+  
   // Organization data
   organization = {
     name: 'GreenEarth Foundation',
@@ -277,5 +283,35 @@ export class NgoDashboardComponent implements OnInit {
   viewPostInsights(post: Post): void {
     console.log('View insights for post:', post);
     // This would open post insights modal or navigate to post insights page
+  }
+  
+  // Toggle profile dropdown
+  toggleProfileDropdown(): void {
+    this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
+  }
+  
+  // Close profile dropdown when clicking outside
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const profileElement = document.querySelector('.user-profile-container');
+    if (profileElement && !profileElement.contains(event.target as Node) && this.isProfileDropdownOpen) {
+      this.isProfileDropdownOpen = false;
+    }
+  }
+  
+  // Show logout confirmation modal
+  confirmLogout(): void {
+    this.showLogoutConfirmation = true;
+  }
+  
+  // Handle logout confirmation
+  handleLogout(confirmed: boolean): void {
+    this.showLogoutConfirmation = false;
+    if (confirmed) {
+      // Handle actual logout logic here
+      console.log('Organization logged out');
+      // Navigate to login page
+      // this.router.navigate(['/login']);
+    }
   }
 }

@@ -1,31 +1,29 @@
-// Variables
+
 $sidebar-width: 260px;
 $sidebar-collapsed-width: 70px;
-$primary-color: #021a02; // Dark green
-$accent-color: #337060; // Medium green
+$primary-color: #021a02;
+$accent-color: #337060;
 $text-color: #1f2937;
 $text-light: #9ca3af;
 $background-light: #f9fafb;
-$background-dark: #021a02; // Sidebar color
+$background-dark: #021a02;
 $card-background: #ffffff;
 $success-color: #10b981;
 $danger-color: #ef4444;
 $warning-color: #f59e0b;
 $secondary-color: #6b7280;
-$border-radius: 36px; // Very rounded corners matching image
-$card-border-radius: 36px; // Very rounded corners for cards
-$button-radius: 32px; // For buttons and smaller elements
-$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
+$border-radius: 36px;
+$card-border-radius: 36px;
+$button-radius: 32px;
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 $mobile-breakpoint: 768px;
 
-// Global styles
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-// Main container
 .dashboard-container {
   display: flex;
   height: 100vh;
@@ -35,7 +33,6 @@ $mobile-breakpoint: 768px;
   position: relative; // For absolute positioning of elements
 }
 
-// Content wrapper to create the "white area inside brown area" effect
 .content-wrapper {
   flex: 1;
   display: flex;
@@ -48,7 +45,6 @@ $mobile-breakpoint: 768px;
   box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1); // Add inset shadow instead of outer shadow
 }
 
-// Mobile nav close button
 .mobile-nav-close {
   position: absolute;
   top: 20px;
@@ -70,7 +66,6 @@ $mobile-breakpoint: 768px;
   }
 }
 
-// Sidebar styles
 .sidebar {
   width: $sidebar-width;
   min-width: $sidebar-width;
@@ -83,8 +78,8 @@ $mobile-breakpoint: 768px;
   overflow-x: hidden;
   padding: 24px 20px;
   transition: all 0.3s ease;
-  position: relative; // For the close button
-  z-index: 1000; // Ensure sidebar sits above content
+  position: relative;
+  z-index: 1000;
   
   .sidebar-header {
     padding-bottom: 32px;
@@ -489,79 +484,12 @@ $mobile-breakpoint: 768px;
   }
 }
 
-// Quick Actions Section
-.quick-actions {
+// Profile content layout
+.profile-content {
+  padding: 24px 0;
   display: flex;
-  gap: 12px;
-  margin: 0 24px 24px;
-  
-  .quick-action-btn {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 16px;
-    border-radius: $button-radius;
-    border: none;
-    cursor: pointer;
-    font-size: 0.875rem;
-    font-weight: 500;
-    box-shadow: $box-shadow;
-    transition: all 0.2s ease;
-    
-    i {
-      margin-right: 8px;
-    }
-    
-    &.primary {
-      background-color: $accent-color;
-      color: white;
-      
-      &:hover {
-        background-color: darken($accent-color, 5%);
-      }
-    }
-    
-    &.secondary {
-      background-color: white;
-      color: $accent-color;
-      border: 1px solid rgba($accent-color, 0.3);
-      
-      &:hover {
-        background-color: rgba($accent-color, 0.05);
-      }
-    }
-  }
-}
-
-// Dashboard content area
-.dashboard-content {
-  flex: 1;
-  display: flex;
-  min-height: 0; // Allow proper flex sizing
-}
-
-// Three column layout - Updated to give more space to main content
-.three-column-layout {
-  display: grid;
-  grid-template-columns: 3fr 2fr; // Left section is wider for posts
-  gap: 24px;
+  flex-direction: column;
   width: 100%;
-  padding: 0 0 24px 0; // Add padding at bottom to ensure space for scrolling
-  
-  .column {
-    min-width: 0; // Prevent overflow
-  }
-  
-  .right-column {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .left-column {
-    display: flex;
-    flex-direction: column;
-  }
 }
 
 // Card styling
@@ -656,169 +584,191 @@ $mobile-breakpoint: 768px;
   }
   
   .card-content {
-    padding: 18px 24px;
+    padding: 24px;
     flex: 1;
   }
 }
 
-// Card minimum heights
-.events-card {
-  min-height: 400px; // Increased height
-}
-
-.donations-card {
-  min-height: 350px; // Increased height
-}
-
-.posts-card {
-  min-height: 600px; // Increased height for main posts section
-  height: calc(100vh - 132px); // Fix to take up most of the available height
-  
-  .card-content {
-    overflow-y: auto; // Enable scrolling within the card
-    height: calc(100% - 60px); // Account for header height
-  }
-}
-
-// Enhanced styles for NGO posts section
-.posts-card {
-  .posts-list {
-    .post-item {
-      padding: 20px 0;
-      border-bottom: 1px solid #e5e7eb;
+// Profile header card styling
+.profile-card {
+  .profile-header {
+    display: flex;
+    flex-wrap: wrap;
+    
+    .profile-avatar-container {
+      position: relative;
+      margin-right: 32px;
       
-      &:last-child {
-        border-bottom: none;
+      .profile-avatar {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
       
-      .post-header {
+      .edit-profile-btn {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background-color: $accent-color;
+        color: white;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        
+        &:hover {
+          background-color: darken($accent-color, 5%);
+        }
+        
+        i {
+          font-size: 0.875rem;
+        }
+      }
+    }
+    
+    .profile-details {
+      flex: 1;
+      min-width: 250px;
+      
+      .profile-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: $primary-color;
+        margin-bottom: 8px;
+      }
+      
+      .profile-bio {
+        font-size: 0.9375rem;
+        color: $text-color;
+        margin-bottom: 16px;
+        line-height: 1.5;
+      }
+      
+      .edit-profile-btn {
+        padding: 8px 16px;
+        border-radius: $button-radius;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        width: fit-content;
+        
+        i {
+          margin-right: 8px;
+          font-size: 0.875rem;
+        }
+        
+        &.primary {
+          background-color: $accent-color;
+          color: white;
+          border: none;
+          
+          &:hover {
+            background-color: darken($accent-color, 5%);
+          }
+        }
+      }
+    }
+    
+    .level-card {
+      min-width: 220px;
+      background-color: rgba($accent-color, 0.05);
+      border-radius: $button-radius;
+      padding: 16px;
+      margin-left: auto;
+      
+      .level-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 16px;
+        margin-bottom: 12px;
         
-        .post-organization {
-          display: flex;
-          align-items: center;
-          
-          .post-org-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            margin-right: 12px;
-          }
-          
-          div {
-            display: flex;
-            flex-direction: column;
-            
-            .post-org-name {
-              font-size: 0.875rem;
-              font-weight: 600;
-              color: #021a02;
-            }
-            
-            .post-date {
-              font-size: 0.75rem;
-              color: #9ca3af;
-            }
-          }
+        .level-number {
+          font-size: 1.125rem;
+          font-weight: 700;
+          color: $accent-color;
         }
         
-        .post-actions {
-          .action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            border: none;
-            background-color: rgba($accent-color, 0.1);
-            color: $accent-color;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            
-            &:hover {
-              background-color: rgba($accent-color, 0.2);
-            }
-          }
-        }
-      }
-      
-      .post-content {
-        margin-bottom: 16px;
-        
-        .post-text {
-          font-size: 0.9375rem;
-          line-height: 1.5;
-          margin-bottom: 16px;
-        }
-        
-        .post-image {
+        .level-title {
+          font-size: 0.875rem;
+          color: $accent-color;
+          background-color: rgba($accent-color, 0.1);
+          padding: 4px 12px;
           border-radius: 16px;
+        }
+      }
+      
+      .level-progress-container {
+        .level-progress-bar {
+          height: 8px;
+          background-color: rgba($accent-color, 0.1);
+          border-radius: 4px;
+          margin-bottom: 8px;
           overflow: hidden;
-          margin-bottom: 16px;
           
-          img {
-            width: 100%;
-            height: auto;
-            display: block;
+          .level-progress {
+            height: 100%;
+            background-color: $accent-color;
+            border-radius: 4px;
           }
         }
-      }
-      
-      .post-stats {
-        display: flex;
-        gap: 20px;
         
-        .stat-group {
+        .level-progress-text {
           display: flex;
-          align-items: center;
+          justify-content: space-between;
           font-size: 0.75rem;
-          color: $secondary-color;
-          
-          i {
-            margin-right: 6px;
-            font-size: 0.875rem;
-          }
+          color: $text-light;
         }
-      }
-    }
-  }
-  
-  .create-post-btn-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 24px;
-    
-    .create-post-btn {
-      padding: 10px 20px;
-      border-radius: $button-radius;
-      font-size: 0.875rem;
-      background-color: rgba($accent-color, 0.1);
-      color: $accent-color;
-      border: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      
-      i {
-        margin-right: 8px;
-      }
-      
-      &:hover {
-        background-color: rgba($accent-color, 0.2);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
       }
     }
   }
 }
 
-// Events Card
-.events-card {
-  .events-list {
-    .event-item {
+// Stats card styling
+.stats-card {
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    
+    .stat-item {
+      text-align: center;
+      padding: 16px;
+      background-color: rgba($accent-color, 0.05);
+      border-radius: $button-radius;
+      
+      .stat-value {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $accent-color;
+        margin-bottom: 8px;
+      }
+      
+      .stat-label {
+        font-size: 0.875rem;
+        color: $text-color;
+        line-height: 1.4;
+      }
+    }
+  }
+}
+
+// Activity card styling
+.activity-card {
+  .activity-list {
+    display: flex;
+    flex-direction: column;
+    
+    .activity-item {
       display: flex;
       align-items: center;
       padding: 16px 0;
@@ -828,7 +778,7 @@ $mobile-breakpoint: 768px;
         border-bottom: none;
       }
       
-      .event-date {
+      .activity-date {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -838,6 +788,7 @@ $mobile-breakpoint: 768px;
         .date-day {
           font-size: 1.25rem;
           font-weight: 700;
+          color: $primary-color;
         }
         
         .date-month {
@@ -846,173 +797,109 @@ $mobile-breakpoint: 768px;
         }
       }
       
-      .event-details {
+      .activity-details {
         flex: 1;
         
-        .event-title {
-          font-size: 0.875rem;
-          font-weight: 500;
+        .activity-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: $primary-color;
           margin-bottom: 4px;
           margin-top: 0;
         }
         
-        .event-location {
-          font-size: 0.75rem;
+        .activity-organization,
+        .activity-location {
+          font-size: 0.875rem;
           color: $text-light;
-          margin-bottom: 8px;
+          margin-bottom: 4px;
           
           i {
-            margin-right: 4px;
+            margin-right: 8px;
+            width: 14px;
+            text-align: center;
           }
-        }
-        
-        .event-stats {
-          .registration-progress {
-            display: flex;
-            flex-direction: column;
-            
-            .progress-bar {
-              height: 6px;
-              background-color: #e5e7eb;
-              border-radius: 3px;
-              margin-bottom: 4px;
-              overflow: hidden;
-              
-              .progress {
-                height: 100%;
-                background-color: $accent-color;
-              }
-            }
-            
-            .progress-text {
-              font-size: 0.6875rem;
-              color: $text-light;
-            }
+          
+          &:last-child {
+            margin-bottom: 0;
           }
         }
       }
       
-      .event-actions {
-        .event-action-btn {
-          padding: 6px 12px;
-          border-radius: $button-radius;
+      .activity-role {
+        margin-right: 16px;
+        
+        .role-badge {
           font-size: 0.75rem;
           background-color: rgba($accent-color, 0.1);
           color: $accent-color;
-          border: none;
-          cursor: pointer;
+          padding: 4px 12px;
+          border-radius: 16px;
+          white-space: nowrap;
+        }
+      }
+      
+      .activity-points {
+        .points-badge {
           display: flex;
           align-items: center;
+          font-size: 0.875rem;
+          font-weight: 600;
+          background-color: rgba($success-color, 0.1);
+          color: $success-color;
+          padding: 6px 12px;
+          border-radius: 16px;
+          white-space: nowrap;
           
           i {
-            margin-right: 4px;
-          }
-          
-          &:hover {
-            background-color: rgba($accent-color, 0.2);
+            margin-right: 6px;
+            font-size: 0.75rem;
           }
         }
       }
     }
   }
   
-  .create-event-btn-container {
+  .empty-state {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin-top: 16px;
+    padding: 48px 0;
+    text-align: center;
     
-    .create-event-btn {
-      padding: 8px 16px;
+    .empty-icon {
+      font-size: 3rem;
+      color: lighten($text-light, 15%);
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: $text-color;
+      margin-bottom: 8px;
+    }
+    
+    p {
+      font-size: 0.9375rem;
+      color: $text-light;
+      margin-bottom: 24px;
+      max-width: 400px;
+    }
+    
+    .primary-button {
+      padding: 12px 24px;
       border-radius: $button-radius;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
       background-color: $accent-color;
       color: white;
       border: none;
       cursor: pointer;
-      display: flex;
-      align-items: center;
-      
-      i {
-        margin-right: 8px;
-      }
       
       &:hover {
         background-color: darken($accent-color, 5%);
-      }
-    }
-  }
-}
-
-// Donations Card
-.donations-card {
-  .donations-list {
-    .donation-item {
-      display: flex;
-      align-items: center;
-      padding: 16px 0;
-      border-bottom: 1px solid #e5e7eb;
-      
-      &:last-child {
-        border-bottom: none;
-      }
-      
-      .donation-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 12px;
-        
-        &.financial {
-          background-color: rgba($success-color, 0.1);
-          color: $success-color;
-        }
-        
-        &.items {
-          background-color: rgba($warning-color, 0.1);
-          color: $warning-color;
-        }
-      }
-      
-      .donation-details {
-        flex: 1;
-        
-        .donation-title {
-          font-size: 0.875rem;
-          font-weight: 500;
-          margin-bottom: 4px;
-          margin-top: 0;
-        }
-        
-        .donation-info {
-          font-size: 0.75rem;
-          color: $text-light;
-          margin-bottom: 0;
-          
-          .donor-name {
-            font-weight: 500;
-          }
-        }
-      }
-      
-      .donation-status {
-        font-size: 0.75rem;
-        font-weight: 500;
-        padding: 4px 8px;
-        border-radius: 16px;
-        text-transform: capitalize;
-        
-        &.received {
-          background-color: rgba($success-color, 0.1);
-          color: $success-color;
-        }
-        
-        &.pending {
-          background-color: rgba($warning-color, 0.1);
-          color: $warning-color;
-        }
       }
     }
   }
@@ -1038,9 +925,21 @@ $mobile-breakpoint: 768px;
 }
 
 // Media queries for responsiveness
-@media (max-width: 1280px) {
-  .three-column-layout {
-    grid-template-columns: 1fr;
+@media (max-width: 1200px) {
+  .profile-card {
+    .profile-header {
+      .level-card {
+        flex: 0 0 100%;
+        margin-left: 0;
+        margin-top: 16px;
+      }
+    }
+  }
+  
+  .stats-card {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
   }
 }
 
@@ -1052,25 +951,64 @@ $mobile-breakpoint: 768px;
     border-radius: 0;
   }
   
-  // Allow scrolling on mobile
-  .dashboard-content {
-    max-height: none;
-    overflow-y: visible;
+  // Main content padding
+  .main-content {
+    padding: 0 16px 16px 16px;
   }
   
-  .three-column-layout {
-    max-height: none;
-    height: auto;
-    overflow-y: visible;
-    
-    .column {
-      height: auto;
-      overflow-y: visible;
+  // Profile header adjustments
+  .profile-card {
+    .profile-header {
+      flex-direction: column;
+      
+      .profile-avatar-container {
+        margin: 0 auto 20px;
+      }
+      
+      .profile-details {
+        text-align: center;
+        margin-bottom: 20px;
+        
+        .edit-profile-btn {
+          margin: 0 auto;
+        }
+      }
     }
-    
-    .right-column {
-      height: auto;
-      overflow-y: visible;
+  }
+  
+  // Stats grid for mobile
+  .stats-card {
+    .stats-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+  }
+  
+  // Activity items on mobile
+  .activity-card {
+    .activity-list {
+      .activity-item {
+        flex-wrap: wrap;
+        
+        .activity-date {
+          margin-right: 16px;
+        }
+        
+        .activity-details {
+          width: calc(100% - 64px);
+          margin-bottom: 12px;
+        }
+        
+        .activity-role,
+        .activity-points {
+          margin-top: 8px;
+          margin-left: 64px; // Align with activity details
+        }
+        
+        .activity-points {
+          margin-left: auto;
+        }
+      }
     }
   }
   
@@ -1086,12 +1024,6 @@ $mobile-breakpoint: 768px;
     
     &.mobile-active {
       left: 0;
-    }
-    
-    .sidebar-header {
-      .collapse-btn {
-        display: none;
-      }
     }
     
     // Show mobile close button
@@ -1114,92 +1046,6 @@ $mobile-breakpoint: 768px;
       display: flex;
     }
   }
-  
-  // More accent color on mobile
-  .card {
-    border: 2px solid rgba($accent-color, 0.1);
-    
-    .card-header {
-      background-color: rgba($accent-color, 0.05);
-      
-      .card-title {
-        color: $accent-color;
-      }
-    }
-  }
-  
-  .main-content {
-    padding: 0 16px 16px 16px;
-    overflow-y: auto; // Allow scrolling on mobile
-  }
-  
-  // Quick actions responsive
-  .quick-actions {
-    flex-direction: column;
-    margin: 0 16px 16px;
-    
-    .quick-action-btn {
-      width: 100%;
-      margin-bottom: 8px;
-      
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-  
-  // Fix post item on mobile
-  .post-item {
-    .post-header {
-      flex-direction: column;
-      align-items: flex-start;
-      
-      .post-organization {
-        margin-bottom: 10px;
-      }
-      
-      .post-actions {
-        align-self: flex-end;
-        margin-top: -30px;
-      }
-    }
-  }
-  
-  // Adjust card heights on mobile
-  .posts-card, .events-card, .donations-card {
-    height: auto;
-    min-height: auto;
-    
-    .card-content {
-      max-height: none;
-      height: auto;
-    }
-  }
-  
-  // Profile dropdown adjustments for mobile
-  .user-profile-container {
-    .profile-dropdown {
-      position: fixed;
-      top: auto;
-      bottom: 70px;
-      left: 16px;
-      right: 16px;
-      width: auto;
-      margin-bottom: 0;
-    }
-  }
-  
-  // Modal dialog adjustments for mobile
-  .card.modal-card {
-    width: 90%;
-    max-width: 350px;
-    
-    .modal-footer {
-      .modal-btn {
-        padding: 10px 12px;
-      }
-    }
-  }
 }
 
 // Specific adjustments for very small screens
@@ -1210,69 +1056,27 @@ $mobile-breakpoint: 768px;
     .search-container {
       .search-input {
         padding: 10px 12px 10px 36px;
-        font-size: 0.75rem;
-      }
-      
-      .search-icon {
-        left: 12px;
-      }
-    }
-    
-    .mobile-nav-toggle {
-      width: 38px;
-      height: 38px;
-      
-      i {
-        font-size: 1rem;
       }
     }
     
     .top-bar-actions {
       .action-button {
-        width: 38px;
-        height: 38px;
+        width: 40px;
+        height: 40px;
         margin-left: 8px;
       }
     }
   }
   
-  .card {
-    .card-header {
-      padding: 16px 20px;
-      
-      .card-title {
-        font-size: 1rem;
+  .activity-card {
+    .activity-list {
+      .activity-item {
+        .activity-points,
+        .activity-role {
+          margin-left: 64px;
+          margin-top: 8px;
+        }
       }
-      
-      .card-link {
-        font-size: 0.75rem;
-      }
-    }
-    
-    .card-content {
-      padding: 16px 20px;
-    }
-  }
-  
-  .post-stats {
-    flex-wrap: wrap;
-    
-    .stat-group {
-      margin-bottom: 6px;
-    }
-  }
-  
-  .donation-item {
-    flex-direction: column;
-    align-items: flex-start;
-    
-    .donation-icon {
-      margin-bottom: 10px;
-    }
-    
-    .donation-status {
-      align-self: flex-start;
-      margin-top: 8px;
     }
   }
 }
