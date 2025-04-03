@@ -1,24 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 import { OrganizationStatsComponent } from '../../components/organization-stats/organization-stats.component';
 import { EventManagementComponent } from '../../components/event-management/event-management.component';
-
-// Create a pipe for safe URLs
-import { Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({
-  name: 'safe',
-  standalone: true
-})
-export class SafePipe implements PipeTransform {
-  constructor(private sanitizer: DomSanitizer) {}
-  
-  transform(url: string): SafeResourceUrl {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-  }
-}
+import { SafePipe } from '../../shared/pipes/safe.pipe';
 
 // Interface definitions
 interface Event {
@@ -68,25 +54,6 @@ interface Post {
   ]
 })
 export class NgoDashboardComponent implements OnInit {
-  // Sidebar state - we will only use this on mobile now
-  isSidebarCollapsed = false;
-  isMobileMenuOpen = false;
-  isMobileView = false;
-  
-  // Profile dropdown state
-  isProfileDropdownOpen = false;
-  
-  // Logout confirmation state
-  showLogoutConfirmation = false;
-  
-  // Organization data
-  organization = {
-    name: 'GreenEarth Foundation',
-    email: 'info@greenearthfoundation.org',
-    avatar: '/assets/images/orgs/greenearth.png',
-    profileCompletion: 75
-  };
-
   // Upcoming events
   upcomingEvents: Event[] = [
     { 
@@ -209,50 +176,10 @@ export class NgoDashboardComponent implements OnInit {
     }
   ];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.checkScreenSize();
-  }
-
-  // Check screen size on window resize
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkScreenSize();
-  }
-
-  // Check if mobile view
-  checkScreenSize() {
-    this.isMobileView = window.innerWidth <= 768;
-    
-    // Auto-collapse sidebar on desktop if width is between 768px and 1200px
-    if (window.innerWidth > 768 && window.innerWidth < 1200) {
-      this.isSidebarCollapsed = true;
-    } else if (window.innerWidth >= 1200) {
-      this.isSidebarCollapsed = false;
-    }
-  }
-
-  // Toggle mobile menu
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    
-    // Add/remove body scroll lock when mobile menu is open
-    if (this.isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-  
-  // Toggle sidebar on desktop or mobile menu on mobile
-  toggleSidebarOrMenu() {
-    if (this.isMobileView) {
-      this.toggleMobileMenu();
-    } else {
-      // On desktop, just toggle sidebar collapse state
-      this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    }
+    // Initialize the dashboard
   }
 
   // Method to create a new event
@@ -283,35 +210,5 @@ export class NgoDashboardComponent implements OnInit {
   viewPostInsights(post: Post): void {
     console.log('View insights for post:', post);
     // This would open post insights modal or navigate to post insights page
-  }
-  
-  // Toggle profile dropdown
-  toggleProfileDropdown(): void {
-    this.isProfileDropdownOpen = !this.isProfileDropdownOpen;
-  }
-  
-  // Close profile dropdown when clicking outside
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const profileElement = document.querySelector('.user-profile-container');
-    if (profileElement && !profileElement.contains(event.target as Node) && this.isProfileDropdownOpen) {
-      this.isProfileDropdownOpen = false;
-    }
-  }
-  
-  // Show logout confirmation modal
-  confirmLogout(): void {
-    this.showLogoutConfirmation = true;
-  }
-  
-  // Handle logout confirmation
-  handleLogout(confirmed: boolean): void {
-    this.showLogoutConfirmation = false;
-    if (confirmed) {
-      // Handle actual logout logic here
-      console.log('Organization logged out');
-      // Navigate to login page
-      // this.router.navigate(['/login']);
-    }
   }
 }
