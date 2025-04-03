@@ -11,11 +11,11 @@ export const NGO_ROUTES: Routes = [
     children: [
       {
         path: '',
-        redirectTo: 'dashboard',
+        redirectTo: 'home',
         pathMatch: 'full'
       },
       {
-        path: 'dashboard',
+        path: 'home',
         component: NgoDashboardComponent
       },
       {
@@ -24,27 +24,27 @@ export const NGO_ROUTES: Routes = [
       },
       {
         path: 'events',
-        component: DashboardNotFoundComponent // Will be replaced with actual component later
+        component: DashboardNotFoundComponent
       },
       {
         path: 'volunteers',
-        component: DashboardNotFoundComponent // Will be replaced with actual component later
+        component: DashboardNotFoundComponent
       },
       {
         path: 'donations',
-        component: DashboardNotFoundComponent // Will be replaced with actual component later
+        component: DashboardNotFoundComponent
       },
       {
         path: 'insights',
-        component: DashboardNotFoundComponent // Will be replaced with actual component later
+        component: DashboardNotFoundComponent
       },
       {
         path: 'settings',
-        component: DashboardNotFoundComponent // Will be replaced with actual component later
+        component: DashboardNotFoundComponent
       },
       {
         path: '**',
-        component: DashboardNotFoundComponent // Use custom dashboard not found component
+        component: DashboardNotFoundComponent
       }
     ]
   }

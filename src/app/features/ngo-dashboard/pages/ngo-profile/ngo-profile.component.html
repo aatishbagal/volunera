@@ -67,7 +67,7 @@
             <i class="fas fa-{{stat.icon}} stat-icon"></i>
             <h3 class="stat-value">{{stat.label === 'Total Donations' ? formatCurrency(stat.value) : stat.value}}</h3>
             <p class="stat-label">{{stat.label}}</p>
-            <div class="stat-trend" *ngIf="stat.trend !== undefined">
+            <div class="stat-trend" *ngIf="stat.trend !== undefined && stat.trendDirection !== undefined">
               <i class="fas" [ngClass]="getTrendIconClass(stat.trendDirection)"></i>
               <span>{{stat.trend}}%</span>
             </div>

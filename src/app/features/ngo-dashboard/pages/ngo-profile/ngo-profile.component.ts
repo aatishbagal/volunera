@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 // Interface definitions
 interface Event {
@@ -27,7 +28,8 @@ interface Statistic {
   styleUrls: ['./ngo-profile.component.scss'],
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
 export class NgoProfileComponent implements OnInit {
@@ -119,7 +121,9 @@ export class NgoProfileComponent implements OnInit {
   }
   
   // Get trend icon class based on direction
-  getTrendIconClass(direction: 'up' | 'down' | 'stable'): string {
+  getTrendIconClass(direction?: 'up' | 'down' | 'stable'): string {
+    if (!direction) return 'fa-minus text-secondary'; // Default for undefined
+    
     switch (direction) {
       case 'up': return 'fa-arrow-up text-success';
       case 'down': return 'fa-arrow-down text-danger';

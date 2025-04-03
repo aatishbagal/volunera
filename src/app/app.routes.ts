@@ -62,6 +62,11 @@ export const routes: Routes = [
     path: 'ngo', 
     children: [
       { 
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
+      { 
         path: 'dashboard',
         loadChildren: () => import('./features/ngo-dashboard/ngo-dashboard.module').then(m => m.NgoDashboardModule),
         canActivate: [AuthGuard],

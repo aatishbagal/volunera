@@ -1,13 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDividerModule } from '@angular/material/divider';
-import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-ngo-dashboard-layout',
@@ -16,13 +9,7 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatDividerModule
+    RouterModule
   ]
 })
 export class NgoDashboardLayoutComponent implements OnInit {
@@ -47,11 +34,12 @@ export class NgoDashboardLayoutComponent implements OnInit {
 
   // Menu items for the sidebar
   menuItems = [
-    { label: 'Dashboard', icon: 'th-large', route: '/ngo/dashboard' },
-    { label: 'Events', icon: 'calendar', route: '/ngo/events' },
-    { label: 'Donations', icon: 'gift', route: '/ngo/donations' },
-    { label: 'Volunteers', icon: 'users', route: '/ngo/volunteers' },
-    { label: 'Insights', icon: 'chart-line', route: '/ngo/insights' }
+    { label: 'Dashboard', icon: 'th-large', route: '/ngo/dashboard/home' },
+    { label: 'Profile', icon: 'user-circle', route: '/ngo/dashboard/profile' },
+    { label: 'Events', icon: 'calendar', route: '/ngo/dashboard/events' },
+    { label: 'Donations', icon: 'gift', route: '/ngo/dashboard/donations' },
+    { label: 'Volunteers', icon: 'users', route: '/ngo/dashboard/volunteers' },
+    { label: 'Insights', icon: 'chart-line', route: '/ngo/dashboard/insights' }
   ];
 
   constructor() {}

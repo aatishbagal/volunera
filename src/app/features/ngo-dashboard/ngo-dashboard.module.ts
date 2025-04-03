@@ -1,21 +1,19 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
-import { NGO_ROUTES } from './ngo-dashboard.routes';
-
-// Import standalone components
+import { NgoDashboardLayoutComponent } from './components/layout/ngo-dashboard-layout.component';
 import { NgoDashboardComponent } from './pages/dashboard-home/ngo-dashboard.component';
-import { VolunteerManagementComponent } from './components/volunteer-management/volunteer-management.component';
-import { ActiveEventsComponent } from './components/active-events/active-events.component';
+import { NgoProfileComponent } from './pages/ngo-profile/ngo-profile.component';
+import { DashboardNotFoundComponent } from '../../shared/components/dashboard-not-found/dashboard-not-found.component';
+import { NGO_ROUTES } from './ngo-dashboard.routes';
 
 @NgModule({
   imports: [
+    CommonModule,
     RouterModule.forChild(NGO_ROUTES),
-    SharedModule,
-    // Import standalone components here instead of declaring them
+    NgoDashboardLayoutComponent,
     NgoDashboardComponent,
-    VolunteerManagementComponent,
-    ActiveEventsComponent
+    NgoProfileComponent
   ]
 })
 export class NgoDashboardModule { }

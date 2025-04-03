@@ -46,11 +46,11 @@
           
           <!-- Profile dropdown menu -->
           <div class="profile-dropdown" *ngIf="isProfileDropdownOpen">
-            <a [routerLink]="['/ngo/profile']" class="dropdown-item" (click)="isProfileDropdownOpen = false">
+            <a [routerLink]="['/ngo/dashboard/profile']" class="dropdown-item" (click)="isProfileDropdownOpen = false">
               <i class="fas fa-user-circle"></i>
               <span>View Profile</span>
             </a>
-            <a [routerLink]="['/ngo/settings']" class="dropdown-item" (click)="isProfileDropdownOpen = false">
+            <a [routerLink]="['/ngo/dashboard/settings']" class="dropdown-item" (click)="isProfileDropdownOpen = false">
               <i class="fas fa-cog"></i>
               <span>Settings</span>
             </a>

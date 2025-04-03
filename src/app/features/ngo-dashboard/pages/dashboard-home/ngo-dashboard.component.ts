@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { OrganizationStatsComponent } from '../../components/organization-stats/organization-stats.component';
 import { EventManagementComponent } from '../../components/event-management/event-management.component';
-import { SafePipe } from '../../shared/pipes/safe.pipe';
+import { SafePipe } from '../../../../shared/pipes/safe.pipe';
 
 // Interface definitions
 interface Event {
