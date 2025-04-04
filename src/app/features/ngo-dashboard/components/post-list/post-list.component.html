@@ -1,0 +1,114 @@
+<div class="posts-container">
+    <div class="posts-header">
+      <h2>Posts</h2>
+      <button class="create-post-btn" (click)="openPostForm()">
+        <i class="fas fa-plus"></i>
+        Create Post
+      </button>
+    </div>
+  
+    <!-- Create Post Form -->
+    <app-post-create *ngIf="showPostForm" (close)="closePostForm()"></app-post-create>
+  
+    <!-- Posts List -->
+    <div class="posts-list">
+      <div *ngIf="posts.length === 0" class="no-posts">
+        <p>No posts yet. Be the first to create a post!</p>
+      </div>
+  
+      <div *ngFor="let post of posts" class="post-card">
+        <div class="post-header">
+          <div class="post-author">
+            <img [src]="post.orgAvatar" alt="{{post.orgName}}" class="post-avatar">
+            <div class="post-info">
+              <span class="author-name">{{post.orgName}}</span>
+              <span class="post-date">{{post.date | date:'MMM d, yyyy, h:mm a'}}</span>
+            </div>
+          </div>
+          
+          <div class="post-actions" *ngIf="post.isOwnOrg">
+            <button class="action-btn" (click)="deletePost(post.id!)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="post-content">
+          <p>{{post.content}}</p>
+        </div>
+        
+        <div class="post-footer">
+          <div class="post-stats">
+            <div class="stat">
+              <i class="fas fa-heart"></i>
+              <span>{{post.likes}} likes</span>
+            </div>
+            <div class="stat">
+              <i class="fas fa-comment"></i>
+              <span>{{post.comments}} comments</span>
+            </div>
+          </div>
+          
+          <button class="comment-toggle-btn" (click)="toggleComments(post.id!)">
+            <i class="fas" [ngClass]="expandedPostId === post.id ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+            <span>{{ expandedPostId === post.id ? 'Hide comments' : 'Show comments' }}</span>
+          </button>
+        </div>
+        
+        <!-- Comments Section -->
+        <div class="comments-section" *ngIf="expandedPostId === post.id">
+          <!-- Loading State -->
+          <div *ngIf="loadingComments" class="loading-comments">
+            <i class="fas fa-spinner fa-spin"></i>
+            <span>Loading comments...</span>
+          </div>
+          
+          <!-- Comments List -->
+          <div *ngIf="!loadingComments" class="comments-list">
+            <div *ngIf="postComments[post.id!]?.length === 0" class="no-comments">
+              <p>No comments yet. Be the first to add a comment!</p>
+            </div>
+            
+            <div *ngFor="let comment of postComments[post.id!]" class="comment-item">
+              <div class="comment-header">
+                <div class="comment-author">
+                  <img [src]="comment.userAvatar" alt="{{comment.userName}}" class="comment-avatar">
+                  <div class="comment-info">
+                    <span class="author-name">{{comment.userName}}</span>
+                    <span class="comment-date">{{comment.date | date:'MMM d, h:mm a'}}</span>
+                  </div>
+                </div>
+                
+                <div class="comment-actions" *ngIf="comment.userId === post.orgId && post.isOwnOrg">
+                  <button class="action-btn" (click)="deleteComment(post.id!, comment.id!)">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="comment-content">
+                <p>{{comment.content}}</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Add Comment Form -->
+          <div class="add-comment-form">
+            <textarea 
+              [(ngModel)]="newComment" 
+              placeholder="Write a comment..." 
+              class="comment-input"
+              rows="2"
+            ></textarea>
+            <button 
+              class="submit-comment-btn" 
+              [disabled]="!newComment.trim()" 
+              (click)="submitComment(post.id!)"
+            >
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

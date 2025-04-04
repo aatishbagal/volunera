@@ -1,54 +1,50 @@
-// Variables
+
 $sidebar-width: 260px;
 $sidebar-collapsed-width: 70px;
-$primary-color: #021a02; // Dark green
-$accent-color: #337060; // Medium green
+$primary-color: #021a02;
+$accent-color: #337060;
 $text-color: #1f2937;
 $text-light: #9ca3af;
 $background-light: #f9fafb;
-$background-dark: #021a02; // Sidebar color
+$background-dark: #021a02;
 $card-background: #ffffff;
 $success-color: #10b981;
 $danger-color: #ef4444;
 $warning-color: #f59e0b;
 $secondary-color: #6b7280;
-$border-radius: 36px; // Very rounded corners matching image
-$card-border-radius: 36px; // Very rounded corners for cards
-$button-radius: 32px; // For buttons and smaller elements
-$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
+$border-radius: 36px; 
+$card-border-radius: 36px; 
+$button-radius: 32px; 
+$box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 $mobile-breakpoint: 768px;
 
-// Global styles
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-// Main container
 .dashboard-container {
   display: flex;
   height: 100vh;
   overflow: hidden;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background-color: $background-dark; // Make the entire background match the sidebar
-  position: relative; // For absolute positioning of elements
+  background-color: $background-dark;
+  position: relative;
 }
 
-// Content wrapper to create the "white area inside brown area" effect
 .content-wrapper {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: $background-light;
   border-radius: $border-radius 0 0 $border-radius;
-  margin: 8px 8px 8px 0; // Add right margin to prevent shadow clipping
-  overflow: hidden; // Keep content inside the rounded corners
-  min-width: 0; // Prevent horizontal scrolling
-  box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1); // Add inset shadow instead of outer shadow
+  margin: 8px 8px 8px 0;
+  overflow: hidden;
+  min-width: 0;
+  box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1); 
 }
 
-// Mobile nav close button
 .mobile-nav-close {
   position: absolute;
   top: 20px;
@@ -61,7 +57,7 @@ $mobile-breakpoint: 768px;
   border: none;
   cursor: pointer;
   z-index: 1001;
-  display: none; // Hidden by default, shown in mobile
+  display: none; 
   align-items: center;
   justify-content: center;
   
@@ -70,7 +66,6 @@ $mobile-breakpoint: 768px;
   }
 }
 
-// Sidebar styles
 .sidebar {
   width: $sidebar-width;
   min-width: $sidebar-width;
@@ -83,8 +78,8 @@ $mobile-breakpoint: 768px;
   overflow-x: hidden;
   padding: 24px 20px;
   transition: all 0.3s ease;
-  position: relative; // For the close button
-  z-index: 1000; // Ensure sidebar sits above content
+  position: relative;
+  z-index: 1000; 
   
   .sidebar-header {
     padding-bottom: 32px;
@@ -194,7 +189,7 @@ $mobile-breakpoint: 768px;
         color: white;
         font-size: 0.75rem;
         font-weight: 700;
-        overflow: hidden; // Ensure circular shape
+        overflow: hidden; 
         
         .progress-indicator {
           position: absolute;

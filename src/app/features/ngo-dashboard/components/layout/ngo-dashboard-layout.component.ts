@@ -1,6 +1,10 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../../../app/auth/services/auth.service';
+import { NgoService, NgoProfile } from '../../../../../app/auth/services/ngo.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { ToastService } from '../../../../shared/global-services/toast.service';
 
 @Component({
   selector: 'app-ngo-dashboard-layout',
@@ -9,9 +13,11 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    MatSnackBarModule
   ]
 })
+
 export class NgoDashboardLayoutComponent implements OnInit {
   // Sidebar state - we will only use this on mobile now
   isSidebarCollapsed = false;
@@ -24,12 +30,15 @@ export class NgoDashboardLayoutComponent implements OnInit {
   // Logout confirmation state
   showLogoutConfirmation = false;
 
-  // Organization data
-  organization = {
-    name: 'GreenEarth Foundation',
-    email: 'info@greenearthfoundation.org',
-    avatar: '/assets/images/orgs/greenearth.png',
-    profileCompletion: 75
+  // Organization data (will be populated from Firestore)
+  organization: NgoProfile | null = null;
+
+  // Default fallback in case data isn't loaded
+  defaultOrganization = {
+    name: 'My Organization',
+    email: 'loading@example.com',
+    avatar: 'assets/images/orgs/default-ngo.png',
+    profileCompletion: 30
   };
 
   // Menu items for the sidebar
@@ -42,10 +51,24 @@ export class NgoDashboardLayoutComponent implements OnInit {
     { label: 'Insights', icon: 'chart-line', route: '/ngo/dashboard/insights' }
   ];
 
-  constructor() {}
+  constructor(
+    private authService: AuthService,
+    private ngoService: NgoService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.checkScreenSize();
+    this.loadNgoProfile();
+  }
+  
+  // Load NGO profile data from Firestore
+  private loadNgoProfile(): void {
+    this.ngoService.currentNgo$.subscribe(ngo => {
+      if (ngo) {
+        this.organization = ngo;
+      }
+    });
   }
 
   // Check screen size on window resize
@@ -111,10 +134,23 @@ export class NgoDashboardLayoutComponent implements OnInit {
   handleLogout(confirmed: boolean): void {
     this.showLogoutConfirmation = false;
     if (confirmed) {
-      // Handle actual logout logic here
-      console.log('Organization logged out');
-      // Navigate to login page
-      // this.router.navigate(['/login']);
+      // Handle actual logout
+      this.authService.logout()
+        .then(() => {
+          console.log('Organization logged out');
+          
+          // Show toast notification
+          this.toastService.show('Logged out successfully', 'success');
+          
+          // Wait a moment for the toast to be visible before redirecting
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
+        })
+        .catch(error => {
+          console.error('Logout error:', error);
+          this.toastService.show('Logout failed. Please try again.', 'error');
+        });
     }
   }
 }
