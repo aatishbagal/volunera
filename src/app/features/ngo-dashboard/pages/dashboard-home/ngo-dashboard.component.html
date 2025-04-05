@@ -23,43 +23,150 @@
           <a href="javascript:void(0)" class="card-link">View All</a>
         </div>
         <div class="card-content">
-          <div class="posts-list">
-            <div *ngFor="let post of allNgoPosts" class="post-item">
-              <div class="post-header">
-                <div class="post-organization">
-                  <img [src]="post.orgAvatar" alt="Organization Logo" class="post-org-avatar">
-                  <div>
-                    <span class="post-org-name">{{post.orgName}}</span>
-                    <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+          <!-- Post Creation Modal with backdrop overlay -->
+          <!-- Use this when showing the post creation dialog -->
+          <div *ngIf="showPostForm" class="modal-backdrop" (click)="closePostForm()">
+            <div class="post-create-modal" (click)="$event.stopPropagation()">
+              <div class="modal-header">
+                <h2 class="modal-title">Create New Post</h2>
+                <button type="button" class="close-btn" (click)="closePostForm()">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+              
+              <form [formGroup]="postForm" (ngSubmit)="submitPost()">
+                <div class="modal-body">
+                  <div class="form-group">
+                    <label for="content">Post Content</label>
+                    <textarea 
+                      id="content" 
+                      formControlName="content" 
+                      class="content-textarea" 
+                      placeholder="What would you like to share?"
+                      rows="6"
+                    ></textarea>
+                    <div class="char-count" [ngClass]="{
+                      'warning': postForm.get('content')?.value?.length > 400,
+                      'error': postForm.get('content')?.value?.length > 500
+                    }">
+                      {{postForm.get('content')?.value?.length || 0}}/500
+                    </div>
+                    
+                    <div *ngIf="postForm.get('content')?.invalid && (postForm.get('content')?.dirty || postForm.get('content')?.touched)" class="error-message">
+                      <span *ngIf="postForm.get('content')?.errors?.['required']">
+                        Content is required
+                      </span>
+                      <span *ngIf="postForm.get('content')?.errors?.['maxlength']">
+                        Content cannot exceed 500 characters
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div class="post-actions" *ngIf="post.isOwnOrg">
-                  <button class="action-btn" (click)="viewPostInsights(post)">
-                    <i class="fas fa-chart-bar"></i>
+                
+                <div class="modal-footer">
+                  <button type="button" class="cancel-btn" (click)="closePostForm()">Cancel</button>
+                  <button 
+                    type="submit" 
+                    class="submit-btn" 
+                    [disabled]="postForm.invalid || isSubmitting"
+                  >
+                    <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+                    <span>Post</span>
                   </button>
                 </div>
-              </div>
-              <div class="post-content">
-                <p class="post-text">{{post.content}}</p>
-                <div *ngIf="post.image" class="post-image">
-                  <img [src]="post.image" alt="Post image">
-                </div>
-              </div>
-              <div class="post-stats">
-                <div class="stat-group">
-                  <i class="fas fa-heart"></i>
-                  <span>{{post.likes}}</span>
-                </div>
-                <div class="stat-group">
-                  <i class="fas fa-comment"></i>
-                  <span>{{post.comments}}</span>
-                </div>
-                <div class="stat-group">
-                  <i class="fas fa-eye"></i>
-                  <span>{{post.reach}}</span>
-                </div>
-              </div>
+              </form>
             </div>
+          </div>
+      
+          <!-- Posts list with loading state -->
+          <div class="posts-list">
+            <!-- Loading indicator -->
+            <div *ngIf="isLoadingPosts" class="loading-posts">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Loading posts...</span>
+            </div>
+            
+            <!-- No posts message -->
+            <div *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length === 0" class="no-posts">
+              <p>No posts yet. Create your first post to share updates with your volunteers!</p>
+            </div>
+            
+            <!-- Show Firestore posts if available -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length > 0">
+              <div *ngFor="let post of firestorePosts" class="post-item">
+                <div class="post-header">
+                  <div class="post-organization">
+                    <img [src]="post.orgAvatar" alt="Organization Logo" class="post-org-avatar">
+                    <div>
+                      <span class="post-org-name">{{post.orgName}}</span>
+                      <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+                    </div>
+                  </div>
+                  <div class="post-actions" *ngIf="post.isOwnOrg">
+                    <button class="action-btn" (click)="viewPostInsights(post)">
+                      <i class="fas fa-chart-bar"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                </div>
+                <div class="post-stats">
+                  <div class="stat-group">
+                    <i class="fas fa-heart"></i>
+                    <span>{{post.likes}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-eye"></i>
+                    <span>{{post.reach || 0}}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            
+            <!-- Fallback to static posts ONLY if no Firestore posts are available and not loading -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length > 0">
+              <div *ngFor="let post of allNgoPosts" class="post-item">
+                <div class="post-header">
+                  <div class="post-organization">
+                    <img [src]="post.orgAvatar" alt="Organization Logo" class="post-org-avatar">
+                    <div>
+                      <span class="post-org-name">{{post.orgName}}</span>
+                      <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+                    </div>
+                  </div>
+                  <div class="post-actions" *ngIf="post.isOwnOrg">
+                    <button class="action-btn" (click)="viewPostInsights(post)">
+                      <i class="fas fa-chart-bar"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                  <div *ngIf="post.image" class="post-image">
+                    <img [src]="post.image" alt="Post image">
+                  </div>
+                </div>
+                <div class="post-stats">
+                  <div class="stat-group">
+                    <i class="fas fa-heart"></i>
+                    <span>{{post.likes}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-eye"></i>
+                    <span>{{post.reach}}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
           </div>
           
           <div class="create-post-btn-container">
@@ -72,7 +179,7 @@
       </section>
     </div>
 
-    <!-- Right Column - Events and Donations (as requested) -->
+    <!-- Right Column - Empty Events and Donations -->
     <div class="column right-column">
       <!-- Event Management Card -->
       <section class="card events-card">
@@ -81,37 +188,10 @@
           <a href="javascript:void(0)" class="card-link" (click)="viewAllEvents()">View All</a>
         </div>
         <div class="card-content">
-          <div class="events-list">
-            <div *ngFor="let event of upcomingEvents" class="event-item">
-              <div class="event-date">
-                <span class="date-day">{{event.date | date:'d'}}</span>
-                <span class="date-month">{{event.date | date:'MMM'}}</span>
-              </div>
-              <div class="event-details">
-                <h4 class="event-title">{{event.title}}</h4>
-                <p class="event-location">
-                  <i class="fas fa-map-marker-alt"></i>
-                  {{event.location}}
-                </p>
-                <div class="event-stats">
-                  <div class="registration-progress">
-                    <div class="progress-bar">
-                      <div class="progress" [style.width.%]="(event.registeredVolunteers / event.capacity) * 100"></div>
-                    </div>
-                    <span class="progress-text">{{event.registeredVolunteers}}/{{event.capacity}} registered</span>
-                  </div>
-                </div>
-              </div>
-              <div class="event-actions">
-                <button class="event-action-btn manage-btn">
-                  <i class="fas fa-cog"></i>
-                  <span>Manage</span>
-                </button>
-              </div>
-            </div>
-          </div>
-          
-          <div class="create-event-btn-container">
+          <!-- Empty state for events -->
+          <div class="empty-state">
+            <i class="fas fa-calendar-alt"></i>
+            <p>No upcoming events yet</p>
             <button class="create-event-btn" (click)="createEvent()">
               <i class="fas fa-plus"></i>
               <span>Create New Event</span>
@@ -127,24 +207,10 @@
           <a href="javascript:void(0)" class="card-link" (click)="viewAllDonations()">View All</a>
         </div>
         <div class="card-content">
-          <div class="donations-list">
-            <div *ngFor="let donation of recentDonations" class="donation-item">
-              <div class="donation-icon" [ngClass]="donation.type">
-                <i class="fas" [ngClass]="donation.type === 'financial' ? 'fa-dollar-sign' : 'fa-box'"></i>
-              </div>
-              <div class="donation-details">
-                <h4 class="donation-title">
-                  {{donation.type === 'financial' ? '$' + donation.amount : donation.items}}
-                </h4>
-                <p class="donation-info">
-                  <span class="donor-name">{{donation.donor}}</span> •
-                  <span class="donation-date">{{donation.date | date:'mediumDate'}}</span>
-                </p>
-              </div>
-              <div class="donation-status" [ngClass]="donation.status">
-                {{donation.status}}
-              </div>
-            </div>
+          <!-- Empty state for donations -->
+          <div class="empty-state">
+            <i class="fas fa-hand-holding-heart"></i>
+            <p>No donations received yet</p>
           </div>
         </div>
       </section>

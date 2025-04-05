@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgoService, NgoProfile } from '../../../../../app/auth/services/ngo.service';
+import { AuthService } from '../../../../../app/auth/services/auth.service';
 
 // Interface definitions
 interface Event {
@@ -29,28 +32,40 @@ interface Statistic {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule
+    RouterModule,
+    FormsModule
   ]
 })
 export class NgoProfileComponent implements OnInit {
-  // Organization data
-  organization = {
-    name: 'GreenEarth Foundation',
-    email: 'info@greenearthfoundation.org',
-    avatar: '/assets/images/orgs/greenearth.png',
-    profileCompletion: 75,
-    description: 'GreenEarth Foundation is dedicated to environmental conservation through community action. We focus on urban reforestation, park cleanups, and environmental education programs to create a more sustainable future.',
-    website: 'www.greenearthfoundation.org',
-    phone: '+1 (555) 123-4567',
-    address: '123 Green Street, New York, NY 10001',
-    foundedYear: 2015,
+  // Organization data (will be populated from Firestore)
+  organization: NgoProfile | null = null;
+  
+  // Default organization data as fallback
+  defaultOrganization = {
+    name: 'My Organization',
+    email: 'loading@example.com',
+    avatar: 'assets/images/orgs/default-ngo.png',
+    profileCompletion: 30,
+    description: 'Organization description not added yet.',
+    website: '',
+    phone: '',
+    address: '',
+    foundedYear: new Date().getFullYear(),
     socialMedia: {
-      facebook: 'greenearthfoundation',
-      twitter: 'greenearth',
-      instagram: 'greenearthfdn'
+      facebook: '',
+      twitter: '',
+      instagram: ''
     },
-    categories: ['Environment', 'Conservation', 'Education']
+    categories: ['General']
   };
+  
+  // Current year for template use
+  currentYear = new Date().getFullYear();
+  
+  // Editing state
+  isEditProfileOpen = false;
+  editForm: Partial<NgoProfile> = {};
+  newCategory: string = '';
 
   // Stats data
   organizationStats: Statistic[] = [
@@ -109,10 +124,23 @@ export class NgoProfileComponent implements OnInit {
     }
   ];
 
-  constructor() {}
+  constructor(
+    private ngoService: NgoService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    // Initialize profile component
+    // Load NGO profile data
+    this.loadNgoProfile();
+  }
+  
+  // Load NGO profile data from service
+  private loadNgoProfile(): void {
+    this.ngoService.currentNgo$.subscribe(ngo => {
+      if (ngo) {
+        this.organization = ngo;
+      }
+    });
   }
   
   // Format currency for display
@@ -131,14 +159,81 @@ export class NgoProfileComponent implements OnInit {
     }
   }
   
-  // Navigate to edit profile
+  // Get current year for template use
+  getCurrentYear(): number {
+    return this.currentYear;
+  }
+  
+  // Open edit profile popup
   editProfile(): void {
-    console.log('Navigate to edit profile');
-    // This would navigate to the edit profile page
+    // Initialize form with current values
+    this.editForm = {
+      name: this.organization?.name || this.defaultOrganization.name,
+      description: this.organization?.description || this.defaultOrganization.description,
+      website: this.organization?.website || this.defaultOrganization.website,
+      phone: this.organization?.phone || this.defaultOrganization.phone,
+      address: this.organization?.address || this.defaultOrganization.address,
+      foundedYear: this.organization?.foundedYear || this.defaultOrganization.foundedYear,
+      categories: [...(this.organization?.categories || this.defaultOrganization.categories)],
+      socialMedia: {
+        facebook: this.organization?.socialMedia?.facebook || '',
+        twitter: this.organization?.socialMedia?.twitter || '',
+        instagram: this.organization?.socialMedia?.instagram || ''
+      }
+    };
+    
+    this.isEditProfileOpen = true;
+  }
+  
+  // Close edit profile popup
+  closeEditProfile(): void {
+    this.isEditProfileOpen = false;
+  }
+  
+  // Save profile changes
+  async saveProfile(): Promise<void> {
+    try {
+      // Save changes to Firestore
+      const success = await this.ngoService.updateNgoProfile(this.editForm);
+      
+      if (success) {
+        // Close the popup on success
+        this.isEditProfileOpen = false;
+      } else {
+        // Handle error
+        console.error('Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error);
+    }
+  }
+  
+  // Add a new category
+  addCategory(category: string): void {
+    if (!category || category.trim() === '') return;
+    
+    if (!this.editForm.categories) {
+      this.editForm.categories = [];
+    }
+    
+    if (!this.editForm.categories.includes(category)) {
+      this.editForm.categories.push(category.trim());
+    }
+    
+    this.newCategory = '';
+  }
+  
+  // Remove a category
+  removeCategory(category: string): void {
+    if (this.editForm.categories) {
+      this.editForm.categories = this.editForm.categories.filter(c => c !== category);
+    }
   }
   
   // Format social media URL
-  getSocialUrl(platform: string, username: string): string {
+  getSocialUrl(platform: string, username?: string): string {
+    if (!username) return '#';
+    
     switch (platform) {
       case 'facebook': return `https://facebook.com/${username}`;
       case 'twitter': return `https://twitter.com/${username}`;

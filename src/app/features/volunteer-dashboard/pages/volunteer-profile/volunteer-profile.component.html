@@ -5,14 +5,14 @@
     <div class="card-content">
       <div class="profile-header">
         <div class="profile-avatar-container">
-          <img [src]="user.avatar" alt="User Avatar" class="profile-avatar">
+          <img [src]="user?.photoURL || defaultUser.photoURL" alt="User Avatar" class="profile-avatar">
           <button class="edit-profile-btn">
             <i class="fas fa-camera"></i>
           </button>
         </div>
         <div class="profile-details">
-          <h1 class="profile-name">{{user.name}}</h1>
-          <p class="profile-bio">{{user.bio}}</p>
+          <h1 class="profile-name">{{user?.displayName || defaultUser.displayName}}</h1>
+          <p class="profile-bio">{{user?.bio || defaultUser.bio}}</p>
           <button class="edit-profile-btn primary">
             <i class="fas fa-edit"></i>
             <span>Edit Profile</span>
@@ -20,7 +20,7 @@
         </div>
         <div class="level-card">
           <div class="level-header">
-            <span class="level-number">Level {{user.level}}</span>
+            <span class="level-number">Level {{user?.level || defaultUser.level}}</span>
             <span class="level-title">{{getLevelTitle()}}</span>
           </div>
           <div class="level-progress-container">
@@ -28,8 +28,8 @@
               <div class="level-progress" [style.width.%]="getProgressToNextLevel()"></div>
             </div>
             <div class="level-progress-text">
-              <span>{{user.totalPoints}} points</span>
-              <span>{{getPointsToNextLevel()}} points to Level {{user.level + 1}}</span>
+              <span>{{user?.totalPoints || defaultUser.totalPoints}} points</span>
+              <span>{{getPointsToNextLevel()}} points to Level {{(user?.level || defaultUser.level) + 1}}</span>
             </div>
           </div>
         </div>
@@ -68,10 +68,16 @@
   <section class="card activity-card">
     <div class="card-header">
       <h2 class="card-title">My Activity</h2>
-      <a href="javascript:void(0)" class="card-link">View All</a>
+      <a [routerLink]="['/volunteer/dashboard/activities']" class="card-link">View All</a>
     </div>
     <div class="card-content">
-      <div class="activity-list">
+      <!-- Loading indicator -->
+      <div *ngIf="isLoadingActivities" class="loading-activities">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span>Loading activities...</span>
+      </div>
+      
+      <div class="activity-list" *ngIf="!isLoadingActivities">
         <div *ngFor="let activity of activityHistory" class="activity-item">
           <div class="activity-date">
             <span class="date-day">{{activity.date | date:'d'}}</span>
@@ -101,11 +107,11 @@
       </div>
       
       <!-- Empty state if no activities -->
-      <div *ngIf="activityHistory.length === 0" class="empty-state">
+      <div *ngIf="!isLoadingActivities && activityHistory.length === 0" class="empty-state">
         <i class="fas fa-calendar-times empty-icon"></i>
         <h3>No activities yet</h3>
         <p>Start volunteering to see your activity history here.</p>
-        <button class="primary-button">Explore Events</button>
+        <button class="primary-button" [routerLink]="['/volunteer/dashboard/events']">Explore Events</button>
       </div>
     </div>
   </section>

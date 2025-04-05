@@ -37,8 +37,8 @@
     <div class="sidebar-footer">
       <div class="profile-completion">
         <div class="completion-circle">
-          <div class="progress-indicator" [style.width.%]="user.profileCompletion"></div>
-          <span>{{user.profileCompletion}}%</span>
+          <div class="progress-indicator" [style.width.%]="getProfileCompletion()"></div>
+          <span>{{getProfileCompletion()}}%</span>
         </div>
         <div class="completion-text">
           <p>Complete profile</p>
@@ -49,10 +49,10 @@
       <!-- Profile dropdown with options -->
       <div class="user-profile-container">
         <div class="user-profile" (click)="toggleProfileDropdown()">
-          <img [src]="user.avatar" alt="User Avatar" class="avatar">
+          <img [src]="user?.photoURL || defaultUser.photoURL" alt="User Avatar" class="avatar">
           <div class="user-info">
-            <p class="user-name">{{user.name}}</p>
-            <p class="user-email">{{user.email}}</p>
+            <p class="user-name">{{user?.displayName || defaultUser.displayName}}</p>
+            <p class="user-email">{{user?.email || defaultUser.email}}</p>
           </div>
           <i class="fas fa-chevron-down profile-chevron"></i>
         </div>

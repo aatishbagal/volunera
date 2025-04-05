@@ -1,4 +1,3 @@
-
 $sidebar-width: 260px;
 $sidebar-collapsed-width: 70px;
 $primary-color: #021a02;
@@ -764,6 +763,21 @@ $mobile-breakpoint: 768px;
 
 // Activity card styling
 .activity-card {
+  .loading-activities {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    color: $text-light;
+    
+    i {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: $accent-color;
+    }
+  }
+  
   .activity-list {
     display: flex;
     flex-direction: column;

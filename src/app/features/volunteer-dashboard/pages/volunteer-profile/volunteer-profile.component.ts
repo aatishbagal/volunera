@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { AuthService, UserProfile } from '../../../../auth/services/auth.service';
+import { Subscription } from 'rxjs';
+import { Firestore, doc, getDoc, collection, query, where, getDocs, orderBy, limit } from '@angular/fire/firestore';
 
 // Interface definitions
 interface Activity {
-  id: number;
+  id: string;
   eventName: string;
   organization: string;
   date: Date;
@@ -13,89 +17,51 @@ interface Activity {
   status: 'completed' | 'upcoming' | 'cancelled';
 }
 
+interface VolunteerProfile extends UserProfile {
+  bio?: string;
+  level?: number;
+  totalPoints?: number;
+  nextLevelPoints?: number;
+  profileCompletion?: number;
+}
+
 @Component({
   selector: 'app-volunteer-profile',
   templateUrl: './volunteer-profile.component.html',
   styleUrls: ['./volunteer-profile.component.scss'],
   standalone: true,
   imports: [
-    CommonModule
+    CommonModule,
+    RouterModule
   ]
 })
-export class VolunteerProfileComponent implements OnInit {
+export class VolunteerProfileComponent implements OnInit, OnDestroy {
   // User data
-  user = {
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    avatar: '/assets/images/avatar.png',
-    bio: 'Passionate about environmental conservation and community building. Love to spend my weekends volunteering and making a difference.',
-    profileCompletion: 85,
-    level: 4,
-    totalPoints: 780,
-    nextLevelPoints: 1000
+  user: VolunteerProfile | null = null;
+  
+  // Default user data as fallback
+  defaultUser = {
+    displayName: 'Volunteer',
+    email: 'loading@example.com',
+    photoURL: '/assets/images/avatar.png',
+    bio: 'Passionate about volunteering and making a difference.',
+    level: 1,
+    totalPoints: 0,
+    nextLevelPoints: 100,
+    profileCompletion: 30
   };
 
-  // Stats data
+  // Stats data - will be calculated based on activity
   stats = {
-    eventsThisMonth: 3,
-    pointsThisMonth: 120,
-    totalEvents: 12,
-    totalPoints: 780,
+    eventsThisMonth: 0,
+    pointsThisMonth: 0,
+    totalEvents: 0,
+    totalPoints: 0,
   };
 
-  // Activity history data
-  activityHistory: Activity[] = [
-    {
-      id: 1,
-      eventName: 'Community Garden Planting',
-      organization: 'GreenEarth Foundation',
-      date: new Date(2025, 2, 15),
-      points: 45,
-      role: 'Team Lead',
-      location: 'Central Park, NY',
-      status: 'completed'
-    },
-    {
-      id: 2,
-      eventName: 'Tech Literacy Workshop',
-      organization: 'Tech4All',
-      date: new Date(2025, 2, 8),
-      points: 35,
-      role: 'Instructor',
-      location: 'Downtown Library',
-      status: 'completed'
-    },
-    {
-      id: 3,
-      eventName: 'Food Drive',
-      organization: 'Community Helpers',
-      date: new Date(2025, 2, 1),
-      points: 40,
-      role: 'Volunteer',
-      location: 'Community Center',
-      status: 'completed'
-    },
-    {
-      id: 4,
-      eventName: 'Park Cleanup',
-      organization: 'GreenEarth Foundation',
-      date: new Date(2025, 1, 22),
-      points: 30,
-      role: 'Volunteer',
-      location: 'Riverside Park',
-      status: 'completed'
-    },
-    {
-      id: 5,
-      eventName: 'Senior Care Visit',
-      organization: 'Care For All',
-      date: new Date(2025, 1, 15),
-      points: 50,
-      role: 'Lead Volunteer',
-      location: 'Sunset Retirement Home',
-      status: 'completed'
-    }
-  ];
+  // Activity history data - will be fetched from Firestore
+  activityHistory: Activity[] = [];
+  isLoadingActivities = true;
 
   // Level system mechanics
   levelSystem = [
@@ -111,37 +77,203 @@ export class VolunteerProfileComponent implements OnInit {
     { level: 10, pointsRequired: 5000, title: 'Legend' }
   ];
 
-  constructor() {}
+  private userSubscription: Subscription | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private firestore: Firestore
+  ) {}
 
   ngOnInit(): void {
-    // Initialize the profile page
+    this.loadUserProfile();
+  }
+  
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  // Load user profile and activities
+  private loadUserProfile(): void {
+    this.userSubscription = this.authService.currentUser$.subscribe(async (userProfile) => {
+      if (userProfile) {
+        // Load volunteer profile data
+        try {
+          const volunteerDoc = doc(this.firestore, 'volunteers', userProfile.uid);
+          const volunteerSnapshot = await getDoc(volunteerDoc);
+          
+          if (volunteerSnapshot.exists()) {
+            // Combine user profile with volunteer specific data
+            this.user = {
+              ...userProfile,
+              ...volunteerSnapshot.data() as Partial<VolunteerProfile>
+            };
+            
+            // Calculate level if not set
+            if (!this.user.level || !this.user.nextLevelPoints) {
+              this.calculateUserLevel();
+            }
+          } else {
+            // No volunteer profile yet, use basic user data
+            this.user = {
+              ...userProfile,
+              bio: this.defaultUser.bio,
+              level: this.defaultUser.level,
+              totalPoints: this.defaultUser.totalPoints,
+              nextLevelPoints: this.defaultUser.nextLevelPoints
+            };
+          }
+          
+          // Load activity history
+          this.loadActivityHistory(userProfile.uid);
+          
+        } catch (error) {
+          console.error('Error loading volunteer profile:', error);
+          this.user = {
+            ...userProfile,
+            ...this.defaultUser
+          };
+        }
+      } else {
+        // No user logged in or loading
+        this.user = null;
+      }
+    });
+  }
+  
+  // Load volunteer activity history
+  private async loadActivityHistory(userId: string): Promise<void> {
+    this.isLoadingActivities = true;
+    
+    try {
+      const activitiesRef = collection(this.firestore, 'activities');
+      const activitiesQuery = query(
+        activitiesRef,
+        where('volunteerId', '==', userId),
+        orderBy('date', 'desc'),
+        limit(10)
+      );
+      
+      const activitiesSnapshot = await getDocs(activitiesQuery);
+      
+      // Process activities
+      const activities: Activity[] = [];
+      let totalPoints = 0;
+      let eventsThisMonth = 0;
+      let pointsThisMonth = 0;
+      
+      const now = new Date();
+      const thisMonth = now.getMonth();
+      const thisYear = now.getFullYear();
+      
+      activitiesSnapshot.forEach((doc) => {
+        const activity = doc.data() as any;
+        const activityDate = activity.date.toDate(); // Convert Firestore timestamp to JS Date
+        
+        // Check if activity is from this month
+        if (activityDate.getMonth() === thisMonth && activityDate.getFullYear() === thisYear) {
+          eventsThisMonth++;
+          pointsThisMonth += activity.points;
+        }
+        
+        totalPoints += activity.points;
+        
+        activities.push({
+          id: doc.id,
+          eventName: activity.eventName,
+          organization: activity.organizationName,
+          date: activityDate,
+          points: activity.points,
+          role: activity.role || 'Volunteer',
+          location: activity.location,
+          status: activity.status
+        });
+      });
+      
+      // Update state
+      this.activityHistory = activities;
+      this.stats = {
+        eventsThisMonth,
+        pointsThisMonth,
+        totalEvents: activities.length,
+        totalPoints
+      };
+      
+      // If no totalPoints was set in user profile, use the calculated one
+      if (this.user && (!this.user.totalPoints || this.user.totalPoints !== totalPoints)) {
+        this.user.totalPoints = totalPoints;
+        this.calculateUserLevel();
+      }
+      
+    } catch (error) {
+      console.error('Error loading activity history:', error);
+    } finally {
+      this.isLoadingActivities = false;
+    }
+  }
+  
+  // Calculate user level based on total points
+  private calculateUserLevel(): void {
+    if (!this.user) return;
+    
+    const totalPoints = this.user.totalPoints || 0;
+    
+    // Find the highest level the user has reached
+    let currentLevel = 1;
+    let nextLevelPoints = 100;
+    
+    for (let i = this.levelSystem.length - 1; i >= 0; i--) {
+      if (totalPoints >= this.levelSystem[i].pointsRequired) {
+        currentLevel = this.levelSystem[i].level;
+        
+        // Set next level points
+        if (i < this.levelSystem.length - 1) {
+          nextLevelPoints = this.levelSystem[i + 1].pointsRequired;
+        } else {
+          // Max level reached
+          nextLevelPoints = totalPoints;
+        }
+        
+        break;
+      }
+    }
+    
+    this.user.level = currentLevel;
+    this.user.nextLevelPoints = nextLevelPoints;
   }
   
   // Get level title based on points
   getLevelTitle(): string {
-    const currentLevel = this.levelSystem.find(level => level.level === this.user.level);
+    if (!this.user) return this.levelSystem[0].title;
+    
+    const currentLevel = this.levelSystem.find(level => level.level === this.user?.level);
     return currentLevel ? currentLevel.title : 'Volunteer';
   }
   
   // Calculate progress percentage to next level
   getProgressToNextLevel(): number {
-    const currentLevel = this.levelSystem.find(level => level.level === this.user.level);
-    const nextLevel = this.levelSystem.find(level => level.level === this.user.level + 1);
+    if (!this.user) return 0;
+    
+    const currentLevel = this.levelSystem.find(level => level.level === this.user?.level);
+    const nextLevel = this.levelSystem.find(level => level.level === (this.user?.level || 0) + 1);
     
     if (!currentLevel || !nextLevel) return 100;
     
     const pointsForCurrentLevel = currentLevel.pointsRequired;
     const pointsForNextLevel = nextLevel.pointsRequired;
     const pointsNeeded = pointsForNextLevel - pointsForCurrentLevel;
-    const pointsAchieved = this.user.totalPoints - pointsForCurrentLevel;
+    const pointsAchieved = (this.user?.totalPoints || 0) - pointsForCurrentLevel;
     
     return Math.min(Math.floor((pointsAchieved / pointsNeeded) * 100), 100);
   }
   
   // Get points needed for next level
   getPointsToNextLevel(): number {
-    const nextLevel = this.levelSystem.find(level => level.level === this.user.level + 1);
+    if (!this.user) return 100;
+    
+    const nextLevel = this.levelSystem.find(level => level.level === (this.user?.level || 0) + 1);
     if (!nextLevel) return 0;
-    return nextLevel.pointsRequired - this.user.totalPoints;
+    return nextLevel.pointsRequired - (this.user?.totalPoints || 0);
   }
 }

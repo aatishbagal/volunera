@@ -397,6 +397,212 @@ $mobile-breakpoint: 768px;
   }
 }
 
+// Modal overlay styling
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+// Modal card styling
+.modal-card {
+  max-width: 600px;
+  width: 90%;
+  margin: 0 auto;
+  max-height: 90vh;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1101;
+  overflow-y: auto;
+  
+  .card-header {
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 2;
+  }
+  
+  .card-content {
+    padding: 24px;
+  }
+  
+  .modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px 24px;
+    border-top: 1px solid #e5e7eb;
+    position: sticky;
+    bottom: 0;
+    background-color: white;
+    z-index: 2;
+    
+    .modal-btn {
+      padding: 10px 20px;
+      border-radius: $button-radius;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-left: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      
+      &.cancel {
+        background-color: #f3f4f6;
+        color: $text-color;
+        border: none;
+        
+        &:hover {
+          background-color: darken(#f3f4f6, 5%);
+        }
+      }
+      
+      &.confirm {
+        background-color: $accent-color;
+        color: white;
+        border: none;
+        
+        &:hover {
+          background-color: darken($accent-color, 5%);
+        }
+      }
+    }
+  }
+}
+
+// Form styling
+.edit-profile-form {
+  .form-section {
+    margin-bottom: 24px;
+    
+    .section-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: $primary-color;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+  }
+  
+  .form-group {
+    margin-bottom: 16px;
+    
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: $text-color;
+    }
+    
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: $button-radius;
+      border: 1px solid #d1d5db;
+      font-size: 0.875rem;
+      transition: border-color 0.2s ease;
+      
+      &:focus {
+        outline: none;
+        border-color: $accent-color;
+        box-shadow: 0 0 0 2px rgba($accent-color, 0.2);
+      }
+    }
+    
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+  }
+  
+  // Social media inputs
+  .social-input-group {
+    display: flex;
+    align-items: center;
+    
+    .social-prefix {
+      background-color: #f3f4f6;
+      padding: 10px 12px;
+      border-radius: $button-radius 0 0 $button-radius;
+      border: 1px solid #d1d5db;
+      border-right: none;
+      font-size: 0.875rem;
+      color: $text-light;
+    }
+    
+    .social-input {
+      border-radius: 0 $button-radius $button-radius 0;
+    }
+  }
+  
+  // Category inputs
+  .category-input-group {
+    .selected-categories {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+      
+      .category-tag {
+        display: inline-flex;
+        align-items: center;
+        background-color: rgba($accent-color, 0.1);
+        color: $accent-color;
+        font-size: 0.75rem;
+        padding: 4px 10px;
+        border-radius: 16px;
+        margin-right: 8px;
+        margin-bottom: 8px;
+        
+        .remove-btn {
+          background: none;
+          border: none;
+          color: $accent-color;
+          padding: 0 0 0 4px;
+          cursor: pointer;
+          font-size: 0.875rem;
+          line-height: 1;
+          
+          &:hover {
+            color: darken($accent-color, 10%);
+          }
+        }
+      }
+    }
+    
+    .add-category-form {
+      display: flex;
+      
+      .form-input {
+        flex: 1;
+        border-radius: $button-radius 0 0 $button-radius;
+      }
+      
+      .add-btn {
+        padding: 10px 16px;
+        background-color: $accent-color;
+        color: white;
+        border: none;
+        border-radius: 0 $button-radius $button-radius 0;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        
+        &:hover {
+          background-color: darken($accent-color, 5%);
+        }
+      }
+    }
+  }
+}
+
 // Mobile styles
 @media (max-width: $mobile-breakpoint) {
   // Profile header adjustments
@@ -454,6 +660,48 @@ $mobile-breakpoint: 768px;
         .event-status {
           margin-left: 64px;
         }
+      }
+    }
+  }
+  
+  // Modal adjustments for mobile
+  .modal-card {
+    max-width: 90%;
+    max-height: 80vh;
+    
+    .card-content {
+      padding: 16px;
+    }
+    
+    .form-section {
+      margin-bottom: 16px;
+    }
+    
+    .social-input-group {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .social-prefix {
+        border-radius: $button-radius $button-radius 0 0;
+        border: 1px solid #d1d5db;
+        border-bottom: none;
+      }
+      
+      .social-input {
+        border-radius: 0 0 $button-radius $button-radius;
+      }
+    }
+    
+    .add-category-form {
+      flex-direction: column;
+      
+      .form-input {
+        border-radius: $button-radius $button-radius 0 0;
+        margin-bottom: 0;
+      }
+      
+      .add-btn {
+        border-radius: 0 0 $button-radius $button-radius;
       }
     }
   }

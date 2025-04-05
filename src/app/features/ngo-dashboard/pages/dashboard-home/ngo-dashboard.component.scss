@@ -18,6 +18,8 @@ $button-radius: 32px; // For buttons and smaller elements
 $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
 $mobile-breakpoint: 768px;
 
+@import '../../../../styles/mixins';
+
 // Global styles
 * {
   box-sizing: border-box;
@@ -1276,3 +1278,145 @@ $mobile-breakpoint: 768px;
     }
   }
 }
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Post create modal styles */
+.post-create-modal {
+  width: 100%;
+  max-width: 600px;
+  background-color: white;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  z-index: 1001;
+  position: relative;
+}
+
+/* Loading posts styles */
+.loading-posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: $text-light;
+  
+  i {
+    font-size: 2rem;
+    margin-bottom: 16px;
+    color: $accent-color;
+  }
+}
+
+/* No posts message */
+.no-posts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+  color: $text-light;
+  text-align: center;
+  
+  p {
+    max-width: 80%;
+    line-height: 1.5;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  
+  i {
+    font-size: 3rem;
+    color: lighten($accent-color, 30%);
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: $text-light;
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+  
+  .create-event-btn {
+    padding: 8px 16px;
+    border-radius: $button-radius;
+    font-size: 0.875rem;
+    background-color: $accent-color;
+    color: white;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    
+    i {
+      font-size: 0.9rem;
+      margin-right: 8px;
+      margin-bottom: 0;
+      color: white;
+    }
+    
+    &:hover {
+      background-color: darken($accent-color, 5%);
+    }
+  }
+}
+.cancel-btn,
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+// ✅ Cancel = light button
+.cancel-btn {
+  background-color: #f3f5f4;
+  color: #337060;
+
+  &:hover {
+    background-color: #e6eae9;
+  }
+}
+
+// ✅ Submit = primary green button
+.submit-btn {
+  background-color: #337060;
+  color: #fff;
+
+  &:hover {
+    background-color: darken(#337060, 5%);
+  }
+
+  &:disabled {
+    background-color: #a5b2ad;
+    cursor: not-allowed;
+  }
+}
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -13,6 +13,8 @@ import { ToastService } from '../../../../shared/global-services/toast.service';
   imports: [CommonModule, ReactiveFormsModule]
 })
 export class PostCreateComponent implements OnInit {
+  @Output() close = new EventEmitter<void>();
+  
   postForm: FormGroup;
   isSubmitting = false;
   
@@ -49,7 +51,6 @@ export class PostCreateComponent implements OnInit {
   }
   
   closeModal(): void {
-    // This would close the modal if you're using one
-    // Emit an event or call a service method
+    this.close.emit();
   }
 }

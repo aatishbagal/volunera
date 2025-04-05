@@ -1,6 +1,8 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService, UserProfile } from '../../../../auth/services/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-volunteer-dashboard-layout',
@@ -12,7 +14,7 @@ import { RouterModule } from '@angular/router';
     RouterModule
   ]
 })
-export class VolunteerDashboardLayoutComponent implements OnInit {
+export class VolunteerDashboardLayoutComponent implements OnInit, OnDestroy {
   // Sidebar state - we will only use this on mobile now
   isSidebarCollapsed = false;
   isMobileMenuOpen = false;
@@ -24,18 +26,54 @@ export class VolunteerDashboardLayoutComponent implements OnInit {
   // Logout confirmation state
   showLogoutConfirmation = false;
   
-  // User data
-  user = {
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    avatar: '/assets/images/avatar.png',
+  // User data - will be populated from Firestore
+  user: UserProfile | null = null;
+  
+  // Default user data as fallback
+  defaultUser = {
+    displayName: 'Volunteer',
+    email: 'loading@example.com',
+    photoURL: '/assets/images/avatar.png',
+    profileCompletion: 45
+  };
+  
+  // Volunteer profile specific data
+  volunteerProfileData = {
     profileCompletion: 45
   };
 
-  constructor() {}
+  private userSubscription: Subscription | null = null;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.checkScreenSize();
+    this.loadUserProfile();
+  }
+
+  ngOnDestroy(): void {
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
+    }
+  }
+
+  // Load user profile data
+  private loadUserProfile(): void {
+    this.userSubscription = this.authService.currentUser$.subscribe(user => {
+      this.user = user;
+      
+      // In the future, we could load volunteer-specific profile data here
+      // For now, we're using the default value
+      // Example of future implementation:
+      // this.volunteerService.getVolunteerProfile(user.uid).then(profile => {
+      //   if (profile) {
+      //     this.volunteerProfileData.profileCompletion = profile.profileCompletion;
+      //   }
+      // });
+    });
   }
 
   // Check screen size on window resize
@@ -98,13 +136,23 @@ export class VolunteerDashboardLayoutComponent implements OnInit {
   }
   
   // Handle logout confirmation
-  handleLogout(confirmed: boolean): void {
+  async handleLogout(confirmed: boolean): Promise<void> {
     this.showLogoutConfirmation = false;
+    
     if (confirmed) {
-      // Handle actual logout logic here
-      console.log('User logged out');
-      // Navigate to login page
-      // this.router.navigate(['/login']);
+      try {
+        await this.authService.logout();
+        this.router.navigate(['/']);
+      } catch (error) {
+        console.error('Error logging out:', error);
+      }
     }
+  }
+  
+  // Get profile completion percentage
+  getProfileCompletion(): number {
+    // Check if we can get profileCompletion from Firebase, otherwise use default value
+    // This would ideally come from a volunteer profile document in Firestore
+    return this.volunteerProfileData.profileCompletion;
   }
 }

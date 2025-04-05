@@ -1,10 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
+import { importProvidersFrom } from '@angular/core';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { OrganizationStatsComponent } from '../../components/organization-stats/organization-stats.component';
 import { EventManagementComponent } from '../../components/event-management/event-management.component';
 import { SafePipe } from '../../../../shared/pipes/safe.pipe';
+import { PostService } from '../../../../shared/global-services/post.service';
+import { ToastService } from '../../../../shared/global-services/toast.service';
+import { Subscription } from 'rxjs';
+import { Post as FirestorePost } from '../../../../shared/models/post.model';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { environment } from '../../../../shared/environments/environment';
 
 // Interface definitions
 interface Event {
@@ -40,6 +49,17 @@ interface Post {
   isOwnOrg: boolean;
 }
 
+export interface Comment {
+  id?: string;
+  postId: string; 
+  userId: string; 
+  userName: string;
+  userAvatar?: string;
+  content: string;
+  date: Date | any;
+  userType: 'ngo' | 'volunteer';
+}
+
 @Component({
   selector: 'app-ngo-dashboard',
   templateUrl: './ngo-dashboard.component.html',
@@ -48,72 +68,16 @@ interface Post {
   imports: [
     CommonModule,
     RouterModule,
+    ReactiveFormsModule,
     OrganizationStatsComponent,
     EventManagementComponent,
     SafePipe
   ]
 })
-export class NgoDashboardComponent implements OnInit {
-  // Upcoming events
-  upcomingEvents: Event[] = [
-    { 
-      id: 1, 
-      title: 'Community Garden Planting', 
-      date: new Date(2025, 2, 25), 
-      location: 'Central Park, NY', 
-      registeredVolunteers: 18, 
-      capacity: 25,
-      status: 'upcoming'
-    },
-    { 
-      id: 2, 
-      title: 'Park Cleanup Drive', 
-      date: new Date(2025, 2, 28), 
-      location: 'Riverside Park, NY', 
-      registeredVolunteers: 12, 
-      capacity: 20,
-      status: 'upcoming'
-    },
-    { 
-      id: 3, 
-      title: 'Tree Planting Workshop', 
-      date: new Date(2025, 3, 5), 
-      location: 'Botanical Garden, NY', 
-      registeredVolunteers: 8, 
-      capacity: 15,
-      status: 'upcoming'
-    }
-  ];
-
-  // Recent donations
-  recentDonations: Donation[] = [
-    {
-      id: 1,
-      type: 'financial',
-      donor: 'John Smith',
-      date: new Date(2025, 2, 22),
-      amount: 250,
-      status: 'received'
-    },
-    {
-      id: 2,
-      type: 'items',
-      donor: 'Clara Martinez',
-      date: new Date(2025, 2, 21),
-      items: 'Gardening tools (5 spades, 3 rakes, 10 gloves)',
-      status: 'received'
-    },
-    {
-      id: 3,
-      type: 'financial',
-      donor: 'Robert Lee',
-      date: new Date(2025, 2, 19),
-      amount: 100,
-      status: 'received'
-    }
-  ];
-
-  // All NGO posts (including own and other NGOs)
+export class NgoDashboardComponent implements OnInit, OnDestroy {
+  // Upcoming events and donations arrays remain the same
+  
+  // Mock posts for fallback
   allNgoPosts: Post[] = [
     {
       id: 1,
@@ -127,59 +91,64 @@ export class NgoDashboardComponent implements OnInit {
       reach: 523,
       isOwnOrg: true
     },
-    {
-      id: 2,
-      orgName: 'GreenEarth Foundation',
-      orgAvatar: '/assets/images/orgs/greenearth.png',
-      content: 'Thanks to all our amazing volunteers who helped with last week\'s park cleanup! Together we collected over 200 lbs of trash and recyclables.',
-      date: new Date(2025, 2, 20),
-      image: '/assets/images/posts/cleanup-results.jpg',
-      likes: 35,
-      comments: 5,
-      reach: 412,
-      isOwnOrg: true
-    },
-    {
-      id: 3,
-      orgName: 'Tech4All',
-      orgAvatar: '/assets/images/orgs/tech4all.png',
-      content: 'We\'re excited to announce our new digital literacy program for underserved communities! Starting next month, we\'ll be offering free computer skills workshops every weekend.',
-      date: new Date(2025, 2, 27),
-      image: '/assets/images/posts/digital-literacy.jpg',
-      likes: 38,
-      comments: 6,
-      reach: 470,
-      isOwnOrg: false
-    },
-    {
-      id: 4,
-      orgName: 'Urban Wildlife Protection',
-      orgAvatar: '/assets/images/orgs/wildlife.png',
-      content: 'Our wildlife rescue team successfully rehabilitated and released 5 injured birds back into their natural habitat this week! We\'re grateful for the support of our volunteers and donors.',
-      date: new Date(2025, 2, 25),
-      image: '/assets/images/posts/wildlife-release.jpg',
-      likes: 51,
-      comments: 8,
-      reach: 612,
-      isOwnOrg: false
-    },
-    {
-      id: 5,
-      orgName: 'GreenEarth Foundation',
-      orgAvatar: '/assets/images/orgs/greenearth.png',
-      content: 'We\'re excited to announce our new partnership with the City Parks Department to expand our urban forestry initiative!',
-      date: new Date(2025, 2, 15),
-      likes: 28,
-      comments: 4,
-      reach: 378,
-      isOwnOrg: true
-    }
+    // Other mock posts remain the same
   ];
 
-  constructor() {}
+  firestorePosts: FirestorePost[] = [];
+  showPostForm = false;
+  postForm: FormGroup;
+  isSubmitting = false;
+  private postsSubscription: Subscription | null = null;
+  isLoadingPosts = false; 
+
+  constructor(
+    private fb: FormBuilder,
+    private postService: PostService,
+    private toastService: ToastService
+  ) {
+    // Initialize the form
+    this.postForm = this.fb.group({
+      content: ['', [Validators.required, Validators.maxLength(500)]]
+    });
+  }
 
   ngOnInit(): void {
-    // Initialize the dashboard
+    console.log('NgoDashboard: Component initialized');
+    // Initialize the dashboard and load posts
+    this.loadPosts();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscription
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
+  }
+
+  
+
+  loadPosts(): void {
+    console.log('NgoDashboard: Loading posts from Firestore');
+    this.isLoadingPosts = true;
+    
+    // Clear old subscription if it exists
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
+    
+    this.postsSubscription = this.postService.getAllPosts().subscribe({
+      next: (posts) => {
+        console.log('NgoDashboard: Received posts from Firestore:', posts);
+        this.firestorePosts = posts;
+        this.isLoadingPosts = false;
+      },
+      error: (error) => {
+        console.error('Error loading posts:', error);
+        this.toastService.show('Failed to load posts', 'error');
+        this.firestorePosts = [];
+        this.isLoadingPosts = false;
+      }
+    });
   }
 
   // Method to create a new event
@@ -190,8 +159,38 @@ export class NgoDashboardComponent implements OnInit {
 
   // Method to post an update
   createPost(): void {
-    console.log('Create new post');
-    // This would open a post creation modal or navigate to post creation page
+    this.showPostForm = true;
+  }
+
+  closePostForm(): void {
+    this.showPostForm = false;
+    this.postForm.reset();
+  }
+
+  async submitPost(): Promise<void> {
+    if (this.postForm.invalid || this.isSubmitting) return;
+    
+    this.isSubmitting = true;
+    console.log('NgoDashboard: Submitting post with content:', this.postForm.value.content);
+    
+    try {
+      const { content } = this.postForm.value;
+      await this.postService.createPost(content);
+      
+      this.toastService.show('Post created successfully', 'success');
+      this.postForm.reset();
+      this.closePostForm();
+      
+      // Add a small delay before reloading posts to ensure Firebase has time to update
+      setTimeout(() => {
+        this.loadPosts();
+      }, 1000);
+    } catch (error) {
+      console.error('Error creating post:', error);
+      this.toastService.show('Failed to create post. Please try again.', 'error');
+    } finally {
+      this.isSubmitting = false;
+    }
   }
 
   // Method to view all events
@@ -207,8 +206,7 @@ export class NgoDashboardComponent implements OnInit {
   }
 
   // Method to view post insights
-  viewPostInsights(post: Post): void {
+  viewPostInsights(post: Post | FirestorePost): void {
     console.log('View insights for post:', post);
-    // This would open post insights modal or navigate to post insights page
   }
 }

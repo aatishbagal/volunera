@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 import { NavbarComponent } from './component_files/navbar/navbar.component';
 import { FooterComponent } from './component_files/footer/footer.component';
 import { LoadingScreenComponent } from './component_files/loading-screen/loading-screen.component';
+import { ToastComponent } from './shared/global-services/toast.component'
 
 @Component({
   selector: 'app-root',
@@ -17,7 +18,8 @@ import { LoadingScreenComponent } from './component_files/loading-screen/loading
     RouterOutlet,
     NavbarComponent,
     FooterComponent,
-    LoadingScreenComponent
+    LoadingScreenComponent,
+    ToastComponent
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']

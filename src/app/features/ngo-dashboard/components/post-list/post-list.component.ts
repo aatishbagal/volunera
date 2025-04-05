@@ -22,6 +22,10 @@ export class PostListComponent implements OnInit, OnDestroy {
   loadingComments = false;
   postComments: { [postId: string]: Comment[] } = {};
   private postsSubscription: Subscription | null = null;
+  private commentSubscriptions: { [postId: string]: Subscription } = {};
+  isLoadingPosts = false;
+  firestorePosts: Post[] = [];
+  allNgoPosts: Post[] = [];
   
   constructor(
     private postService: PostService,
@@ -29,21 +33,41 @@ export class PostListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.postsSubscription = this.postService.getAllPosts().subscribe(
-      posts => {
-        this.posts = posts;
+    // Add loading indicator while posts are being fetched
+    this.loadPosts();
+  }
+  
+  loadPosts(): void {
+    console.log('Loading posts from Firestore...');
+    this.isLoadingPosts = true;
+    
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
+    
+    this.postsSubscription = this.postService.getAllPosts().subscribe({
+      next: posts => {
+        console.log('Received posts:', posts);
+        this.firestorePosts = posts;
+        this.isLoadingPosts = false;
       },
-      error => {
+      error: error => {
         console.error('Error fetching posts:', error);
         this.toastService.show('Failed to load posts', 'error');
+        this.isLoadingPosts = false;
       }
-    );
+    });
   }
   
   ngOnDestroy(): void {
     if (this.postsSubscription) {
       this.postsSubscription.unsubscribe();
     }
+    
+    // Clean up any comment subscriptions
+    Object.values(this.commentSubscriptions).forEach(subscription => {
+      subscription.unsubscribe();
+    });
   }
   
   openPostForm(): void {
@@ -52,6 +76,8 @@ export class PostListComponent implements OnInit, OnDestroy {
   
   closePostForm(): void {
     this.showPostForm = false;
+    // Reload posts after closing form to fetch any new posts
+    this.loadPosts();
   }
   
   toggleComments(postId: string | undefined): void {
@@ -68,21 +94,26 @@ export class PostListComponent implements OnInit, OnDestroy {
   loadComments(postId: string): void {
     if (!postId) return;
     
-    if (!this.postComments[postId]) {
-      this.loadingComments = true;
-      
-      this.postService.getPostComments(postId).subscribe(
-        comments => {
-          this.postComments[postId] = comments;
-          this.loadingComments = false;
-        },
-        error => {
-          console.error('Error loading comments:', error);
-          this.toastService.show('Failed to load comments', 'error');
-          this.loadingComments = false;
-        }
-      );
+    // Clear any existing subscription
+    if (this.commentSubscriptions[postId]) {
+      this.commentSubscriptions[postId].unsubscribe();
+      delete this.commentSubscriptions[postId];
     }
+    
+    this.loadingComments = true;
+    
+    this.commentSubscriptions[postId] = this.postService.getPostComments(postId).subscribe({
+      next: comments => {
+        this.postComments[postId] = comments;
+        this.loadingComments = false;
+      },
+      error: error => {
+        console.error('Error loading comments:', error);
+        this.toastService.show('Failed to load comments', 'error');
+        this.loadingComments = false;
+        this.postComments[postId] = [];
+      }
+    });
   }
   
   async submitComment(postId: string): Promise<void> {
@@ -109,6 +140,8 @@ export class PostListComponent implements OnInit, OnDestroy {
       try {
         await this.postService.deletePost(postId);
         this.toastService.show('Post deleted successfully', 'success');
+        // Reload posts after deletion
+        this.loadPosts();
       } catch (error) {
         console.error('Error deleting post:', error);
         this.toastService.show('Failed to delete post', 'error');
@@ -126,9 +159,11 @@ export class PostListComponent implements OnInit, OnDestroy {
         await this.postService.deleteComment(postId, commentId);
         
         // Remove from local array
-        this.postComments[postId] = this.postComments[postId].filter(
-          comment => comment.id !== commentId
-        );
+        if (this.postComments[postId]) {
+          this.postComments[postId] = this.postComments[postId].filter(
+            comment => comment.id !== commentId
+          );
+        }
         
         this.toastService.show('Comment deleted successfully', 'success');
       } catch (error) {
@@ -136,5 +171,11 @@ export class PostListComponent implements OnInit, OnDestroy {
         this.toastService.show('Failed to delete comment', 'error');
       }
     }
+  }
+  
+  // Add this method if referenced in your HTML
+  viewPostInsights(post: Post): void {
+    console.log('View insights for post:', post);
+    // Implementation would go here
   }
 }
