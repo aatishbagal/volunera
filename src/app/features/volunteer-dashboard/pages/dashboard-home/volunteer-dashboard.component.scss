@@ -1,4 +1,4 @@
-// Variables - using the same variables as the dashboard layout
+// Variables - using the same variables as the dashboard
 $primary-color: #021a02; // Dark green
 $accent-color: #337060; // Medium green
 $text-color: #1f2937;
@@ -92,8 +92,38 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
   }
 }
 
-// Posts styling
+// Posts styling - Updated to match NGO dashboard styling
 .posts-list {
+  .loading-posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    color: $text-light;
+    
+    i {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: $accent-color;
+    }
+  }
+
+  .no-posts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 0;
+    color: $text-light;
+    text-align: center;
+    
+    p {
+      max-width: 80%;
+      line-height: 1.5;
+    }
+  }
+
   .post-item {
     padding: 16px 0;
     border-bottom: 1px solid #e5e7eb;
@@ -108,11 +138,11 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
       align-items: center;
       margin-bottom: 12px;
       
-      .ngo-info {
+      .ngo-info, .post-organization {
         display: flex;
         align-items: center;
         
-        .ngo-avatar {
+        .ngo-avatar, .post-org-avatar {
           width: 44px;
           height: 44px;
           border-radius: 50%;
@@ -126,8 +156,8 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
           }
         }
         
-        .ngo-details {
-          .ngo-name {
+        .ngo-details, div {
+          .ngo-name, .post-org-name {
             font-size: 0.875rem;
             font-weight: 600;
             margin-bottom: 2px;
@@ -136,25 +166,6 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
           .post-date {
             font-size: 0.75rem;
             color: $text-light;
-          }
-        }
-      }
-      
-      .post-actions {
-        .action-btn {
-          background: none;
-          border: none;
-          color: $text-light;
-          cursor: pointer;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          
-          &:hover {
-            background-color: rgba($accent-color, 0.1);
           }
         }
       }
@@ -182,22 +193,39 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
       }
     }
     
-    .post-footer {
+    .post-footer, .post-stats {
       display: flex;
       flex-wrap: wrap;
+      gap: 16px;
       
-      .post-action-btn {
+      .post-action-btn, .stat-group {
         display: flex;
         align-items: center;
-        background: none;
-        border: none;
         color: $text-light;
         font-size: 0.75rem;
+        
+        i {
+          margin-right: 6px;
+          cursor: pointer;
+          
+          &.active, &.fa-heart.active {
+            color: $accent-color;
+          }
+        }
+        
+        &.like-btn.active {
+          color: $accent-color;
+        }
+      }
+      
+      .post-action-btn {
+        background: none;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 24px;
         margin-right: 16px;
         margin-bottom: 8px;
         cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 24px;
         
         i {
           margin-right: 4px;
@@ -205,18 +233,6 @@ $box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12); // Enhanced shadow
         
         &:hover {
           background-color: rgba($accent-color, 0.1);
-        }
-        
-        &.active {
-          color: $accent-color;
-        }
-        
-        &.like-btn.active {
-          color: $accent-color;
-          
-          i {
-            color: $accent-color;
-          }
         }
       }
     }

@@ -10,45 +10,87 @@
           <a href="javascript:void(0)" class="card-link">View All</a>
         </div>
         <div class="card-content">
+          <!-- Posts list with loading state -->
           <div class="posts-list">
-            <div *ngFor="let post of ngoPosts" class="post-item">
-              <div class="post-header">
-                <div class="ngo-info">
-                  <div class="ngo-avatar">
-                    <img [src]="post.ngoAvatar || '/assets/images/placeholder-avatar.png'" alt="NGO Logo">
-                  </div>
-                  <div class="ngo-details">
-                    <h4 class="ngo-name">{{post.ngoName}}</h4>
-                    <p class="post-date">{{post.date | date:'MMM d, yyyy'}}</p>
+            <!-- Loading indicator -->
+            <div *ngIf="isLoadingPosts" class="loading-posts">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Loading posts...</span>
+            </div>
+            
+            <!-- No posts message -->
+            <div *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length === 0" class="no-posts">
+              <p>No posts yet. Follow NGOs to see their updates in your feed!</p>
+            </div>
+            
+            <!-- Show Firestore posts if available -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length > 0">
+              <div *ngFor="let post of firestorePosts" class="post-item">
+                <div class="post-header">
+                  <div class="post-organization">
+                    <img [src]="post.orgAvatar || '/assets/images/orgs/default-ngo.png'" alt="Organization Logo" class="post-org-avatar">
+                    <div>
+                      <span class="post-org-name">{{post.orgName}}</span>
+                      <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+                    </div>
                   </div>
                 </div>
-                <div class="post-actions">
-                  <button class="action-btn">
-                    <i class="fas fa-ellipsis-h"></i>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                </div>
+                <div class="post-stats">
+                  <div class="stat-group">
+                    <i class="fas fa-heart" [class.active]="post.liked" (click)="toggleLike(post)"></i>
+                    <span>{{post.likes || 0}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments || 0}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-eye"></i>
+                    <span>{{post.reach || 0}}</span>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+            
+            <!-- Fallback to static posts ONLY if no Firestore posts are available and not loading -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length > 0">
+              <div *ngFor="let post of ngoPosts" class="post-item">
+                <div class="post-header">
+                  <div class="ngo-info">
+                    <div class="ngo-avatar">
+                      <img [src]="post.ngoAvatar || '/assets/images/placeholder-avatar.png'" alt="NGO Logo">
+                    </div>
+                    <div class="ngo-details">
+                      <h4 class="ngo-name">{{post.ngoName}}</h4>
+                      <p class="post-date">{{post.date | date:'MMM d, yyyy'}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                  <div *ngIf="post.image" class="post-image">
+                    <img [src]="post.image" [alt]="post.ngoName + ' post image'">
+                  </div>
+                </div>
+                <div class="post-footer">
+                  <button class="post-action-btn like-btn" [class.active]="post.liked" (click)="toggleLike(post)">
+                    <i class="fas" [ngClass]="post.liked ? 'fa-heart' : 'fa-heart'"></i>
+                    <span>{{post.likes}} Likes</span>
+                  </button>
+                  <button class="post-action-btn comment-btn">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments}} Comments</span>
+                  </button>
+                  <button class="post-action-btn share-btn">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
                   </button>
                 </div>
               </div>
-              <div class="post-content">
-                <p class="post-text">{{post.content}}</p>
-                <div *ngIf="post.image" class="post-image">
-                  <img [src]="post.image" [alt]="post.ngoName + ' post image'">
-                </div>
-              </div>
-              <div class="post-footer">
-                <button class="post-action-btn like-btn" [class.active]="post.liked" (click)="toggleLike(post)">
-                  <i class="fas" [ngClass]="post.liked ? 'fa-heart' : 'fa-heart'"></i>
-                  <span>{{post.likes}} Likes</span>
-                </button>
-                <button class="post-action-btn comment-btn">
-                  <i class="fas fa-comment"></i>
-                  <span>{{post.comments}} Comments</span>
-                </button>
-                <button class="post-action-btn share-btn">
-                  <i class="fas fa-share"></i>
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
+            </ng-container>
           </div>
         </div>
       </section>

@@ -1,6 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
+import { PostService } from '../../../../shared/global-services/post.service';
+import { ToastService } from '../../../../shared/global-services/toast.service';
 
 // Create a pipe for safe URLs
 import { Pipe, PipeTransform } from '@angular/core';
@@ -18,7 +21,7 @@ export class SafePipe implements PipeTransform {
 }
 
 interface NGOPost {
-  id: number;
+  id: number | string;
   ngoName: string;
   ngoAvatar?: string;
   date: Date;
@@ -26,7 +29,11 @@ interface NGOPost {
   image?: string;
   likes: number;
   comments: number;
+  reach?: number;
   liked: boolean;
+  isOwnOrg?: boolean;
+  orgName?: string;
+  orgAvatar?: string;
 }
 
 interface Event {
@@ -48,7 +55,7 @@ interface Event {
     SafePipe
   ]
 })
-export class VolunteerDashboardComponent implements OnInit {
+export class VolunteerDashboardComponent implements OnInit, OnDestroy {
   // Dashboard data
   calendarUrl: string = 'https://calendar.google.com/calendar/embed?src=c_classroomf65b04c4%40group.calendar.google.com&ctz=America%2FNew_York&mode=AGENDA';
 
@@ -104,19 +111,82 @@ export class VolunteerDashboardComponent implements OnInit {
     { id: 3, name: 'HomelessSupport', category: 'Social Welfare', match: 82, logo: '/assets/images/orgs/homelesssupport.png' }
   ];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  // Added for Firestore post integration
+  firestorePosts: any[] = [];
+  allNgoPosts: NGOPost[] = [];
+  isLoadingPosts = false;
+  private postsSubscription: Subscription | null = null;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private postService: PostService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     // Initialize the dashboard
+    this.loadPosts();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscription when component is destroyed
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
+  }
+
+  // Load posts from Firestore
+  loadPosts(): void {
+    console.log('Loading posts...');
+    this.isLoadingPosts = true;
+    
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
+    
+    this.postsSubscription = this.postService.getAllPosts().subscribe({
+      next: (posts) => {
+        console.log('Received posts:', posts);
+        this.firestorePosts = posts;
+        this.isLoadingPosts = false;
+        
+        // If no posts from Firestore, use the static ngoPosts as fallback
+        this.allNgoPosts = this.ngoPosts;
+      },
+      error: (error: Error) => {
+        console.error('Error loading posts:', error);
+        this.toastService.show('Failed to load posts', 'error');
+        this.firestorePosts = [];
+        this.isLoadingPosts = false;
+        
+        // Use static posts as fallback
+        this.allNgoPosts = this.ngoPosts;
+      }
+    });
   }
 
   // Toggle post like
   toggleLike(post: NGOPost): void {
-    post.liked = !post.liked;
-    if (post.liked) {
-      post.likes++;
+    if (typeof post.id === 'string') {
+      // This is a Firestore post, but we'll handle it locally since PostService doesn't have toggleLike
+      // In a real implementation, you would add this method to PostService
+      post.liked = !post.liked;
+      if (post.liked) {
+        post.likes++;
+      } else {
+        post.likes--;
+      }
+      
+      // Optional: You could implement this functionality using updatePost if that exists
+      // For example: this.postService.updatePost(post.id, { likes: post.likes });
     } else {
-      post.likes--;
+      // This is a static post, handle locally
+      post.liked = !post.liked;
+      if (post.liked) {
+        post.likes++;
+      } else {
+        post.likes--;
+      }
     }
   }
 }
