@@ -1,0 +1,50 @@
+<div class="post-create-modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Create New Post</h2>
+      <button type="button" class="close-btn" (click)="closeModal()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="content">Post Content</label>
+          <textarea 
+            id="content" 
+            formControlName="content" 
+            class="content-textarea" 
+            placeholder="What would you like to share?"
+            rows="6"
+          ></textarea>
+          <div class="char-count" [ngClass]="{
+            'warning': postForm.get('content')?.value?.length > 400,
+            'error': postForm.get('content')?.value?.length > 500
+          }">
+            {{postForm.get('content')?.value?.length || 0}}/500
+          </div>
+          
+          <div *ngIf="postForm.get('content')?.invalid && (postForm.get('content')?.dirty || postForm.get('content')?.touched)" class="error-message">
+            <span *ngIf="postForm.get('content')?.errors?.['required']">
+              Content is required
+            </span>
+            <span *ngIf="postForm.get('content')?.errors?.['maxlength']">
+              Content cannot exceed 500 characters
+            </span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="cancel-btn" (click)="closeModal()">Cancel</button>
+        <button 
+          type="submit" 
+          class="submit-btn" 
+          [disabled]="postForm.invalid || isSubmitting"
+        >
+          <i *ngIf="isSubmitting" class="fas fa-spinner fa-spin"></i>
+          <span>Post</span>
+        </button>
+      </div>
+    </form>
+  </div>

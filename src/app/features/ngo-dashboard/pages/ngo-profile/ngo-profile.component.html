@@ -1,0 +1,275 @@
+<!-- Profile Content -->
+<div class="profile-content">
+  <!-- Profile Header Card -->
+  <section class="card profile-card">
+    <div class="card-content">
+      <div class="profile-header">
+        <div class="profile-avatar-container">
+          <img [src]="organization?.avatar || defaultOrganization.avatar" alt="Organization Logo" class="profile-avatar">
+          <button class="edit-profile-btn" (click)="editProfile()">
+            <i class="fas fa-camera"></i>
+          </button>
+        </div>
+        <div class="profile-details">
+          <h1 class="profile-name">{{organization?.name || defaultOrganization.name}}</h1>
+          <p class="profile-bio">{{organization?.description || defaultOrganization.description}}</p>
+          <div class="organization-categories">
+            <span *ngFor="let category of organization?.categories || defaultOrganization.categories" class="category-tag">
+              {{category}}
+            </span>
+          </div>
+          <button class="edit-profile-btn primary" (click)="editProfile()">
+            <i class="fas fa-edit"></i>
+            <span>Edit Profile</span>
+          </button>
+        </div>
+        <div class="contact-card">
+          <div class="contact-detail" *ngIf="organization?.website">
+            <i class="fas fa-globe"></i>
+            <a [href]="'https://' + organization?.website" target="_blank">{{organization?.website}}</a>
+          </div>
+          <div class="contact-detail" *ngIf="organization?.phone">
+            <i class="fas fa-phone"></i>
+            <span>{{organization?.phone}}</span>
+          </div>
+          <div class="contact-detail" *ngIf="organization?.address">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>{{organization?.address}}</span>
+          </div>
+          <div class="contact-detail" *ngIf="organization?.foundedYear">
+            <i class="fas fa-calendar-alt"></i>
+            <span>Founded in {{organization?.foundedYear}}</span>
+          </div>
+          <div class="social-media-links">
+            <a *ngIf="organization?.socialMedia?.facebook" [href]="getSocialUrl('facebook', organization?.socialMedia?.facebook)" target="_blank" class="social-link">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a *ngIf="organization?.socialMedia?.twitter" [href]="getSocialUrl('twitter', organization?.socialMedia?.twitter)" target="_blank" class="social-link">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a *ngIf="organization?.socialMedia?.instagram" [href]="getSocialUrl('instagram', organization?.socialMedia?.instagram)" target="_blank" class="social-link">
+              <i class="fab fa-instagram"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Stats Card -->
+  <section class="card stats-card">
+    <div class="card-header">
+      <h2 class="card-title">Organization Stats</h2>
+    </div>
+    <div class="card-content">
+      <div class="stats-grid">
+        <div *ngFor="let stat of organizationStats" class="stat-item">
+          <i class="fas fa-{{stat.icon}} stat-icon"></i>
+          <h3 class="stat-value">{{stat.label === 'Total Donations' ? formatCurrency(stat.value) : stat.value}}</h3>
+          <p class="stat-label">{{stat.label}}</p>
+          <div class="stat-trend" *ngIf="stat.trend !== undefined && stat.trendDirection !== undefined">
+            <i class="fas" [ngClass]="getTrendIconClass(stat.trendDirection)"></i>
+            <span>{{stat.trend}}%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Events History Card -->
+  <section class="card events-card">
+    <div class="card-header">
+      <h2 class="card-title">Recent Events</h2>
+      <a [routerLink]="['/ngo/events']" class="card-link">View All</a>
+    </div>
+    <div class="card-content">
+      <div class="events-list">
+        <div *ngFor="let event of recentEvents" class="event-item">
+          <div class="event-date">
+            <span class="date-day">{{event.date | date:'d'}}</span>
+            <span class="date-month">{{event.date | date:'MMM'}}</span>
+          </div>
+          <div class="event-details">
+            <h4 class="event-title">{{event.title}}</h4>
+            <p class="event-location">
+              <i class="fas fa-map-marker-alt"></i>
+              {{event.location}}
+            </p>
+            <div class="event-capacity">
+              <div class="capacity-progress">
+                <div class="progress-bar">
+                  <div class="progress" [style.width.%]="(event.registeredVolunteers / event.capacity) * 100"></div>
+                </div>
+                <span class="progress-text">{{event.registeredVolunteers}}/{{event.capacity}} volunteers</span>
+              </div>
+            </div>
+          </div>
+          <div class="event-status">
+            <span class="status-badge" [ngClass]="event.status">
+              {{event.status}}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- Edit Profile Popup Modal -->
+<div class="card modal-overlay" *ngIf="isEditProfileOpen">
+<div class="card modal-card">
+  <div class="card-header">
+    <h2 class="card-title">Edit Organization Profile</h2>
+  </div>
+  <div class="card-content">
+    <form class="edit-profile-form">
+      <!-- Basic Info Section -->
+      <div class="form-section">
+        <h3 class="section-title">Basic Information</h3>
+        
+        <div class="form-group">
+          <label for="orgName">Organization Name*</label>
+          <input 
+            type="text" 
+            id="orgName" 
+            name="orgName"
+            class="form-input"
+            [(ngModel)]="editForm.name" 
+            required>
+        </div>
+        
+        <div class="form-group">
+          <label for="orgDescription">Description*</label>
+          <textarea 
+            id="orgDescription" 
+            name="orgDescription"
+            class="form-textarea"
+            [(ngModel)]="editForm.description" 
+            rows="4"
+            required></textarea>
+        </div>
+        
+        <div class="form-group">
+          <label for="orgWebsite">Website</label>
+          <input 
+            type="text" 
+            id="orgWebsite" 
+            name="orgWebsite"
+            class="form-input"
+            [(ngModel)]="editForm.website">
+        </div>
+        
+        <div class="form-group">
+          <label for="orgPhone">Phone Number</label>
+          <input 
+            type="tel" 
+            id="orgPhone" 
+            name="orgPhone"
+            class="form-input"
+            [(ngModel)]="editForm.phone">
+        </div>
+        
+        <div class="form-group">
+          <label for="orgAddress">Address</label>
+          <input 
+            type="text" 
+            id="orgAddress" 
+            name="orgAddress"
+            class="form-input"
+            [(ngModel)]="editForm.address">
+        </div>
+        
+        <div class="form-group">
+          <label for="orgFoundedYear">Founded Year</label>
+          <input 
+            type="number" 
+            id="orgFoundedYear" 
+            name="orgFoundedYear"
+            class="form-input"
+            [(ngModel)]="editForm.foundedYear"
+            min="1900"
+            [max]="currentYear">
+        </div>
+      </div>
+      
+      <!-- Categories Section -->
+      <div class="form-section">
+        <h3 class="section-title">Categories</h3>
+        
+        <div class="category-input-group">
+          <div class="selected-categories">
+            <span *ngFor="let category of editForm.categories" class="category-tag">
+              {{category}}
+              <button type="button" class="remove-btn" (click)="removeCategory(category)">×</button>
+            </span>
+          </div>
+          
+          <div class="add-category-form">
+            <input 
+              type="text" 
+              id="newCategory" 
+              name="newCategory"
+              class="form-input"
+              [(ngModel)]="newCategory"
+              placeholder="Add a category (e.g., Education)">
+            <button 
+              type="button" 
+              class="add-btn" 
+              (click)="addCategory(newCategory); newCategory = ''">
+              Add
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Social Media Section -->
+      <div class="form-section">
+        <h3 class="section-title">Social Media</h3>
+        
+        <div class="form-group">
+          <label for="orgFacebook">Facebook Username</label>
+          <div class="social-input-group">
+            <span class="social-prefix">facebook.com/</span>
+            <input 
+              type="text" 
+              id="orgFacebook" 
+              name="orgFacebook"
+              class="form-input social-input"
+              [(ngModel)]="editForm.socialMedia!.facebook">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="orgTwitter">Twitter Username</label>
+          <div class="social-input-group">
+            <span class="social-prefix">twitter.com/</span>
+            <input 
+              type="text" 
+              id="orgTwitter" 
+              name="orgTwitter"
+              class="form-input social-input"
+              [(ngModel)]="editForm.socialMedia!.twitter">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="orgInstagram">Instagram Username</label>
+          <div class="social-input-group">
+            <span class="social-prefix">instagram.com/</span>
+            <input 
+              type="text" 
+              id="orgInstagram" 
+              name="orgInstagram"
+              class="form-input social-input"
+              [(ngModel)]="editForm.socialMedia!.instagram">
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="modal-btn cancel" (click)="closeEditProfile()">Cancel</button>
+    <button class="modal-btn confirm" (click)="saveProfile()">Save Changes</button>
+  </div>
+</div>
+</div>

@@ -1,0 +1,57 @@
+<!-- Posts list with loading state -->
+<div class="posts-list">
+  <!-- Loading indicator -->
+  <div *ngIf="isLoadingPosts" class="loading-posts">
+    <i class="fas fa-spinner fa-spin"></i>
+    <span>Loading posts...</span>
+  </div>
+  
+  <!-- No posts message -->
+  <div *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length === 0" class="no-posts">
+    <p>No posts yet. Create your first post to share updates with your volunteers!</p>
+  </div>
+  
+  <!-- Show Firestore posts if available -->
+  <ng-container *ngIf="!isLoadingPosts && firestorePosts.length > 0">
+    <div *ngFor="let post of firestorePosts" class="post-item">
+      <div class="post-header">
+        <div class="post-organization">
+          <img [src]="post.orgAvatar || '/assets/images/orgs/default-ngo.png'" alt="Organization Logo" class="post-org-avatar">
+          <div>
+            <span class="post-org-name">{{post.orgName}}</span>
+            <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
+          </div>
+        </div>
+        <div class="post-actions" *ngIf="post.isOwnOrg">
+          <button class="action-btn" (click)="viewPostInsights(post)">
+            <i class="fas fa-chart-bar"></i>
+          </button>
+        </div>
+      </div>
+      <div class="post-content">
+        <p class="post-text">{{post.content}}</p>
+      </div>
+      <div class="post-stats">
+        <div class="stat-group">
+          <i class="fas fa-heart"></i>
+          <span>{{post.likes || 0}}</span>
+        </div>
+        <div class="stat-group">
+          <i class="fas fa-comment"></i>
+          <span>{{post.comments || 0}}</span>
+        </div>
+        <div class="stat-group">
+          <i class="fas fa-eye"></i>
+          <span>{{post.reach || 0}}</span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  
+  <!-- Fallback to static posts ONLY if no Firestore posts are available and not loading -->
+  <ng-container *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length > 0">
+    <div *ngFor="let post of allNgoPosts" class="post-item">
+      <!-- Mock post content remains the same -->
+    </div>
+  </ng-container>
+</div>

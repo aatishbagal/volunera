@@ -25,3 +25,141 @@
     background-color: darken($primary-color, 10%);
   }
 }
+
+/* Toast notification styles */
+.success-toast {
+  background-color: #4caf50 !important; /* Green */
+  color: white !important;
+}
+
+.error-toast {
+  background-color: #f44336 !important; /* Red */
+  color: white !important;
+}
+
+.info-toast {
+  background-color: #2196f3 !important; /* Blue */
+  color: white !important;
+}
+
+/* Make sure the close button is visible */
+.success-toast .mat-simple-snackbar-action,
+.error-toast .mat-simple-snackbar-action,
+.info-toast .mat-simple-snackbar-action {
+  color: white !important;
+}
+
+/* Add these styles to your global styles.scss file */
+
+/* Modal Background/Backdrop */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Modal Container */
+.modal-container {
+  background-color: white;
+  border-radius: 24px;
+  max-width: 600px;
+  width: 90%;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+/* Modal Header */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #021a02;
+  margin: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #6b7280;
+}
+
+/* Modal Body */
+.modal-body {
+  padding: 24px;
+}
+
+/* Form Controls */
+.form-group {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.content-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  border: 1px solid #d1d5db;
+  resize: none;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+/* Modal Footer */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px;
+  border-top: 1px solid #e5e7eb;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 32px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+}
+
+.btn-cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.btn-primary {
+  background-color: #337060;
+  color: white;
+}
+
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}

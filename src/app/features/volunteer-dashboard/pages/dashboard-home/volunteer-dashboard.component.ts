@@ -1,10 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { ImpactCardComponent } from '../../components/impact-card/impact-card.component';
-import { UpcomingEventsComponent } from '../../components/upcoming-events/upcoming-events.component';
-import { RecentActivityComponent } from '../../components/recent-activity/recent-activity.component';
+import { Subscription } from 'rxjs';
+import { PostService } from '../../../../shared/global-services/post.service';
+import { ToastService } from '../../../../shared/global-services/toast.service';
 
 // Create a pipe for safe URLs
 import { Pipe, PipeTransform } from '@angular/core';
@@ -21,18 +20,8 @@ export class SafePipe implements PipeTransform {
   }
 }
 
-// Interface definitions
-interface Activity {
-  id: number;
-  type: 'event' | 'donation' | 'achievement';
-  title: string;
-  organization: string;
-  date: Date;
-  points: number;
-}
-
 interface NGOPost {
-  id: number;
+  id: number | string;
   ngoName: string;
   ngoAvatar?: string;
   date: Date;
@@ -40,7 +29,11 @@ interface NGOPost {
   image?: string;
   likes: number;
   comments: number;
+  reach?: number;
   liked: boolean;
+  isOwnOrg?: boolean;
+  orgName?: string;
+  orgAvatar?: string;
 }
 
 interface Event {
@@ -59,27 +52,10 @@ interface Event {
   standalone: true,
   imports: [
     CommonModule,
-    RouterModule,
-    ImpactCardComponent,
-    UpcomingEventsComponent,
-    RecentActivityComponent,
     SafePipe
   ]
 })
-export class VolunteerDashboardComponent implements OnInit {
-  // Sidebar state - we will only use this on mobile now
-  isSidebarCollapsed = false;
-  isMobileMenuOpen = false;
-  isMobileView = false;
-  
-  // User data
-  user = {
-    name: 'Sarah Johnson',
-    email: 'sarah.j@example.com',
-    avatar: '/assets/images/avatar.png',
-    profileCompletion: 45
-  };
-
+export class VolunteerDashboardComponent implements OnInit, OnDestroy {
   // Dashboard data
   calendarUrl: string = 'https://calendar.google.com/calendar/embed?src=c_classroomf65b04c4%40group.calendar.google.com&ctz=America%2FNew_York&mode=AGENDA';
 
@@ -135,59 +111,82 @@ export class VolunteerDashboardComponent implements OnInit {
     { id: 3, name: 'HomelessSupport', category: 'Social Welfare', match: 82, logo: '/assets/images/orgs/homelesssupport.png' }
   ];
 
-  constructor(private sanitizer: DomSanitizer) {}
+  // Added for Firestore post integration
+  firestorePosts: any[] = [];
+  allNgoPosts: NGOPost[] = [];
+  isLoadingPosts = false;
+  private postsSubscription: Subscription | null = null;
+
+  constructor(
+    private sanitizer: DomSanitizer,
+    private postService: PostService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
-    this.checkScreenSize();
+    // Initialize the dashboard
+    this.loadPosts();
   }
 
-  // Check screen size on window resize
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.checkScreenSize();
+  ngOnDestroy(): void {
+    // Clean up subscription when component is destroyed
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
+    }
   }
 
-  // Check if mobile view
-  checkScreenSize() {
-    this.isMobileView = window.innerWidth <= 768;
+  // Load posts from Firestore
+  loadPosts(): void {
+    console.log('Loading posts...');
+    this.isLoadingPosts = true;
     
-    // Auto-collapse sidebar on desktop if width is between 768px and 1200px
-    if (window.innerWidth > 768 && window.innerWidth < 1200) {
-      this.isSidebarCollapsed = true;
-    } else if (window.innerWidth >= 1200) {
-      this.isSidebarCollapsed = false;
+    if (this.postsSubscription) {
+      this.postsSubscription.unsubscribe();
     }
-  }
-
-  // Toggle mobile menu
-  toggleMobileMenu() {
-    this.isMobileMenuOpen = !this.isMobileMenuOpen;
     
-    // Add/remove body scroll lock when mobile menu is open
-    if (this.isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-  }
-  
-  // Toggle sidebar on desktop or mobile menu on mobile
-  toggleSidebarOrMenu() {
-    if (this.isMobileView) {
-      this.toggleMobileMenu();
-    } else {
-      // On desktop, just toggle sidebar collapse state
-      this.isSidebarCollapsed = !this.isSidebarCollapsed;
-    }
+    this.postsSubscription = this.postService.getAllPosts().subscribe({
+      next: (posts) => {
+        console.log('Received posts:', posts);
+        this.firestorePosts = posts;
+        this.isLoadingPosts = false;
+        
+        // If no posts from Firestore, use the static ngoPosts as fallback
+        this.allNgoPosts = this.ngoPosts;
+      },
+      error: (error: Error) => {
+        console.error('Error loading posts:', error);
+        this.toastService.show('Failed to load posts', 'error');
+        this.firestorePosts = [];
+        this.isLoadingPosts = false;
+        
+        // Use static posts as fallback
+        this.allNgoPosts = this.ngoPosts;
+      }
+    });
   }
 
   // Toggle post like
   toggleLike(post: NGOPost): void {
-    post.liked = !post.liked;
-    if (post.liked) {
-      post.likes++;
+    if (typeof post.id === 'string') {
+      // This is a Firestore post, but we'll handle it locally since PostService doesn't have toggleLike
+      // In a real implementation, you would add this method to PostService
+      post.liked = !post.liked;
+      if (post.liked) {
+        post.likes++;
+      } else {
+        post.likes--;
+      }
+      
+      // Optional: You could implement this functionality using updatePost if that exists
+      // For example: this.postService.updatePost(post.id, { likes: post.likes });
     } else {
-      post.likes--;
+      // This is a static post, handle locally
+      post.liked = !post.liked;
+      if (post.liked) {
+        post.likes++;
+      } else {
+        post.likes--;
+      }
     }
   }
 }

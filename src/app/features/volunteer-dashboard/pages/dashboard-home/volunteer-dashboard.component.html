@@ -1,216 +1,159 @@
-<div class="dashboard-container">
-  <!-- Mobile Nav Overlay -->
-  <div class="mobile-nav-overlay" [class.active]="isMobileMenuOpen" (click)="toggleMobileMenu()"></div>
-  
-  <!-- Sidebar -->
-  <aside class="sidebar" [class.collapsed]="isSidebarCollapsed" [class.mobile-active]="isMobileMenuOpen">
-    <div class="sidebar-header">
-      <div class="logo-container">
-        <img src="assets/images/volunera-text-logo-white.svg" alt="VolunEra" class="logo-image">
-      </div>
-      <!-- No collapse button here -->
-    </div>
-
-    <nav class="sidebar-nav">
-      <a [routerLink]="['/volunteer/dashboard']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-th-large"></i>
-        <span>Dashboard</span>
-      </a>
-      <a [routerLink]="['/volunteer/profile']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-user"></i>
-        <span>Profile</span>
-      </a>
-      <a [routerLink]="['/volunteer/events']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-calendar"></i>
-        <span>Events</span>
-      </a>
-      <a [routerLink]="['/volunteer/leaderboards']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-trophy"></i>
-        <span>Leaderboards</span>
-      </a>
-      <a [routerLink]="['/volunteer/settings']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-cog"></i>
-        <span>Settings</span>
-      </a>
-      <a [routerLink]="['/volunteer/history']" routerLinkActive="active" class="nav-item">
-        <i class="fas fa-history"></i>
-        <span>History</span>
-      </a>
-    </nav>
-
-    <div class="sidebar-footer">
-      <div class="profile-completion">
-        <div class="completion-circle">
-          <div class="progress-indicator" [style.width.%]="user.profileCompletion"></div>
-          <span>{{user.profileCompletion}}%</span>
+<!-- Dashboard main content -->
+<div class="dashboard-content">
+  <!-- Three-column layout -->
+  <div class="three-column-layout">
+    <!-- Left Column - NGO Posts -->
+    <div class="column left-column">
+      <section class="card posts-card">
+        <div class="card-header">
+          <h2 class="card-title">Latest Posts</h2>
+          <a href="javascript:void(0)" class="card-link">View All</a>
         </div>
-        <div class="completion-text">
-          <p>Complete profile</p>
-          <p class="subtext">Complete your profile to unlock all features</p>
-        </div>
-      </div>
-
-      <div class="user-profile">
-        <img [src]="user.avatar" alt="User Avatar" class="avatar">
-        <div class="user-info">
-          <p class="user-name">{{user.name}}</p>
-          <p class="user-email">{{user.email}}</p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Mobile close button -->
-    <button class="mobile-nav-close" (click)="toggleMobileMenu()">
-      <i class="fas fa-times"></i>
-    </button>
-  </aside>
-
-  <!-- Main Content Wrapper -->
-  <div class="content-wrapper">
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Top Bar (now part of main content) -->
-      <header class="top-bar">
-        <!-- Burger menu toggle button - visible on both desktop and mobile -->
-        <button class="mobile-nav-toggle" (click)="toggleSidebarOrMenu()">
-          <i class="fas fa-bars"></i>
-        </button>
-        
-        <!-- Search container positioned to the left -->
-        <div class="search-container">
-          <i class="fas fa-search search-icon"></i>
-          <input type="text" placeholder="Search anything..." class="search-input">
-        </div>
-        
-        <div class="top-bar-actions">
-          <button class="action-button notification-btn">
-            <i class="fas fa-bell"></i>
-            <span class="notification-indicator"></span>
-          </button>
-          <button class="action-button message-btn">
-            <i class="fas fa-envelope"></i>
-          </button>
-        </div>
-      </header>
-      
-      <!-- Rest of the HTML remains unchanged -->
-      <!-- Dashboard Content -->
-      <div class="dashboard-content">
-        <!-- Two Column Layout with stacked right side -->
-        <div class="three-column-layout">
-          <!-- Left Column - NGO Posts -->
-          <div class="column left-column">
-            <section class="card posts-card">
-              <div class="card-header">
-                <h2 class="card-title">Posts</h2>
-                <a href="javascript:void(0)" class="card-link">View All</a>
-              </div>
-              <div class="card-content">
-                <div class="posts-list">
-                  <div *ngFor="let post of ngoPosts" class="post-item">
-                    <div class="post-header">
-                      <div class="ngo-info">
-                        <div class="ngo-avatar">
-                          <img [src]="post.ngoAvatar || '/assets/images/placeholder-avatar.png'" alt="NGO Logo">
-                        </div>
-                        <div class="ngo-details">
-                          <h4 class="ngo-name">{{post.ngoName}}</h4>
-                          <p class="post-date">{{post.date | date:'MMM d, yyyy'}}</p>
-                        </div>
-                      </div>
-                      <div class="post-actions">
-                        <button class="action-btn">
-                          <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="post-content">
-                      <p class="post-text">{{post.content}}</p>
-                      <div *ngIf="post.image" class="post-image">
-                        <img [src]="post.image" [alt]="post.ngoName + ' post image'">
-                      </div>
-                    </div>
-                    <div class="post-footer">
-                      <button class="post-action-btn like-btn" [class.active]="post.liked" (click)="toggleLike(post)">
-                        <i class="fas" [ngClass]="post.liked ? 'fa-heart' : 'fa-heart'"></i>
-                        <span>{{post.likes}} Likes</span>
-                      </button>
-                      <button class="post-action-btn comment-btn">
-                        <i class="fas fa-comment"></i>
-                        <span>{{post.comments}} Comments</span>
-                      </button>
-                      <button class="post-action-btn share-btn">
-                        <i class="fas fa-share"></i>
-                        <span>Share</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-
-          <!-- Right Column - Calendar and NGO Suggestions stacked -->
-          <div class="column right-column">
-            <!-- Calendar Embed -->
-            <section class="card calendar-card">
-              <div class="card-header">
-                <h2 class="card-title">Calendar</h2>
-                <a href="javascript:void(0)" class="card-link">View Full</a>
-              </div>
-              <div class="card-content">
-                <div class="calendar-container">
-                  <iframe [src]="calendarUrl | safe" frameborder="0" scrolling="no" class="google-calendar"></iframe>
-                </div>
-                <div class="upcoming-reminder">
-                  <div class="reminder-header">
-                    <h4>Next Event</h4>
-                  </div>
-                  <div class="reminder-content" *ngIf="nextEvent">
-                    <div class="event-date-badge">
-                      <span class="date-month">{{nextEvent.date | date:'MMM'}}</span>
-                      <span class="date-day">{{nextEvent.date | date:'d'}}</span>
-                    </div>
-                    <div class="event-details">
-                      <h5 class="event-title">{{nextEvent.title}}</h5>
-                      <p class="event-org">{{nextEvent.organization}}</p>
-                      <p class="event-time">{{nextEvent.date | date:'shortTime'}} • {{nextEvent.location}}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+        <div class="card-content">
+          <!-- Posts list with loading state -->
+          <div class="posts-list">
+            <!-- Loading indicator -->
+            <div *ngIf="isLoadingPosts" class="loading-posts">
+              <i class="fas fa-spinner fa-spin"></i>
+              <span>Loading posts...</span>
+            </div>
             
-            <!-- NGO Suggestions with reduced height -->
-            <section class="card ngo-suggestions-card">
-              <div class="card-header">
-                <h2 class="card-title">NGO Suggestions</h2>
-                <a href="javascript:void(0)" class="card-link">View All</a>
-              </div>
-              <div class="card-content">
-                <div class="ngo-suggestions-list">
-                  <div *ngFor="let ngo of recommendedNGOs" class="ngo-suggestion-item">
-                    <div class="ngo-logo">
-                      <img [src]="ngo.logo || '/assets/images/placeholder-logo.png'" [alt]="ngo.name + ' logo'">
+            <!-- No posts message -->
+            <div *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length === 0" class="no-posts">
+              <p>No posts yet. Follow NGOs to see their updates in your feed!</p>
+            </div>
+            
+            <!-- Show Firestore posts if available -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length > 0">
+              <div *ngFor="let post of firestorePosts" class="post-item">
+                <div class="post-header">
+                  <div class="post-organization">
+                    <img [src]="post.orgAvatar || '/assets/images/orgs/default-ngo.png'" alt="Organization Logo" class="post-org-avatar">
+                    <div>
+                      <span class="post-org-name">{{post.orgName}}</span>
+                      <span class="post-date">{{post.date | date:'MMM d, yyyy'}}</span>
                     </div>
-                    <div class="ngo-suggestion-details">
-                      <h4 class="ngo-name">{{ngo.name}}</h4>
-                      <p class="ngo-category">{{ngo.category}}</p>
-                      <div class="ngo-match-rate">
-                        <div class="match-progress">
-                          <div class="match-bar" [style.width.%]="ngo.match"></div>
-                        </div>
-                        <span class="match-percentage">{{ngo.match}}% match</span>
-                      </div>
-                    </div>
-                    <button class="follow-btn">Follow</button>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                </div>
+                <div class="post-stats">
+                  <div class="stat-group">
+                    <i class="fas fa-heart" [class.active]="post.liked" (click)="toggleLike(post)"></i>
+                    <span>{{post.likes || 0}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments || 0}}</span>
+                  </div>
+                  <div class="stat-group">
+                    <i class="fas fa-eye"></i>
+                    <span>{{post.reach || 0}}</span>
                   </div>
                 </div>
               </div>
-            </section>
+            </ng-container>
+            
+            <!-- Fallback to static posts ONLY if no Firestore posts are available and not loading -->
+            <ng-container *ngIf="!isLoadingPosts && firestorePosts.length === 0 && allNgoPosts.length > 0">
+              <div *ngFor="let post of ngoPosts" class="post-item">
+                <div class="post-header">
+                  <div class="ngo-info">
+                    <div class="ngo-avatar">
+                      <img [src]="post.ngoAvatar || '/assets/images/placeholder-avatar.png'" alt="NGO Logo">
+                    </div>
+                    <div class="ngo-details">
+                      <h4 class="ngo-name">{{post.ngoName}}</h4>
+                      <p class="post-date">{{post.date | date:'MMM d, yyyy'}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="post-content">
+                  <p class="post-text">{{post.content}}</p>
+                  <div *ngIf="post.image" class="post-image">
+                    <img [src]="post.image" [alt]="post.ngoName + ' post image'">
+                  </div>
+                </div>
+                <div class="post-footer">
+                  <button class="post-action-btn like-btn" [class.active]="post.liked" (click)="toggleLike(post)">
+                    <i class="fas" [ngClass]="post.liked ? 'fa-heart' : 'fa-heart'"></i>
+                    <span>{{post.likes}} Likes</span>
+                  </button>
+                  <button class="post-action-btn comment-btn">
+                    <i class="fas fa-comment"></i>
+                    <span>{{post.comments}} Comments</span>
+                  </button>
+                  <button class="post-action-btn share-btn">
+                    <i class="fas fa-share"></i>
+                    <span>Share</span>
+                  </button>
+                </div>
+              </div>
+            </ng-container>
           </div>
         </div>
-      </div>
-    </main>
+      </section>
+    </div>
+
+    <!-- Right Column - Calendar and NGO Suggestions -->
+    <div class="column right-column">
+      <!-- Calendar Embed -->
+      <section class="card calendar-card">
+        <div class="card-header">
+          <h2 class="card-title">Calendar</h2>
+          <a href="javascript:void(0)" class="card-link">View Full</a>
+        </div>
+        <div class="card-content">
+          <div class="calendar-container">
+            <iframe [src]="calendarUrl | safe" frameborder="0" scrolling="no" class="google-calendar"></iframe>
+          </div>
+          <div class="upcoming-reminder">
+            <div class="reminder-header">
+              <h4>Next Event</h4>
+            </div>
+            <div class="reminder-content" *ngIf="nextEvent">
+              <div class="event-date-badge">
+                <span class="date-month">{{nextEvent.date | date:'MMM'}}</span>
+                <span class="date-day">{{nextEvent.date | date:'d'}}</span>
+              </div>
+              <div class="event-details">
+                <h5 class="event-title">{{nextEvent.title}}</h5>
+                <p class="event-org">{{nextEvent.organization}}</p>
+                <p class="event-time">{{nextEvent.date | date:'shortTime'}} • {{nextEvent.location}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- NGO Suggestions with reduced height -->
+      <section class="card ngo-suggestions-card">
+        <div class="card-header">
+          <h2 class="card-title">NGO Suggestions</h2>
+          <a href="javascript:void(0)" class="card-link">View All</a>
+        </div>
+        <div class="card-content">
+          <div class="ngo-suggestions-list">
+            <div *ngFor="let ngo of recommendedNGOs" class="ngo-suggestion-item">
+              <div class="ngo-logo">
+                <img [src]="ngo.logo || '/assets/images/placeholder-logo.png'" [alt]="ngo.name + ' logo'">
+              </div>
+              <div class="ngo-suggestion-details">
+                <h4 class="ngo-name">{{ngo.name}}</h4>
+                <p class="ngo-category">{{ngo.category}}</p>
+                <div class="ngo-match-rate">
+                  <div class="match-progress">
+                    <div class="match-bar" [style.width.%]="ngo.match"></div>
+                  </div>
+                  <span class="match-percentage">{{ngo.match}}% match</span>
+                </div>
+              </div>
+              <button class="follow-btn">Follow</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   </div>
 </div>
